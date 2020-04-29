@@ -1,0 +1,11 @@
+.DS_Store
+__MACOSX
+.sfdx
+.project
+.salesforce
+.settings
+node_modules
+.idea
+.vscode
+update.log
+.localdevserver

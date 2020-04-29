@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "c/narrate_logEventList": [
+                "narrate_logEventList/narrate_logEventList.js"
+            ],
+            "c/narrate_logger": [
+                "narrate_logger/narrate_logger.js"
+            ],
+            "c/narrate_monitor": [
+                "narrate_monitor/narrate_monitor.js"
+            ],
+            "c/narrate_utilities": [
+                "narrate_utilities/narrate_utilities.js"
+            ]
+        },
+        "experimentalDecorators": true
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

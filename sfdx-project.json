@@ -1,0 +1,17 @@
+{
+    "packageDirectories": [
+        {
+            "path": "src",
+            "default": true,
+            "package": "narrator",
+            "versionName": "Rum Ham",
+            "versionNumber": "1.0.0"
+        }
+    ],
+    "namespace": "",
+    "sfdcLoginUrl": "https://inspirato.lightning.force.com/",
+    "sourceApiVersion": "48.0",
+    "packageAliases": {
+        "narrator": "0Ho3n000000XZAHCA4"
+    }
+}

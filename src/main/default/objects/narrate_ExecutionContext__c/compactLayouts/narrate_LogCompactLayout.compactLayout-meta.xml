@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>narrate_LogCompactLayout</fullName>
+    <fields>narrate_StartTime__c</fields>
+    <fields>narrate_EndTime__c</fields>
+    <fields>narrate_Duration__c</fields>
+    <fields>narrate_NumberOfEntries__c</fields>
+    <label>Log Compact Layout</label>
+</CompactLayout>

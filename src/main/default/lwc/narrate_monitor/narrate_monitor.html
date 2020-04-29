@@ -1,0 +1,29 @@
+<template>
+    <div class="container">
+        <div class="slds-p-around_x-small slds-border_bottom slds-theme_shade">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div class="slds-col">
+                    <lightning-button-icon onclick={pauseOrResume} icon-name={pauseOrResumeIcon}
+                        title={pauseOrResumeText} variant="border-filled"></lightning-button-icon>
+                </div>
+                <div class="slds-col slds-size_3-of-4 shift-up">
+                    <lightning-input onchange={handleFilter} type="text" placeholder="Filter"></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-icon if:false={validFilter} icon-name="utility:error"></lightning-icon>
+                </div>
+                <div class="slds-col">
+                    <lightning-input onchange={handleLongText} type="checkbox" label="Long Text"></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input onchange={handleRegex} type="checkbox" label="RegEx"></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-button-icon onclick={clear} icon-name="utility:delete"
+                                          title="Clear events" variant="border-filled"></lightning-button-icon>
+                </div>
+            </div>
+        </div>
+        <c-narrate_log-event-list></c-narrate_log-event-list>
+    </div>
+</template>
