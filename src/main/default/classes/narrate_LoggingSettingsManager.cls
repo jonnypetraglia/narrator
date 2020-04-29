@@ -12,7 +12,11 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic(settings.narrate_Logic__c.split(' '))); //TODO???
+                try {
+                    filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic((String[])JSON.deserialize(settings.narrate_Logic__c, String[].class)));
+                } catch(JSONException jsonError) {
+                    // Dude that's on you, not on me.
+                }
             }
         }
         return filtersBySettingsId;
