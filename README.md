@@ -79,7 +79,7 @@ public class ShoutingLogger implements narrate_ILogger {
 
 What's a narrator? Well, it's simple: a Narrator says the things, a Logger logs the things.
 
-```apex
+```java
 public class narrate_SystemDebugNarrator implements narrate_INarrator {
     public void log(String level, String message, List<Object> values) {
         System.debug('Hear ye, hear ye, I doth proclaim, at a level of ' + level + ', ' + message + ' is wack');
