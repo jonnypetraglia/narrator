@@ -12,9 +12,13 @@ Because you're going to be using it everywhere, you should get the choice of the
 
 ```apex
 public class Log extends Narrate {}
+// Or maybe
+public class Logger extends Narrate {}
+// Or even
+public class SimonSays extends Narrate {}
 ```
 
-DONE. You now have a fully functional logging class named `Log`. Away we go:
+DONE. Away we go:
 
 
 ```apex
