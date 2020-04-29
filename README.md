@@ -153,28 +153,31 @@ This is all *in addition* to everything that's offered by [apex-unified-logging]
 
 ### How to use the Filter
 
-// TODO
+IFilterLogic is an interface designed to take a list of strings describing what comparisons to perform on an SObject. This interface expects the input to be a very particular format, but ultimately its job is to return a Boolean as to i the record matches or not.
 
-#### In Code
+```apex
+new String[] {'Name', '=', 'Robert Paulson'};
+new String[] {'Company', 'IS NOT NULL'};
+new String[] {'CreatedDate', 'IS TODAY'};
+```
+The supplied SimpleFilterLogic allows for **one** set of criteria, like above. Additionally, a list of the allowed operations -like "=", "IS NOT NULL", and "IS TODAY" above- for SimpleFilterLogic is available for viewing in the class itself.
 
-// TODO
+A more advanced FilterLogic class may be able to take logic like:
+
+```apex
+new String[] {'Name', '=', 'Robert Paulson', 'AND', 'Company', 'CONTAINS', 'soap'};
+new String[] {'(', 'FirstName', '=', 'Robert', 'OR', 'FirstName', '=', 'Rob', ')', 'AND', 'LastName', '=', 'Paulson'};
+```
+
+For the implementation of such logic, as $200 textbooks would say: "The exercise is left to the reader".
 
 #### In Config
 
-// TODO
+The Logging Settings Custom Metadata expects the Logic field to be a **JSON Array** of Strings:
 
-### Extending SimpleLoger
+```apex
+setting.narrate_Logic__c = '["Email", "DOES NOT CONTAIN", "avocado"]';
+```
 
-// TODO
 
-### Implementing your own Logger
-
-// TODO
-
-### Implementing your own Narrator
-
-// TODO
-
-### Implementing your own Filter
-
-// TODO
+Ultimately, you as an admin are responsible for (a) ensuring the field is JSON parsable, and (b) matches with the available input for the FilterLogic class you use.
