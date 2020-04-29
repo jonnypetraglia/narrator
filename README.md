@@ -10,14 +10,14 @@ This is. The final word. In logging.
 
 Because you're going to be using it everywhere, you should get the choice of the class name you use!
 
-```apex
+```java
 public class Log extends Narrate {}
 ```
 
 DONE. You now have a fully functional logging class named `Log`. Away we go:
 
 
-```apex
+```java
   Log.debug('Yo, we logging now!');
   Log.debug('How {0} is this?', new String[] { 'amazing' });
   Log.info('Now im info');
@@ -26,12 +26,12 @@ DONE. You now have a fully functional logging class named `Log`. Away we go:
   Log.log('wack', 'And you can make your own!!!');
 
   Log.start('I can optionally give a context -a unique string-, or have one generated for me');
-  Log.setBufferSizeLimit('3'); // Maybe now I feel like having a buffer
+  Log.setBufferSizeLimit(3); // Maybe now I feel like having a buffer
   Log.debug('Now I continue as normal');
   Log.warn('Then after the third log,');
   Log.wtf('It gets flushed for you!') // Flushes afer executing this statement
 
-  Log.debug('Or I can manually');
+  Log.debug('Or I can do it manually');
   Log.flush(); // flush at any time!
   
   try {
@@ -42,13 +42,15 @@ DONE. You now have a fully functional logging class named `Log`. Away we go:
   }
 
   Log.debug('Thanks for chatting with me!');
-  Log.finish(); // This is just an alias for flush lol();
+  Log.finish(); // This is just an alias for flush but it really gives some nice closure, doesn't it?
 ```
 
 
 ### Sample Custom Logger
-```apex
-// This is literally it.
+
+SimpleLogger is a supplied virtual class that makes it stupid simple to set up your own logger by overriding *one* function.
+
+```java
 public class ExcitableLogger extends narrate_SimpleLogger {
     public Integer processEvents() {
       for(narrate_LogEvent___e logEvent : buffer) {
@@ -59,7 +61,19 @@ public class ExcitableLogger extends narrate_SimpleLogger {
 }
 ```
 
-Or you can straight up implement the ILogger interface and do whatever it is you need to do!
+If if you want to create your own Logger from scratch, it's *two* methods to override:
+
+```java
+public class ShoutingLogger implements narrate_ILogger {
+    void log(narrate_LogEvent__e data) {
+      System.debug(data.narrate_Message__c.toUppercase());
+    }
+    void flush() {
+      System.debug('WE\'RE FLUSHING BUT I DON\'T KNOW WHY I\'M TELLING YOU THAT');
+    }
+}
+```
+
 
 ### Sample Narrator
 
@@ -75,6 +89,12 @@ public class narrate_SystemDebugNarrator implements narrate_INarrator {
     }
     public void flush() {
         // Nothing to do
+    }
+    void restRequest(RestRequest request) {
+      System.debug('REQUESTING FROM URI: ' + request.requestURI);
+    }
+    void restResponse(RestResponse response) {
+      System.debug('RESPONSE STATUS CODE: ' + response.statusCode);
     }
     public String getContext() {
         return context;
