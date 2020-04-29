@@ -10,14 +10,14 @@ This is. The final word. In logging.
 
 Because you're going to be using it everywhere, you should get the choice of the class name you use!
 
-```java
+```apex
 public class Log extends Narrate {}
 ```
 
 DONE. You now have a fully functional logging class named `Log`. Away we go:
 
 
-```java
+```apex
   Log.debug('Yo, we logging now!');
   Log.debug('How {0} is this?', new String[] { 'amazing' });
   Log.info('Now im info');
@@ -50,7 +50,7 @@ DONE. You now have a fully functional logging class named `Log`. Away we go:
 
 SimpleLogger is a supplied virtual class that makes it stupid simple to set up your own logger by overriding *one* function.
 
-```java
+```apex
 public class ExcitableLogger extends narrate_SimpleLogger {
     public Integer processEvents() {
       for(narrate_LogEvent___e logEvent : buffer) {
@@ -63,7 +63,7 @@ public class ExcitableLogger extends narrate_SimpleLogger {
 
 If if you want to create your own Logger from scratch, it's *two* methods to override:
 
-```java
+```apex
 public class ShoutingLogger implements narrate_ILogger {
     void log(narrate_LogEvent__e data) {
       System.debug(data.narrate_Message__c.toUppercase());
@@ -79,7 +79,7 @@ public class ShoutingLogger implements narrate_ILogger {
 
 What's a narrator? Well, it's simple: a Narrator says the things, a Logger logs the things.
 
-```java
+```apex
 public class narrate_SystemDebugNarrator implements narrate_INarrator {
     public void log(String level, String message, List<Object> values) {
         System.debug('Hear ye, hear ye, I doth proclaim, at a level of ' + level + ', ' + message + ' is wack');
@@ -102,7 +102,6 @@ public class narrate_SystemDebugNarrator implements narrate_INarrator {
     public void setContext(String context) {
         this.context = context;
     }
-    //// Private
     private String context;
 ```
 
@@ -112,6 +111,7 @@ public class narrate_SystemDebugNarrator implements narrate_INarrator {
 This is all *in addition* to everything that's offered by [apex-unified-logging](https://github.com/rsoesemann/apex-unified-logging), which is what the project forked off of! *Major props for that lib!*
 
   - You only have to write ONE function to create a Logger!
+  - Ships with a 'Log Entry' SObject, ready to hooked up & connected for persistent logging!
   - Built in Loggers supplied:
     - **Record Logger**
     - **Email Logger**
@@ -122,13 +122,12 @@ This is all *in addition* to everything that's offered by [apex-unified-logging]
   - If you want more fine-grained control, control what logs you want and what logger to use via **Custom Metadata** without ever having to change code. Add complex filters through a dead simple front-end interface. Turn them on, turn them off, make them expire. Be free.
   - @InvocableMethod!
   - @AuraEnabled getLogEntries!
-  - Ships with a 'Log Entry' SObject, ready to hooked up & connected for persistent logging!
   - Logs are grouped by Execution Context (and allows you to give a custom message to each as well!)
   - Gives you a lot of Apex goodies!
     - A Log Creator object!
     - A SimpleLogger abstract class that makes it so easy, it takes as little as extending the class with _1 function_ to create your own Logger!
     - 4 example loggers that are fully functional and fully extendable! (Platform Event, Email, Instant Notification, Console)
-    - A Stack Trace object! Get the exact place in code your log with the call of a function!
+    - A Code Location object! Get the exact place in code your log with the call of a function down to class, method, and line!
     - A Simple Filter Logic object!
     - *F U N* utilities! for! logging!
 
