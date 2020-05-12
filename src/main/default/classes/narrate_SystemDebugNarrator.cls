@@ -15,9 +15,9 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
             values = new List<Object>();
         }
         String premsg = context != null ? '[' + context + '] ' : '';
-        LoggingLevel lvl = loggingLevels.containsKey(level) ? loggingLevels.get(level) : LoggingLevel.DEBUG;
-        String msg = String.format(message, narrate_Utilities.castToStringList(values));
-        System.debug(lvl, lastLog);
+        LoggingLevel lvl = loggingLevels.containsKey(level.toUpperCase()) ? loggingLevels.get(level.toUpperCase()) : LoggingLevel.DEBUG;
+        String msg = message == null ? null : String.format(message, narrate_Utilities.castToStringList(values));
+        System.debug(lvl, premsg + msg);
         lastLevel = lvl;
         lastLog = premsg + msg;
     }
@@ -53,6 +53,10 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
     }
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snapshot) {
+        // Don't care
     }
 
     //// Private

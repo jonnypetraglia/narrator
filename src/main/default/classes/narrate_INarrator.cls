@@ -6,4 +6,5 @@ public interface narrate_INarrator {
     void flush();
     String getContext();
     void setContext(String context);
+    void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap);
 }

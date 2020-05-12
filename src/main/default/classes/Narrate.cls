@@ -12,11 +12,9 @@ public virtual without sharing class Narrate {
                 REST = 'Rest';
 
     public static void debug(String message) {
-        System.debug('Inside debug ' + message);
         log(DEBUG, message, new List<Object>());
     }
     public static void debug(String message, List<Object> values) {
-        System.debug('Inside debug ' + message);
         log(DEBUG, message, values);
     }
     
@@ -108,10 +106,17 @@ public virtual without sharing class Narrate {
     private static List<narrate_INarrator> narrators {get {
         if(narrators == null) {
             // TODO: Read from custom metadata & create narrators based on that
-            narrators = new List<narrate_INarrator> {new narrate_AutoContextNarrator(), new narrate_SystemDebugNarrator()};
+            // new narrate_AutoContextNarrator()
+            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator()};
+            for(narrate_INarrator narrator : narrators) {
+                narrator.setCodeLocationSnapshot(makeSnapshot());
+            }
             System.debug('There are ' + narrators.size() + ' narrators');
         }
         return narrators;
     } set;}
-    
+
+    public static narrate_CodeLocationSnapshot makeSnapshot() {
+        return new narrate_CodeLocationSnapshot();
+    }
 }

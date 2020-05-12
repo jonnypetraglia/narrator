@@ -23,7 +23,6 @@ public without sharing class narrate_LogEventBuffer {
     }
 
     public void flush() {
-        System.debug('flush ' + EventBus.publish(buffer));
         buffer.clear();
     }
 

@@ -2,10 +2,13 @@
 
 public class narrate_CodeLocationSnapshot {
 
+    public narrate_CodeLocationSnapshot(String parentType) {
+        this.parentType = parentType;
+    }
+
     public narrate_CodeLocationSnapshot() {
-        Exception e = new DmlException();
-        System.debug('aw yeah');
-        System.debug(e.getStackTraceString().split('\n'));
+        this.parentType = getClassNameOfImmediatelyEnclosingClass();
+        System.debug('AUTO ' + this.parentType);
     }
 
     public class Snapshot {
@@ -13,15 +16,16 @@ public class narrate_CodeLocationSnapshot {
         public Integer theLine;
     }
 
-    public static Snapshot snap() {
+    public Snapshot snap() {
         return snap(null);
     }
 
-    public static Snapshot snap(Exception traceableException) {
+    public Snapshot snap(Exception traceableException) {
         if(traceableException == null) {
             traceableException = new DmlException();
         }
-        return findEndOfInheritence(removeLinesOfNarrators(removeLinesByThisClass(traceableException.getStackTraceString().split('\n'))));
+        List<String> filteredStackTrace = removeLinesUntilParentClass(traceableException.getStackTraceString().split('\n'));
+        return filteredStackTrace.size()>0 ? extractSnapFromStacktraceLine(filteredStackTrace.get(0)) : new Snapshot();
     }
 
     public static Snapshot extractSnapFromStacktraceLine(String line) {
@@ -44,47 +48,26 @@ public class narrate_CodeLocationSnapshot {
         return snap;
     }
 
-    // Private
+    //// Private
 
-    private static List<String> removeLinesByThisClass(List<String> stacktrace) {
-        while(stacktrace.size() > 0 && stacktrace[0].startsWith('Class.narrate_CodeLocationSnapshot.')) {
-            System.debug('Removing lines by this class ' + stacktrace.get(0));
+    private List<String> removeLinesUntilParentClass(List<String> stacktrace) {
+        System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
+        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass != parentType) {
+            System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
+            stacktrace.remove(0);
+        }
+        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == parentType) {
+            System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
             stacktrace.remove(0);
         }
         return stacktrace;
     }
 
-    private static List<String> removeLinesOfNarrators(List<String> stacktrace) {
-        while(stacktrace.size() > 0) {
-            System.debug('Removing lines of narrators ' + stacktrace.get(0));
-            Snapshot snap = extractSnapFromStacktraceLine(stacktrace.get(0));
-            try {
-                narrate_INarrator what = (narrate_INarrator) Type.forName(snap.theClass).newInstance();
-                stacktrace.remove(0);
-            } catch(Exception error) {
-                break;
-            }
-        }
-        return stacktrace;
+    private String getClassNameOfImmediatelyEnclosingClass() {
+        return extractSnapFromStacktraceLine(((new DmlException()).getStackTraceString().split('\n').get(1))).theClass;
     }
 
-    private static Snapshot findEndOfInheritence(List<String> stacktrace) {
-        Snapshot snap = new Snapshot();
-        Type lastType;
-        while(stacktrace.size() > 0) {
-            System.debug('finishing end of inheritance ' + stacktrace.get(0));
-            Snapshot lineSnap = extractSnapFromStacktraceLine(stacktrace.get(0));
-            Type lineType = Type.forName(lineSnap.theClass);
-            if(lastType != null && !lastType.isAssignableFrom(lineType)) {
-                snap = lineSnap;
-                break;
-            } else if(lastType == null) {
-                lastType = lineType;
-            }
-            stacktrace.remove(0);
-        }
-        return snap;
-    }
+    private String parentType;
     
     private static final Pattern STACK_LINE = Pattern.compile('^(?:Class\\.)?([^.]+)\\.?([^\\.\\:]+)?[\\.\\:]?([^\\.\\:]*): line (\\d+), column (\\d+)$');
     private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;

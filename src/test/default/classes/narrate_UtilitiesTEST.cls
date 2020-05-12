@@ -48,7 +48,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEvent() {
         DateTime timestamp = DateTime.now();
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
         narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, 'MuhLevel', 'MAH BOI!');
         System.assertEquals('MuhContext', result.narrate_Context__c);
         System.assertEquals('MuhLevel', result.narrate_Level__c);
@@ -62,7 +62,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEventFromException() {
         DateTime timestamp = DateTime.now();
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
         narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, new DmlException());
         System.assertEquals('MuhContext', result.narrate_Context__c);
         System.assertEquals('Except', result.narrate_Level__c);
@@ -76,7 +76,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEventFromRestRequest() {
         DateTime timestamp = DateTime.now();
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
         RestRequest request = new RestRequest();
         request.requestBody = Blob.valueOf('Hello there');
         request.httpMethod = 'GET';
@@ -93,7 +93,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEventFromRestResponse() {
         DateTime timestamp = DateTime.now();
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
         RestResponse response = new RestResponse();
         response.responseBody = Blob.valueOf('General Kenobi!');
         response.statusCode = 200;

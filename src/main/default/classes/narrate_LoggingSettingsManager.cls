@@ -25,7 +25,7 @@ public without sharing class narrate_LoggingSettingsManager {
     public static Set<String> getLoggerNamesForSettingsThatMatchFilter(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
-            if(filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null) {
+            if(filtersBySettingsId.containsKey(setting.Id) && filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null) {
                 result.addAll(setting.narrate_Loggers__c.split('[,;]'));
             }
         }
