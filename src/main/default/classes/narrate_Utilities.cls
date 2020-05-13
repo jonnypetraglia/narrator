@@ -84,8 +84,7 @@ public with sharing class narrate_Utilities {
     }
     public static List<narrate_ExecutionContext__c> makeMissingExecutionContextsFromEvents(List<narrate_LogEvent__e> events) {
         Set<String> potentiallyNewUniqueKeys = extractContexts(events);
-        Map<String, narrate_ExecutionContext__c> existingExecutionContexts;
-        // TODO WHAT EVEN
+        Map<String, narrate_ExecutionContext__c> existingExecutionContexts = getMapOfExistingExecutionContextsByNameForContexts(potentiallyNewUniqueKeys);
         Set<String> contextsToCreate = getWhatsNew(existingExecutionContexts.keySet(), potentiallyNewUniqueKeys);
         return constructExecutionContextsForContexts(contextsToCreate);
     }
