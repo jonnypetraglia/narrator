@@ -59,6 +59,9 @@ public class narrate_CodeLocationSnapshot {
             stacktrace.remove(0);
         }
         if(enclosingClassName != null) {
+            while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass != enclosingClassName) {
+                stacktrace.remove(0);
+            }
             while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == enclosingClassName) {
                 stacktrace.remove(0);
             }
