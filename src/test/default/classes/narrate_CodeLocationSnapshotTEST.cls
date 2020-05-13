@@ -3,14 +3,14 @@ public with sharing class narrate_CodeLocationSnapshotTEST {
 
     @isTest
     private static void snapClass() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap();
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
         System.assertEquals('snapClass', snappy.theMethod); // is this
     }
 
     @isTest
     private static void snapError() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap(new DmlException());
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap(new DmlException());
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
         System.assertEquals('snapError', snappy.theMethod); // is this
     }
@@ -41,11 +41,11 @@ public with sharing class narrate_CodeLocationSnapshotTEST {
 
     private class NarrateEquivalent {
         public narrate_CodeLocationSnapshot.Snapshot snapTest(Exception e) {
-            return (new narrate_CodeLocationSnapshot('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent')).snap(e);
+            return narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent').snap(e);
         }
 
         public narrate_CodeLocationSnapshot.Snapshot snapTestError(Exception e) {
-            return (new narrate_CodeLocationSnapshot('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent')).snap(e);
+            return narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent').snap(e);
         }
     }
 }

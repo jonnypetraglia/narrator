@@ -2,11 +2,18 @@
 
 public class narrate_CodeLocationSnapshot {
 
-    public narrate_CodeLocationSnapshot(String enclosingClassName) {
+    public static narrate_CodeLocationSnapshot newInstanceForClass(String enclosingClassName) {
+        return new narrate_CodeLocationSnapshot(enclosingClassName);
+    }
+    public static narrate_CodeLocationSnapshot newInstanceWithoutEnclosingClass() { // This should not be used often, so fully expecting it to be deprecated in the future, hence the less than pretty name
+        return new narrate_CodeLocationSnapshot();
+    }
+
+    private narrate_CodeLocationSnapshot(String enclosingClassName) {
         this.enclosingClassName = enclosingClassName;
     }
 
-    public narrate_CodeLocationSnapshot() {}
+    private narrate_CodeLocationSnapshot() {}
 
     public class Snapshot {
         public String theClass, theMethod;

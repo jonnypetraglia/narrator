@@ -117,6 +117,6 @@ public virtual without sharing class Narrate {
     } set;}
 
     public static narrate_CodeLocationSnapshot makeSnapshot() {
-        return new narrate_CodeLocationSnapshot(Narrate.class.getName());
+        return narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
     }
 }
