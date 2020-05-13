@@ -105,13 +105,10 @@ public virtual without sharing class Narrate {
 
     private static List<narrate_INarrator> narrators {get {
         if(narrators == null) {
-            // TODO: Read from custom metadata & create narrators based on that
-            // new narrate_AutoContextNarrator()
-            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator()};
+            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator(), new narrate_AutoContextNarrator()};
             for(narrate_INarrator narrator : narrators) {
                 narrator.setCodeLocationSnapshot(makeSnapshot());
             }
-            System.debug('There are ' + narrators.size() + ' narrators');
         }
         return narrators;
     } set;}
