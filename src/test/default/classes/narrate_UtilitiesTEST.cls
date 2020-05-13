@@ -61,7 +61,6 @@ public class narrate_UtilitiesTEST {
 
     @isTest
     private static void constructLogEventFromException() {
-        DateTime timestamp = DateTime.now();
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap();
         narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, new DmlException('MAH BOI!'));
         System.assertEquals('MuhContext', result.narrate_Context__c);
@@ -70,12 +69,10 @@ public class narrate_UtilitiesTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals('MAH BOI!', result.narrate_Message__c);
-        System.assertEquals(timestamp, result.narrate_Timestamp__c);
     }
 
     @isTest
     private static void constructLogEventFromRestRequest() {
-        DateTime timestamp = DateTime.now();
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap();
         RestRequest request = new RestRequest();
         request.requestBody = Blob.valueOf('Hello there');
@@ -87,12 +84,10 @@ public class narrate_UtilitiesTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(JSON.serialize(request), result.narrate_Message__c);
-        System.assertEquals(timestamp, result.narrate_Timestamp__c);
     }
 
     @isTest
     private static void constructLogEventFromRestResponse() {
-        DateTime timestamp = DateTime.now();
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap();
         RestResponse response = new RestResponse();
         response.responseBody = Blob.valueOf('General Kenobi!');
@@ -104,7 +99,6 @@ public class narrate_UtilitiesTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(JSON.serialize(response), result.narrate_Message__c);
-        System.assertEquals(timestamp, result.narrate_Timestamp__c);
     }
 
     @isTest
