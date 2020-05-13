@@ -12,10 +12,14 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                try {
-                    filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic((String[])JSON.deserialize(settings.narrate_Logic__c, String[].class)));
-                } catch(JSONException jsonError) {
-                    // Dude that's on you, not on me.
+                if(String.isEmpty(settings.narrate_Logic__c)) {
+                    filtersBySettingsId.put(settings.Id, null);
+                } else {
+                    try {
+                        filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic((String[])JSON.deserialize(settings.narrate_Logic__c, String[].class)));
+                    } catch(JSONException jsonError) {
+                        // Dude that's on you, not on me.
+                    }
                 }
             }
         }
@@ -25,7 +29,7 @@ public without sharing class narrate_LoggingSettingsManager {
     public static Set<String> getLoggerNamesForSettingsThatMatchFilter(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
-            if(filtersBySettingsId.containsKey(setting.Id) && filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null) {
+            if(filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null))) {
                 result.addAll(setting.narrate_Loggers__c.split('[,;]'));
             }
         }

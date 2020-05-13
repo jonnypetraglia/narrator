@@ -2,14 +2,11 @@
 
 public class narrate_CodeLocationSnapshot {
 
-    public narrate_CodeLocationSnapshot(String parentType) {
-        this.parentType = parentType;
+    public narrate_CodeLocationSnapshot(String enclosingClassName) {
+        this.enclosingClassName = enclosingClassName;
     }
 
-    public narrate_CodeLocationSnapshot() {
-        this.parentType = getClassNameOfImmediatelyEnclosingClass();
-        System.debug('AUTO ' + this.parentType);
-    }
+    public narrate_CodeLocationSnapshot() {}
 
     public class Snapshot {
         public String theClass, theMethod;
@@ -51,23 +48,19 @@ public class narrate_CodeLocationSnapshot {
     //// Private
 
     private List<String> removeLinesUntilParentClass(List<String> stacktrace) {
-        System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
-        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass != parentType) {
-            System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
+        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == THIS_CLASS_NAME) {
             stacktrace.remove(0);
         }
-        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == parentType) {
-            System.debug('Removing lines by parent class ' + parentType + ': ' + extractSnapFromStacktraceLine(stacktrace[0]).theClass);
-            stacktrace.remove(0);
+        if(enclosingClassName != null) {
+            while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == enclosingClassName) {
+                stacktrace.remove(0);
+            }
         }
         return stacktrace;
     }
 
-    private String getClassNameOfImmediatelyEnclosingClass() {
-        return extractSnapFromStacktraceLine(((new DmlException()).getStackTraceString().split('\n').get(1))).theClass;
-    }
-
-    private String parentType;
+    private String enclosingClassName;
+    private final String THIS_CLASS_NAME = narrate_CodeLocationSnapshot.class.getName();
     
     private static final Pattern STACK_LINE = Pattern.compile('^(?:Class\\.)?([^.]+)\\.?([^\\.\\:]+)?[\\.\\:]?([^\\.\\:]*): line (\\d+), column (\\d+)$');
     private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;

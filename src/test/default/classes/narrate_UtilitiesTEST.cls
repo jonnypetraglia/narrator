@@ -48,7 +48,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEvent() {
         DateTime timestamp = DateTime.now();
-        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot('narrate_UtilitiesTEST')).snap();
         narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, 'MuhLevel', 'MAH BOI!');
         System.assertEquals('MuhContext', result.narrate_Context__c);
         System.assertEquals('MuhLevel', result.narrate_Level__c);
@@ -63,7 +63,7 @@ public class narrate_UtilitiesTEST {
     private static void constructLogEventFromException() {
         DateTime timestamp = DateTime.now();
         narrate_CodeLocationSnapshot.Snapshot snappy = (new narrate_CodeLocationSnapshot()).snap();
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, new DmlException());
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, new DmlException('MAH BOI!'));
         System.assertEquals('MuhContext', result.narrate_Context__c);
         System.assertEquals('Except', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);

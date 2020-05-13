@@ -3,7 +3,7 @@ public class narrate_AutoContextNarratorTEST {
     @isTest
     private static void logAndFlush() {
         narrate_LoggingSettingsManager.activeSettings = new List<narrate_LoggingSetting__mdt> {
-            new narrate_LoggingSetting__mdt(narrate_Logic__c = 'narrate_Level__c = INFO', narrate_Loggers__c = 'narrate_RecordLogger__c')
+            new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "INFO"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
         };
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
         narrator.setBufferSizeLimit(3);
@@ -23,7 +23,7 @@ public class narrate_AutoContextNarratorTEST {
     @isTest
     private static void except() {
         narrate_LoggingSettingsManager.activeSettings = new List<narrate_LoggingSetting__mdt> {
-            new narrate_LoggingSetting__mdt(narrate_Logic__c = 'narrate_Level__c = EXCEPT', narrate_Loggers__c = 'narrate_RecordLogger__c')
+            new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "EXCEPT"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
         };
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
         narrator.setBufferSizeLimit(3);
