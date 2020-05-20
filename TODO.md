@@ -19,11 +19,11 @@ Mmm whatsa saaaayy
 ### In Progress
 
 - [ ] Test Filter (DateTime parsing is effed up)  
-- [ ] Test 4 Loggers  
 - [ ] Test Utilities (hold off til I have it solidified)  
 
 
 ### Done ✓
 
+- [x] Test 4 Loggers  
 - [x] Apex can't do 'Custom Notifications' yet so the best way is afawcett's https://github.com/afawcett/customnotificationdemo  
 - [x] Test LogEventDelegator (just receiveEvents)  
