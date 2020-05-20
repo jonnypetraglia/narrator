@@ -9,10 +9,7 @@ public with sharing class narrate_LogEventDelegator {
             Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(event);
             for(String loggerName : loggerNamesToLog) {
                 if(!loggers.containsKey(loggerName)) {
-                    narrate_ILogger logger = instantiateLogger(loggerName);
-                    if(logger != null) {
-                        loggers.put(loggerName, logger);
-                    }
+                    loggers.put(loggerName, instantiateLogger(loggerName));
                 }
                 if(loggers.get(loggerName) != null) {
                     loggers.get(loggerName).log(event);

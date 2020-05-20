@@ -14,13 +14,11 @@ Mmm whatsa saaaayy
 
 ### Urgent
 
-- [ ] Code Location Snapshot is still frikkin broken
 - [ ] Set up our org-specific package
 
 ### In Progress
 
 - [ ] Test Filter (DateTime parsing is effed up)  
-- [ ] Test LogEventDelegator (just receiveEvents)  
 - [ ] Test 4 Loggers  
 - [ ] Test Utilities (hold off til I have it solidified)  
 
@@ -28,3 +26,4 @@ Mmm whatsa saaaayy
 ### Done ✓
 
 - [x] Apex can't do 'Custom Notifications' yet so the best way is afawcett's https://github.com/afawcett/customnotificationdemo  
+- [x] Test LogEventDelegator (just receiveEvents)  
