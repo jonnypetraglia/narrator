@@ -2,50 +2,54 @@
 public with sharing class narrate_CodeLocationSnapshotTEST {
 
     @isTest
-    private static void snapClass() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap();
+    private static void snapWithEnclosingClass() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new ThisClassUsesSnapshot()).snapTest();
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
-        System.assertEquals('snapClass', snappy.theMethod); // is this
+        System.assertEquals('snapWithEnclosingClass', snappy.theMethod); // is this
+        System.assertEquals(6, snappy.theLine);
     }
 
     @isTest
-    private static void snapError() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceWithoutEnclosingClass().snap(new DmlException());
+    private static void snapErrorWithEnclosingClass() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new ThisClassUsesSnapshot()).snapTestError(new DmlException());
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
-        System.assertEquals('snapError', snappy.theMethod); // is this
+        System.assertEquals('snapErrorWithEnclosingClass', snappy.theMethod); // is this
+        System.assertEquals(14, snappy.theLine);
     }
 
     @isTest
-    private static void snapParentClass() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = (new NarrateParentEquivalent()).log();
+    private static void snapWithEnclosingClassExtended() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new ThisClassExtendsTheClassThatUsesSnapshot()).snapTest();
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
-        System.assertEquals('snapParentClass', snappy.theMethod); // is this
+        System.assertEquals('snapWithEnclosingClassExtended', snappy.theMethod); // is this
+        System.assertEquals(22, snappy.theLine);
     }
 
     @isTest
-    private static void snapParentError() {
-        narrate_CodeLocationSnapshot.Snapshot snappy = (new NarrateParentEquivalent()).error(new DmlException());
+    private static void snapErrorWithEnclosingClassExtended() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = (new ThisClassExtendsTheClassThatUsesSnapshot()).snapTestError(new DmlException());
         System.assertEquals('narrate_CodeLocationSnapshotTEST', snappy.theClass); // dude how meta
-        System.assertEquals('snapParentError', snappy.theMethod); // is this
+        System.assertEquals('snapErrorWithEnclosingClassExtended', snappy.theMethod); // is this
+        System.assertEquals(30, snappy.theLine);
     }
 
-    private class NarrateParentEquivalent {
-        public narrate_CodeLocationSnapshot.Snapshot log() {
-            return (new NarrateEquivalent()).snapTest(new DmlException());
-        }
-
-        public  narrate_CodeLocationSnapshot.Snapshot error(Exception e) {
-            return (new NarrateEquivalent()).snapTestError(e);
+    private class ThisClassExtendsTheClassThatUsesSnapshot extends ThisClassUsesSnapshot {
+        public ThisClassExtendsTheClassThatUsesSnapshot() {
+            snapshotter = narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.ThisClassUsesSnapshot');
         }
     }
 
-    private class NarrateEquivalent {
-        public narrate_CodeLocationSnapshot.Snapshot snapTest(Exception e) {
-            return narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent').snap(e);
-        }
+    private virtual class ThisClassUsesSnapshot {
+        private narrate_CodeLocationSnapshot snapshotter;
 
+        public ThisClassUsesSnapshot() {
+            snapshotter = narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.ThisClassUsesSnapshot');
+        }
+        public narrate_CodeLocationSnapshot.Snapshot snapTest() {
+            return snapshotter.snap();
+        }
         public narrate_CodeLocationSnapshot.Snapshot snapTestError(Exception e) {
-            return narrate_CodeLocationSnapshot.newInstanceForClass('narrate_CodeLocationSnapshotTEST.NarrateParentEquivalent').snap(e);
+            return snapshotter.snap(e);
         }
     }
 }

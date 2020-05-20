@@ -5,9 +5,6 @@ public class narrate_CodeLocationSnapshot {
     public static narrate_CodeLocationSnapshot newInstanceForClass(String enclosingClassName) {
         return new narrate_CodeLocationSnapshot(enclosingClassName);
     }
-    public static narrate_CodeLocationSnapshot newInstanceWithoutEnclosingClass() { // This should not be used often, so fully expecting it to be deprecated in the future, hence the less than pretty name
-        return new narrate_CodeLocationSnapshot();
-    }
 
     private narrate_CodeLocationSnapshot(String enclosingClassName) {
         this.enclosingClassName = enclosingClassName;
@@ -21,15 +18,13 @@ public class narrate_CodeLocationSnapshot {
     }
 
     public Snapshot snap() {
-        return snap(null);
+        List<String> stacktrace = new DmlException().getStackTraceString().split('\n');
+        return getSnapshotFromStacktrace((new DmlException('FakeException')).getStackTraceString().split('\n'));
     }
 
     public Snapshot snap(Exception traceableException) {
-        if(traceableException == null) {
-            traceableException = new DmlException();
-        }
-        List<String> filteredStackTrace = removeLinesUntilParentClass(traceableException.getStackTraceString().split('\n'));
-        return filteredStackTrace.size()>0 ? extractSnapFromStacktraceLine(filteredStackTrace.get(0)) : new Snapshot();
+        List<String> stackTrace = traceableException.getStackTraceString().split('\n');
+        return extractSnapFromStacktraceLine(stackTrace.get(0));
     }
 
     public static Snapshot extractSnapFromStacktraceLine(String line) {
@@ -54,19 +49,17 @@ public class narrate_CodeLocationSnapshot {
 
     //// Private
 
-    private List<String> removeLinesUntilParentClass(List<String> stacktrace) {
-        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == THIS_CLASS_NAME) {
+    private Snapshot getSnapshotFromStacktrace(List<String> stacktrace) {
+        Snapshot result = stacktrace.isEmpty() ? new Snapshot() : extractSnapFromStacktraceLine(stacktrace[0]);
+        while(stacktrace.size() > 0 && result.theClass != enclosingClassName) {
             stacktrace.remove(0);
+            result = stacktrace.isEmpty() ? new Snapshot() : extractSnapFromStacktraceLine(stacktrace[0]);
         }
-        if(enclosingClassName != null) {
-            while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass != enclosingClassName) {
-                stacktrace.remove(0);
-            }
-            while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == enclosingClassName) {
-                stacktrace.remove(0);
-            }
+        while(stacktrace.size() > 0 && extractSnapFromStacktraceLine(stacktrace[0]).theClass == enclosingClassName) {
+            stacktrace.remove(0);
+            result = stacktrace.isEmpty() ? new Snapshot() : extractSnapFromStacktraceLine(stacktrace[0]);
         }
-        return stacktrace;
+        return result;
     }
 
     private String enclosingClassName;
