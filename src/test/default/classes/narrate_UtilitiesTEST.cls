@@ -164,7 +164,35 @@ public class narrate_UtilitiesTEST {
         }
     }
 
-    // TODO, MAYBE:
-    //  getMapOfExistingExecutionContextsByNameForContexts
-    //  createLogEntriesAndNeededExecutionContexts
+    // TODO: I find this test kind of blegh
+    @isTest
+    private static void createLogEntriesAndNeededExecutionContexts() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
+        List<narrate_ExecutionContext__c> preexistingExecutionContextsToInsert = new List<narrate_ExecutionContext__c>();
+        for(Integer i=0; i<13; i++) {
+            preexistingExecutionContextsToInsert.add(new narrate_ExecutionContext__c(Name = 'I have ' + i + ' cookies'));
+        }
+        insert preexistingExecutionContextsToInsert;
+        Map<ID, narrate_ExecutionContext__c> preexistingExecutionContexts = new Map<ID, narrate_ExecutionContext__c>([SELECT Name FROM narrate_ExecutionContext__c WHERE Id IN :preexistingExecutionContextsToInsert]);
+        List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
+        for(Integer i=0; i<42; i++) {
+            logEvents.add(narrate_Utilities.constructLogEvent('I have ' + i + ' cookies', snappy, 'Radda', 'Radda'));
+            if(i>36)
+                logEvents.add(narrate_Utilities.constructLogEvent('I have ' + i + ' cookies', snappy, 'Radda', 'Radda'));
+        }
+        Test.startTest();
+        List<narrate_LogEntry__c> createdEntries = narrate_Utilities.createLogEntriesAndNeededExecutionContexts(logEvents);
+        Test.stopTest();
+        for(narrate_LogEntry__c createdEntry : createdEntries) {
+            System.assertNotEquals(null, createdEntry.narrate_ExecutionContext__c);
+        }
+        Map<ID, narrate_ExecutionContext__c> createdContexts = new Map<ID, narrate_ExecutionContext__c>([SELECT Name FROM narrate_ExecutionContext__c WHERE Id NOT IN :preexistingExecutionContexts.keySet()]);
+        System.assertEquals(42-13, createdContexts.size());
+        for(ID execID : createdContexts.keySet()) {
+            System.assert(!preexistingExecutionContexts.containsKey(execID));
+        }
+        for(ID execID : preexistingExecutionContexts.keySet()) {
+            System.assert(!createdContexts.containsKey(execID));
+        }
+    }
 }
