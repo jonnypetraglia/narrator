@@ -4,7 +4,6 @@ public with sharing class narrate_LogEventDelegator {
     // This is where the magic happens
     // @PlatformEventListen or whatever
     public void receiveEvents(List<narrate_LogEvent__e> events) {
-        Map<Id, User> userMap = narrate_Query.loadUsersByIDs(narrate_Utilities.getUserIdsFromEvents(events));
         for(narrate_LogEvent__e event : events) {
             Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(event);
             for(String loggerName : loggerNamesToLog) {

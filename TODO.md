@@ -18,7 +18,6 @@ Mmm whatsa saaaayy
 
 ### In Progress
 
-- [ ] Test Filter (DateTime parsing is effed up)  
 - [ ] Test Utilities (hold off til I have it solidified)  
 
 

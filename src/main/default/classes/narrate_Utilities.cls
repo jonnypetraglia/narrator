@@ -89,7 +89,7 @@ public with sharing class narrate_Utilities {
         return constructExecutionContextsForContexts(contextsToCreate);
     }
     public static Map<String, narrate_ExecutionContext__c> getMapOfExistingExecutionContextsByNameForContexts(Set<String> potentiallyNewUniqueKeys) {
-        return makeMapOfExecutionContextsByName(narrate_Query.loadLogsByExecutionContext(potentiallyNewUniqueKeys));
+        return makeMapOfExecutionContextsByName(loadLogsByExecutionContext(potentiallyNewUniqueKeys));
     }
     public static Map<String, narrate_ExecutionContext__c> makeMapOfExecutionContextsByName(List<narrate_ExecutionContext__c> logs) {
         Map<String, narrate_ExecutionContext__c> mapNameToExecutionContext = new Map<String, narrate_ExecutionContext__c>();
@@ -109,17 +109,9 @@ public with sharing class narrate_Utilities {
             contexts.add(logEvent.narrate_Context__c);
         return contexts;
     }
-
-
-    public static Set<Id> getUserIdsFromEvents(List<narrate_LogEvent__e> events) {
-        Set<Id> userIds = new Set<Id>();
-        for(narrate_LogEvent__e event : events) {
-            userIds.add(event.narrate_User__c);
-        }
-        return userIds;
+    public static List<narrate_ExecutionContext__c> loadLogsByExecutionContext(Set<String> contexts) {
+        return [SELECT Id, Name FROM narrate_ExecutionContext__c WHERE Name IN :contexts];
     }
-
-
 
     // TODO: Prolly rename
     public static Set<String> getWhatsNew(Set<String> existingSets, Set<String> potentiallyNewSets) {

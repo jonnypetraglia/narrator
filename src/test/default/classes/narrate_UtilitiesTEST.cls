@@ -102,21 +102,41 @@ public class narrate_UtilitiesTEST {
     }
 
     @isTest
-    private static void getUserIdsFromEvents() {
-        List<narrate_LogEvent__e> events = new List<narrate_LogEvent__e>();
-        Test.startTest();
-        Map<Id, User> users = new Map<Id, User>([SELECT Id FROM User LIMIT 10]);
-        System.assert(users.size() > 3);
-        Test.stopTest();
-        for(Id userId : users.keySet()) {
-            events.add(new narrate_LogEvent__e(narrate_User__c=userId));
+    private static void extractContexts() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
+        List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
+        for(Integer i=0; i<10; i++) {
+            logEvents.add(narrate_Utilities.constructLogEvent('Give me a ' + i + '!', snappy, 'Radda', 'Radda'));
         }
-        Set<Id> resultIds = narrate_Utilities.getUserIdsFromEvents(events);
-        for(Id userId : users.keySet()) {
-            System.assert(resultIds.contains(userId));
+        Set<String> contextResults = narrate_Utilities.extractContexts(logEvents);
+        for(Integer i=0; i<10; i++) {
+            System.assert(contextResults.contains('Give me a ' + i + '!'), 'i=' + i + ';' + contextResults);
         }
-        for(Id userId : resultIds) {
-            System.assert(users.containsKey(userId));
+    }
+
+    @isTest
+    private static void constructExecutionContextsForContexts() {
+        Map<String, Integer> contexts = new Map<String, Integer> {'This'=>0, 'That'=>0, 'The Other'=>0, 'Lunch'=>0};
+        for(narrate_ExecutionContext__c executionContext : narrate_Utilities.constructExecutionContextsForContexts(contexts.keySet())) {
+            contexts.put(executionContext.Name, contexts.get(executionContext.Name)+1);
+        }
+        for(String context : contexts.keySet()) {
+            System.assertEquals(1, contexts.get(context), context);
+        }
+    }
+
+    @isTest
+    private static void makeMapOfExecutionContextsByName() {
+        List<narrate_ExecutionContext__c> executionContexts = new List<narrate_ExecutionContext__c>();
+        for(Integer i=0; i<10; i++) {
+            executionContexts.add(new narrate_ExecutionContext__c(Name = i + ' potato'));
+        }
+        Map<String, narrate_ExecutionContext__c> mapResult = narrate_Utilities.makeMapOfExecutionContextsByName(executionContexts);
+        for(Integer i=0; i<10; i++) {
+            String potoooooooo = i + ' potato'; //Pot 8 O's
+            System.assert(mapResult.containsKey(potoooooooo), 'i=' + i + ';' + mapResult);
+            System.assertNotEquals(null, mapResult.get(potoooooooo), 'i=' + i);
+            System.assertEquals(potoooooooo, mapResult.get(potoooooooo).Name, 'i=' + i);
         }
     }
 }
