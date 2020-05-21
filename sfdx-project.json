@@ -3,15 +3,16 @@
         {
             "path": "src",
             "default": true,
-            "package": "narrator",
-            "versionName": "Rum Ham",
-            "versionNumber": "1.0.0"
+            "package": "Narrator",
+            "versionName": "Acorn",
+            "versionNumber": "1.0.0.NEXT"
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://inspirato.lightning.force.com/",
     "sourceApiVersion": "48.0",
     "packageAliases": {
-        "narrator": "0Ho3n000000XZAHCA4"
+        "Narrator": "0Ho3n000000XZAbCAO",
+        "Narrator@1.0.0-1": "04t3n000000tNn0AAE"
     }
 }

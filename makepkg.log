@@ -1,0 +1,15 @@
+Successfully created a package. 0Ho3n000000XZAbCAO
+
+
+=== Package Version Create Request
+NAME                           VALUE
+─────────────────────────────  ─────────────────────────────────────────────────────────────────────────────────
+ID                             08c3n000000KykYAAS
+Status                         Success
+Package Id                     0Ho3n000000XZAbCAO
+Package Version Id             05i3n000000KyjpAAC
+Subscriber Package Version Id  04t3n000000tNn0AAE
+Tag
+Branch
+Created Date                   2020-05-21 16:59
+Installation URL               https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3n000000tNn0AAE
