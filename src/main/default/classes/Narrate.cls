@@ -103,6 +103,7 @@ public virtual without sharing class Narrate {
         }
     }
 
+    @testVisible
     private static List<narrate_INarrator> narrators {get {
         if(narrators == null) {
             narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator(), new narrate_AutoContextNarrator()};
