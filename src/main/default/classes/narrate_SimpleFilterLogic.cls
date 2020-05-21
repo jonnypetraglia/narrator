@@ -62,6 +62,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 }
             }
         } catch(Exception e) {
+            System.debug(LoggingLevel.ERROR, e.getStackTraceString());
             result = null;
         }
         return result;
@@ -109,7 +110,6 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 when '<' { result = left < right; }
                 when '>=' { result = left >= right; }
                 when '<=' { result = left <= right; }
-                // TODO: All this date (& datetime)stuff
                 when 'IS TODAY' { result = Date.today() == left; }
                 when 'IS YESTERDAY' { result = Date.today().addDays(-1) == left; }
                 when 'IS THIS MONTH' { result = Date.today().month() == left.month(); }
@@ -123,8 +123,8 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
 
     private boolean evaluateField(DateTime left, DateTime right) {
         boolean result = evaluateShared(left, right);
+        Date leftDate = left.dateGmt();
         if(!result) {
-            Date leftDate = Date.newinstance(left.year(), left.month(), left.day());
             switch on logic {
                 when '>' { result = left > right; }
                 when '<' { result = left < right; }
@@ -143,9 +143,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
 
     private boolean evaluateField(String left, String right) {
         boolean result = evaluateShared(left, right);
-        System.debug('bro evaluate field ' + result);
         if(!result) {
-            System.debug('bro string logic ' + left + ' ' + logic + ' ' + right);
             switch on logic {
                 when 'MATCHES' {
                     if(!patternCache.containsKey(logic)) {
@@ -165,7 +163,6 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 when 'ENDS WITH' {  result = left.endsWith(right); }
             }
         }
-        System.debug('bro evaluate field again ' + result);
         return result;
     }
 
