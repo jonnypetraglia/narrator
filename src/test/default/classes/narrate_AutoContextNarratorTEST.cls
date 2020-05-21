@@ -6,6 +6,7 @@ public class narrate_AutoContextNarratorTEST {
             new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "INFO"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
         };
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
         narrator.setBufferSizeLimit(3);
         System.assertEquals(3, narrator.getBufferSizeLimit());
         System.assertEquals(0, narrator.buffer.getBufferSize());
@@ -26,6 +27,7 @@ public class narrate_AutoContextNarratorTEST {
             new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "EXCEPT"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
         };
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
         narrator.setBufferSizeLimit(3);
         narrator.except(new DmlException());
         System.assertEquals(1, narrator.buffer.getBufferSize());
