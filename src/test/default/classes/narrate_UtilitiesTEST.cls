@@ -126,6 +126,30 @@ public class narrate_UtilitiesTEST {
     }
 
     @isTest
+    private static void makeMissingExecutionContextsFromEvents() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
+        List<narrate_ExecutionContext__c> preexistingExecutionContexts = new List<narrate_ExecutionContext__c>();
+        for(Integer i=0; i<24; i++) {
+            preexistingExecutionContexts.add(new narrate_ExecutionContext__c(Name = i + ' pizza slices'));
+        }
+        insert preexistingExecutionContexts;
+        List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
+        for(Integer i=7; i<42; i++) {
+            logEvents.add(narrate_Utilities.constructLogEvent(i + ' pizza slices', snappy, 'Radda', 'Radda'));
+        }
+        List<narrate_ExecutionContext__c> executionContexts = narrate_Utilities.makeMissingExecutionContextsFromEvents(logEvents);
+        System.assertEquals(42-24, executionContexts.size());
+        Set<String> newContextNames = new Set<String>();
+        for(narrate_ExecutionContext__c execContext : executionContexts) {
+            newContextNames.add(execContext.Name);
+        }
+        for(Integer i=24; i<42; i++) {
+            System.assert(newContextNames.contains(i + ' pizza slices'), 'i=' + i + ';' + newContextNames);
+        }
+        System.assertEquals(42-24, newContextNames.size());
+    }
+
+    @isTest
     private static void makeMapOfExecutionContextsByName() {
         List<narrate_ExecutionContext__c> executionContexts = new List<narrate_ExecutionContext__c>();
         for(Integer i=0; i<10; i++) {
@@ -139,4 +163,8 @@ public class narrate_UtilitiesTEST {
             System.assertEquals(potoooooooo, mapResult.get(potoooooooo).Name, 'i=' + i);
         }
     }
+
+    // TODO, MAYBE:
+    //  getMapOfExistingExecutionContextsByNameForContexts
+    //  createLogEntriesAndNeededExecutionContexts
 }
