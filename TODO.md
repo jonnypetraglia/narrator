@@ -12,17 +12,11 @@ Mmm whatsa saaaayy
 - [ ] LWC can just call apex directly, duh
 - [ ] Auto truncation
 
-### Urgent
-
-- [ ] Set up our org-specific package
 
 ### In Progress
 
-- [ ] Test Utilities (hold off til I have it solidified)  
-
+- [ ] Set up our org-specific package
 
 ### Done ✓
 
-- [x] Test 4 Loggers  
 - [x] Apex can't do 'Custom Notifications' yet so the best way is afawcett's https://github.com/afawcett/customnotificationdemo  
-- [x] Test LogEventDelegator (just receiveEvents)  
