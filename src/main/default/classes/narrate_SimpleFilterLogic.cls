@@ -110,12 +110,12 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 when '<' { result = left < right; }
                 when '>=' { result = left >= right; }
                 when '<=' { result = left <= right; }
-                when 'IS TODAY' { result = Date.today() == left; }
-                when 'IS YESTERDAY' { result = Date.today().addDays(-1) == left; }
-                when 'IS THIS MONTH' { result = Date.today().month() == left.month(); }
-                when 'IS THIS YEAR' { result = Date.today().year() == left.year(); }
-                when 'IS FUTURE' { result = Date.today() < left; }
-                when 'IS PAST' { result = Date.today() > left; }
+                when 'IS TODAY' { result = todayGMT() == left; }
+                when 'IS YESTERDAY' { result = todayGMT().addDays(-1) == left; }
+                when 'IS THIS MONTH' { result = todayGMT().month() == left.month(); }
+                when 'IS THIS YEAR' { result = todayGMT().year() == left.year(); }
+                when 'IS FUTURE' { result = todayGMT() < left; }
+                when 'IS PAST' { result = todayGMT() > left; }
             }
         }
         return result;
@@ -130,12 +130,12 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 when '<' { result = left < right; }
                 when '>=' { result = left >= right; }
                 when '<=' { result = left <= right; }
-                when 'IS TODAY' { result = Date.today() == leftDate; }
-                when 'IS YESTERDAY' { result = Date.today().addDays(-1) == leftDate; }
-                when 'IS THIS MONTH' { result = Date.today().month() == leftDate.month(); }
-                when 'IS THIS YEAR' { result = Date.today().year() == leftDate.year(); }
-                when 'IS FUTURE' { result = DateTime.now() < left; }
-                when 'IS PAST' { result = DateTime.now() > left; }
+                when 'IS TODAY' { result = todayGMT() == leftDate; }
+                when 'IS YESTERDAY' { result = todayGMT().addDays(-1) == leftDate; }
+                when 'IS THIS MONTH' { result = todayGMT().month() == leftDate.month(); }
+                when 'IS THIS YEAR' { result = todayGMT().year() == leftDate.year(); }
+                when 'IS FUTURE' { result = nowGMT() < left; }
+                when 'IS PAST' { result = nowGMT() > left; }
             }
         }
         return result;
@@ -175,5 +175,12 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
             when '!=' {             result = left != right; }
         }
         return result;
+    }
+
+    private static DateTime nowGMT() {
+        return DateTime.now();
+    }
+    private static Date todayGMT() {
+        return nowGMT().dateGMT();
     }
 }
