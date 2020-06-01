@@ -42,7 +42,10 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                         when LONG, INTEGER {
                             result = evaluateField((Long)val, whatToCompareTo == null ? null : Long.valueOf(whatToCompareTo));
                         }
-                        when DOUBLE, CURRENCY, PERCENT {
+                        when CURRENCY, PERCENT {
+                            result = evaluateField((Decimal)val, whatToCompareTo == null ? null : Decimal.valueOf(whatToCompareTo));
+                        }
+                        when DOUBLE  {
                             result = evaluateField((Double)val, whatToCompareTo == null ? null : Double.valueOf(whatToCompareTo));
                         }
                         when DATE {
@@ -77,6 +80,19 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
     }
 
     private boolean evaluateField(Long left, Long right) {
+        boolean result = evaluateShared(left, right);
+        if(!result) {
+            switch on logic {
+                when '>' { result = left > right; }
+                when '<' { result = left < right; }
+                when '>=' { result = left >= right; }
+                when '<=' { result = left <= right; }
+            }
+        }
+        return result;
+    }
+
+    private boolean evaluateField(Decimal left, Decimal right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {

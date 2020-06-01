@@ -115,64 +115,124 @@ public class narrate_SimpleFilterLogicTEST {
         System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
     }
 
+    ////////////////////////////////////// Decimal //////////////////////////////////////
+
+    @isTest
+    public static void Decimal_IsNull() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', IS_NULL});
+        System.assertEquals(true, filterLogic.evaluate( new Account(NumberOfEmployees=null)));
+        System.assertEquals(false, filterLogic.evaluate( new Account(NumberOfEmployees=42)));
+    }
+
+    @isTest
+    public static void Decimal_IsNotNull() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', IS_NOT_NULL});
+        System.assertEquals(true, filterLogic.evaluate( new Account(NumberOfEmployees=42)));
+        System.assertEquals(false, filterLogic.evaluate( new Account(NumberOfEmployees=null)));
+    }
+
+    @isTest
+    public static void Decimal_Equals() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', EQUALS, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=42)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+    }
+
+    @isTest
+    public static void Decimal_NotEquals() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', NOT_EQUALS, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=42)));
+    }
+
+    @isTest
+    public static void Decimal_GreaterThan() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', GREATER_THAN, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=3)));
+    }
+
+    @isTest
+    public static void Decimal_LessThan() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', LESS_THAN, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=3)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+    }
+
+    @isTest
+    public static void Decimal_GreaterThanOrEqual() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', GREATER_THAN_OR_EQUAL, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=42)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=3)));
+    }
+
+    @isTest
+    public static void Decimal_LessThanOrEqual() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'NumberOfEmployees', LESS_THAN_OR_EQUAL, '42'});
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=3)));
+        System.assertEquals(true, filterLogic.evaluate(new Account(NumberOfEmployees=42)));
+        System.assertEquals(false, filterLogic.evaluate(new Account(NumberOfEmployees=9001)));
+    }
+
     ////////////////////////////////////// Double //////////////////////////////////////
 
     @isTest
     public static void Double_IsNull() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', IS_NULL});
-        System.assertEquals(true, filterLogic.evaluate( new SkillRequirement(SkillLevel=null)));
-        System.assertEquals(false, filterLogic.evaluate( new SkillRequirement(SkillLevel=42)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', IS_NULL});
+        System.assertEquals(true, filterLogic.evaluate( new Opportunity(Amount=null)));
+        System.assertEquals(false, filterLogic.evaluate( new Opportunity(Amount=422.42)));
     }
 
     @isTest
     public static void Double_IsNotNull() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', IS_NOT_NULL});
-        System.assertEquals(true, filterLogic.evaluate( new SkillRequirement(SkillLevel=42)));
-        System.assertEquals(false, filterLogic.evaluate( new SkillRequirement(SkillLevel=null)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', IS_NOT_NULL});
+        System.assertEquals(true, filterLogic.evaluate( new Opportunity(Amount=422.42)));
+        System.assertEquals(false, filterLogic.evaluate( new Opportunity(Amount=null)));
     }
 
     @isTest
     public static void Double_Equals() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', EQUALS, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=42)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', EQUALS, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=422.42)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
     }
 
     @isTest
     public static void Double_NotEquals() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', NOT_EQUALS, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=42)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', NOT_EQUALS, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=422.42)));
     }
 
     @isTest
     public static void Double_GreaterThan() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', GREATER_THAN, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=3)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', GREATER_THAN, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=3.00)));
     }
 
     @isTest
     public static void Double_LessThan() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', LESS_THAN, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=3)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', LESS_THAN, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=3.00)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
     }
 
     @isTest
     public static void Double_GreaterThanOrEqual() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', GREATER_THAN_OR_EQUAL, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=42)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=3)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', GREATER_THAN_OR_EQUAL, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=422.42)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=3.00)));
     }
 
     @isTest
     public static void Double_LessThanOrEqual() {
-        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'SkillLevel', LESS_THAN_OR_EQUAL, '42'});
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=3)));
-        System.assertEquals(true, filterLogic.evaluate(new SkillRequirement(SkillLevel=42)));
-        System.assertEquals(false, filterLogic.evaluate(new SkillRequirement(SkillLevel=9001)));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'Amount', LESS_THAN_OR_EQUAL, '422.42'});
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=3.00)));
+        System.assertEquals(true, filterLogic.evaluate(new Opportunity(Amount=422.42)));
+        System.assertEquals(false, filterLogic.evaluate(new Opportunity(Amount=9001.00)));
     }
 
     ////////////////////////////////////// Date //////////////////////////////////////
