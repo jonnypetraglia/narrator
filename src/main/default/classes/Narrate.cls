@@ -79,6 +79,18 @@ public virtual without sharing class Narrate {
         }
     }
 
+    public static void http(HttpRequest request) {
+        for(narrate_INarrator narrator : narrators) {
+            narrator.httpRequest(request);
+        }
+    }
+
+    public static void http(HttpResponse response) {
+        for(narrate_INarrator narrator : narrators) {
+            narrator.httpResponse(response);
+        }
+    }
+
     public static void rest(RestRequest request) {
         for(narrate_INarrator narrator : narrators) {
             narrator.restRequest(request);

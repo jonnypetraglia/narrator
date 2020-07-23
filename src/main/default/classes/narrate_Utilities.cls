@@ -68,6 +68,30 @@ public with sharing class narrate_Utilities {
             narrate_Timestamp__c = System.now()
         );
     }
+    public static narrate_LogEvent__e constructLogEvent(String context, narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
+        return new narrate_LogEvent__e(
+            narrate_Context__c = context,
+            narrate_Level__c = Narrate.REST,
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = request.toString(),
+            narrate_User__c = UserInfo.getUserId(),
+            narrate_Timestamp__c = System.now()
+        );
+    }
+    public static narrate_LogEvent__e constructLogEvent(String context, narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
+        return new narrate_LogEvent__e(
+            narrate_Context__c = context,
+            narrate_Level__c = Narrate.REST,
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = response.toString(),
+            narrate_User__c = UserInfo.getUserId(),
+            narrate_Timestamp__c = System.now()
+        );
+    }
     
     public static List<narrate_LogEntry__c> createLogEntriesAndNeededExecutionContexts(List<narrate_LogEvent__e> events) {
         List<narrate_ExecutionContext__c> executionContexts = makeMissingExecutionContextsFromEvents(events);

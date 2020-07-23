@@ -39,6 +39,24 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
         }
     }
 
+    // TODO: Write test?
+    public void httpRequest(HttpRequest request) {
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), request);
+        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
+        for(String loggerName : loggerNamesToLog) {
+            buffer.add(logData);
+        }
+    }
+
+    // TODO: Write test?
+    public void httpResponse(HttpResponse response) {
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), response);
+        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
+        for(String loggerName : loggerNamesToLog) {
+            buffer.add(logData);
+        }
+    }
+
     public void flush() {
         buffer.flush();
     }

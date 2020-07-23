@@ -30,7 +30,7 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
     }
 
     public void restRequest(RestRequest request) {
-        System.debug('REST[HTTP]=' + request.httpMethod);
+        System.debug('REST[METHOD]=' + request.httpMethod);
         System.debug('REST[URI]=' + request.requestURI);
         System.debug('REST[Path]=' + request.resourcePath);
         System.debug('REST[Remote]=' + request.remoteAddress);
@@ -43,6 +43,23 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
         System.debug('REST[Status]=' + response.statusCode);
         System.debug('REST[Headers]=' + response.headers);
         System.debug('REST[Body]=' + response.responseBody);
+    }
+
+    public void httpRequest(HttpRequest request) {
+        System.debug('HTTP[METHOD]=' + request.getMethod());
+        System.debug('HTTP[URI]=' + request.getEndpoint());
+        System.debug('HTTP[Body]=' + request.getBody());
+        // TODO: IT would be lovely to print headers here but Apex provides no way to retrieve the headers of an HttpRequest
+    }
+
+    public void httpResponse(HttpResponse response) {
+        System.debug('HTTP[Code]=' + response.getStatusCode());
+        System.debug('HTTP[Status]=' + response.getStatus());
+        System.debug('HTTP[Status]=' + response.getStatus());
+        for(String headerKey : response.getHeaderKeys()) {
+            System.debug('HTTP[Header="' + headerKey + '"]=' + response.getHeader(headerKey));
+        }
+        System.debug('HTTP[Body]=' + response.getBody());
     }
 
     public void flush() {

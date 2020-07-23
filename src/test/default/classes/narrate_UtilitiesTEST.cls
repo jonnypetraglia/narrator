@@ -102,6 +102,36 @@ public class narrate_UtilitiesTEST {
     }
 
     @isTest
+    private static void constructLogEventFromHttpRequest() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_UtilitiesTest.class.getName()).snap();
+        HttpRequest request = new HttpRequest();
+        request.setBody('Hello there');
+        request.setMethod('GET');
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, request);
+        System.assertEquals('MuhContext', result.narrate_Context__c);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(request.toString(), result.narrate_Message__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromHttpResponse() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_UtilitiesTest.class.getName()).snap();
+        HttpResponse response = new HttpResponse();
+        response.setBody('General Kenobi!');
+        response.setStatusCode(200);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, response);
+        System.assertEquals('MuhContext', result.narrate_Context__c);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(response.toString(), result.narrate_Message__c);
+    }
+
+    @isTest
     private static void extractContexts() {
         narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
         List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();

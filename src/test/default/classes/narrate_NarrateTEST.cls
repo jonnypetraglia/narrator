@@ -145,6 +145,14 @@ public with sharing class narrate_NarrateTEST {
             loggedLevel = 'Except';
             loggedMessage = error.getMessage();
         }
+        public void httpRequest(httpRequest request) {
+            loggedLevel = 'HTTP';
+            loggedMessage = request.getBody();
+        }
+        public void httpResponse(httpResponse response) {
+            loggedLevel = 'HTTP';
+            loggedMessage = response.getBody();
+        }
         public void restRequest(RestRequest request) {
             loggedLevel = 'REST';
             loggedMessage = request.requestBody.toString();
