@@ -68,6 +68,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
             System.debug(LoggingLevel.ERROR, e.getStackTraceString());
             result = null;
         }
+        System.debug('bro totally ' + result);
         return result;
     }
 
