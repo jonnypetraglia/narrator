@@ -1,4 +1,5 @@
-public class narrate_EmailLogger extends narrate_SimpleLogger {
+public class narrate_EmailLogger implements narrate_ILogger {
+    private static final List<String> NOT_APPLICABLE_VALUES = new List<String>{'NA', 'N/A', 'None'};
     @testVisible
     String[] recipients {get {
         if(recipients == null) {
@@ -7,15 +8,18 @@ public class narrate_EmailLogger extends narrate_SimpleLogger {
         return recipients;
     } set; }
 
-    override public Integer processEvents(List<narrate_LogEvent__e> logEvents) {
-        if(noRecipients()) {
-            return 0;
-        }
+    override public Integer log(List<narrate_LogEvent__e> logEvents) {
         Integer count = 0;
-        for(Messaging.SendEmailResult sendResult : Messaging.sendEmail(generateEmails(logEvents), false)) {
-            if(sendResult.isSuccess()) {
-                count+=1;
+        try{
+            if(hasRecipients()) {
+                for(Messaging.SendEmailResult sendResult : Messaging.sendEmail(generateEmails(logEvents), false)) {
+                    if(sendResult.isSuccess()) {
+                        count+=1;
+                    }
+                }
             }
+        }catch(Exception error){
+            System.debug('NARRATOR ERROR: \n' + error.getStackTraceString());
         }
         return count;
     }
@@ -33,7 +37,7 @@ public class narrate_EmailLogger extends narrate_SimpleLogger {
         return emails;
     }
 
-    private Boolean noRecipients() {
-        return recipients.isEmpty() || (recipients.size() == 1 && (recipients[0] == 'NA' || recipients[0] == 'N/A' || recipients[0] == 'None'));
+    private Boolean hasRecipients() {
+        return !recipients.isEmpty() && recipients.size() != 1 && !NOT_APPLICABLE_VALUES.contains(recipients[0]);
     }
 }
