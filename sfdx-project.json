@@ -5,7 +5,7 @@
             "default": true,
             "package": "Narrator",
             "versionName": "Acorn",
-            "versionNumber": "1.0.0.NEXT"
+            "versionNumber": "1.0.1.NEXT"
         }
     ],
     "namespace": "",
