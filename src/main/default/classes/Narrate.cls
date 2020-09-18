@@ -109,12 +109,6 @@ public virtual without sharing class Narrate {
         }
     }
 
-    public static void finish() {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.flush();
-        }
-    }
-
     @testVisible
     private static List<narrate_INarrator> narrators {get {
         if(narrators == null) {

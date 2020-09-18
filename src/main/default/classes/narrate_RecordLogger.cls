@@ -1,5 +1,5 @@
 public with sharing class narrate_RecordLogger implements narrate_ILogger {
-    override public Integer log(List<narrate_LogEvent__e> events) {
+    public Integer log(List<narrate_LogEvent__e> events) {
         Integer count = 0;
         try{
             for(Database.SaveResult saveResult : Database.insert(narrate_Utilities.createLogEntriesAndNeededExecutionContexts(events), false)) {

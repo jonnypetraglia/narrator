@@ -119,20 +119,36 @@ public with sharing class narrate_NarrateTEST {
     }
 
     @isTest
-    private static void flush() {
+    private static void httpRequest() {
         TestNarrator narrator = setupTestNarrator();
-        for(Integer i=0; i<5; i++) {
-            narrator.addToQueue();
-        }
-        System.assertEquals(5, narrator.queueSize);
-        Narrator.flush();
-        System.assertEquals(0, narrator.queueSize);
+        HttpRequest req = new HttpRequest();
+        req.setBody('Greetings');
+        Narrate.http(req);
+        System.assertEquals('HTTP', narrator.loggedLevel);
+        System.assertEquals('Greetings', narrator.loggedMessage);
+    }
+
+    @isTest
+    private static void httpResponse() {
+        TestNarrator narrator = setupTestNarrator();
+        HttpResponse res = new HttpResponse();
+        res.setBody('Farewell');
+        Narrate.http(res);
+        System.assertEquals('HTTP', narrator.loggedLevel);
+        System.assertEquals('Farewell', narrator.loggedMessage);
+    }
+
+    @isTest
+    private static void start() {
+        TestNarrator narrator = setupTestNarrator();
+        Narrate.start('Contexty!');
+        System.assertEquals('Contexty!', narrator.getContext());
     }
 
     public class TestNarrator implements narrate_INarrator {
-        Integer queueSize = 0;
         private String loggedLevel, loggedMessage;
         private List<Object> loggedValues;
+        private String testContext;
         TestNarrator() {}
         public void log(String level, String message, List<Object> values) {
             loggedLevel = level;
@@ -161,16 +177,9 @@ public with sharing class narrate_NarrateTEST {
             loggedLevel = 'REST';
             loggedMessage = response.responseBody.toString();
         }
-        public void flush() {
-            queueSize = 0;
-        }
-        public String getContext() {return '';}
-        public void setContext(String context) {}
+        public String getContext() {return testContext;}
+        public void setContext(String context) { testContext = context;}
         public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap) {}
-
-        public void addToQueue() {
-            queueSize +=1;
-        }
     }
 
     static TestNarrator setupTestNarrator() {

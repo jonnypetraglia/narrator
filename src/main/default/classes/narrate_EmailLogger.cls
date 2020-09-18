@@ -1,4 +1,5 @@
 public class narrate_EmailLogger implements narrate_ILogger {
+    @testVisible
     private static final List<String> NOT_APPLICABLE_VALUES = new List<String>{'NA', 'N/A', 'None'};
     @testVisible
     String[] recipients {get {
@@ -8,7 +9,7 @@ public class narrate_EmailLogger implements narrate_ILogger {
         return recipients;
     } set; }
 
-    override public Integer log(List<narrate_LogEvent__e> logEvents) {
+    public Integer log(List<narrate_LogEvent__e> logEvents) {
         Integer count = 0;
         try{
             if(hasRecipients()) {
@@ -38,6 +39,8 @@ public class narrate_EmailLogger implements narrate_ILogger {
     }
 
     private Boolean hasRecipients() {
-        return !recipients.isEmpty() && recipients.size() != 1 && !NOT_APPLICABLE_VALUES.contains(recipients[0]);
+        Set<String> recipientsTest = new Set<String>(recipients);
+        recipientsTest.removeAll(NOT_APPLICABLE_VALUES);
+        return !recipientsTest.isEmpty();
     }
 }

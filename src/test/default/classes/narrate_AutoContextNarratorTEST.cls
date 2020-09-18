@@ -1,38 +1,75 @@
 @isTest
 public class narrate_AutoContextNarratorTEST {
     @isTest
-    private static void logAndFlush() {
-        narrate_LoggingSettingsManager.activeSettings = new List<narrate_LoggingSetting__mdt> {
-            new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "INFO"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
-        };
+    private static void log() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
         narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
-        narrator.setBufferSizeLimit(3);
-        System.assertEquals(3, narrator.getBufferSizeLimit());
-        System.assertEquals(0, narrator.buffer.getBufferSize());
-        narrator.log('INFO', 'Howdy', null);
-        System.assertEquals(1, narrator.buffer.getBufferSize());
-        narrator.log('INFO', 'Howdy', null);
-        narrator.log('INFO', 'Howdy', null);
-        System.assertEquals(0, narrator.buffer.getBufferSize());
-        narrator.log('INFO', 'Howdy', null);
-        System.assertEquals(1, narrator.buffer.getBufferSize());
-        narrator.flush();
-        System.assertEquals(0, narrator.buffer.getBufferSize());
+        narrator.log('Level', 'Message', new List<String>{'values'});
+        Test.getEventBus().deliver();
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
     
     @isTest
     private static void except() {
-        narrate_LoggingSettingsManager.activeSettings = new List<narrate_LoggingSetting__mdt> {
-            new narrate_LoggingSetting__mdt(narrate_Logic__c = '["narrate_Level__c", "=", "EXCEPT"]', narrate_Loggers__c = 'narrate_RecordLogger__c')
-        };
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
         narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
         narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
-        narrator.setBufferSizeLimit(3);
         narrator.except(new DmlException());
-        System.assertEquals(1, narrator.buffer.getBufferSize());
-        narrator.flush();
-        System.assertEquals(0, narrator.buffer.getBufferSize());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
+    }
+    
+    @isTest
+    private static void restRequest() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
+        narrator.restRequest(new RestRequest());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
+    }
+
+    @isTest
+    private static void restResponse() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
+        narrator.restResponse(new RestResponse());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
+    }
+    
+    @isTest
+    private static void httpRequest() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
+        narrator.httpRequest(new HttpRequest());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
+    }
+    
+    @isTest
+    private static void httpResponse() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        narrate_AutoContextNarrator narrator = new narrate_AutoContextNarrator();
+        narrator.setCodeLocationSnapshot(narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter'));
+        narrator.httpResponse(new HttpResponse());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
 
     @isTest
@@ -46,5 +83,15 @@ public class narrate_AutoContextNarratorTEST {
         System.assertEquals('Blip', narrator.getContext());
         System.assert(narrator.getFullContext().contains(narrator.AUTO_CONTEXT));
         System.assert(narrator.getFullContext().contains('Blip'));
+    }
+
+    private static EventBusSubscriber getEventBusSubscriber(){
+        List<EventBusSubscriber> subscribers = [SELECT Name, Position, Retries, LastError FROM EventBusSubscriber WHERE Topic='narrate_LogEvent__e' AND Type='ApexTrigger'];
+        for(EventBusSubscriber subscriber : subscribers){
+            if(subscriber.Name == 'narrate_LogEvent'){
+                return subscriber;
+            }
+        }
+        return null;
     }
 }

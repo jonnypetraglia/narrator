@@ -34,31 +34,31 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                     Schema.DisplayType fieldType = objectFieldMap.get(fieldName).getDescribe().getType();
                     switch on fieldType {
                         when BOOLEAN {
-                            result = evaluateField((Boolean)val, whatToCompareTo == 'true');
+                            result = evaluateBoolean((Boolean)val, whatToCompareTo == 'true');
                         }
                         when ID, REFERENCE {
-                            result = evaluateField((Id)val, whatToCompareTo == null ? null : Id.valueOf(whatToCompareTo));
+                            result = evaluateId((Id)val, whatToCompareTo == null ? null : Id.valueOf(whatToCompareTo));
                         }
                         when LONG, INTEGER {
-                            result = evaluateField((Long)val, whatToCompareTo == null ? null : Long.valueOf(whatToCompareTo));
+                            result = evaluateLong((Long)val, whatToCompareTo == null ? null : Long.valueOf(whatToCompareTo));
                         }
                         when CURRENCY, PERCENT {
-                            result = evaluateField((Decimal)val, whatToCompareTo == null ? null : Decimal.valueOf(whatToCompareTo));
+                            result = evaluateDecimal((Decimal)val, whatToCompareTo == null ? null : Decimal.valueOf(whatToCompareTo));
                         }
                         when DOUBLE  {
-                            result = evaluateField((Double)val, whatToCompareTo == null ? null : Double.valueOf(whatToCompareTo));
+                            result = evaluateDouble((Double)val, whatToCompareTo == null ? null : Double.valueOf(whatToCompareTo));
                         }
                         when DATE {
-                            result = evaluateField((Date)val, whatToCompareTo == null ? null : Date.valueOf(whatToCompareTo));
+                            result = evaluateDate((Date)val, whatToCompareTo == null ? null : Date.valueOf(whatToCompareTo));
                         }
                         when DATETIME {
-                            result = evaluateField((DateTime)val, whatToCompareTo == null ? null : (DateTime)JSON.deserialize('"' + whatToCompareTo + '"', DateTime.class));
+                            result = evaluateDateTime((DateTime)val, whatToCompareTo == null ? null : (DateTime)JSON.deserialize('"' + whatToCompareTo + '"', DateTime.class));
                         }
                         when STRING, EMAIL, ENCRYPTEDSTRING, MULTIPICKLIST, PHONE, TEXTAREA, URL, COMBOBOX, TIME {
-                            result = evaluateField((String)val, (String)whatToCompareTo);
+                            result = evaluateString((String)val, (String)whatToCompareTo);
                         }
                         when else {
-                            result = evaluateField(String.valueOf(val), String.valueOf(whatToCompareTo));
+                            result = evaluateString(String.valueOf(val), String.valueOf(whatToCompareTo));
                         }
                         // Also: Address, Base64, DataCategoryGroupReference, 
                     }
@@ -72,15 +72,15 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(Boolean left, Boolean right) {
+    private boolean evaluateBoolean(Boolean left, Boolean right) {
         return evaluateShared(left, right);
     }
 
-    private boolean evaluateField(Id left, Id right) {
+    private boolean evaluateId(Id left, Id right) {
         return evaluateShared(left, right);
     }
 
-    private boolean evaluateField(Long left, Long right) {
+    private boolean evaluateLong(Long left, Long right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {
@@ -93,7 +93,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(Decimal left, Decimal right) {
+    private boolean evaluateDecimal(Decimal left, Decimal right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {
@@ -106,7 +106,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(Double left, Double right) {
+    private boolean evaluateDouble(Double left, Double right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {
@@ -119,7 +119,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(Date left, Date right) {
+    private boolean evaluateDate(Date left, Date right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {
@@ -138,7 +138,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(DateTime left, DateTime right) {
+    private boolean evaluateDateTime(DateTime left, DateTime right) {
         boolean result = evaluateShared(left, right);
         Date leftDate = left.dateGmt();
         if(!result) {
@@ -158,7 +158,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return result;
     }
 
-    private boolean evaluateField(String left, String right) {
+    private boolean evaluateString(String left, String right) {
         boolean result = evaluateShared(left, right);
         if(!result) {
             switch on logic {

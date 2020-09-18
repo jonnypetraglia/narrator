@@ -6,59 +6,36 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
     public void log(String level, String message, List<Object> values) {
         String formattedMessage = String.format(message, narrate_Utilities.castToStringList(values));
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), level, formattedMessage);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData); 
-        }
+        EventBus.publish(logData);
     }
 
     public void except(Exception error) {
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(error), error);
-        System.assertNotEquals(null, logData);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData);
-        }
+        EventBus.publish(logData);
     }
 
     // TODO: Write test?
     public void restRequest(RestRequest request) {
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), request);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData);
-        }
+        EventBus.publish(logData);
     }
 
     // TODO: Write test?
     public void restResponse(RestResponse response) {
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), response);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData);
-        }
+        EventBus.publish(logData);
     }
 
     // TODO: Write test?
     public void httpRequest(HttpRequest request) {
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), request);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData);
-        }
+        EventBus.publish(logData);
     }
 
     // TODO: Write test?
     public void httpResponse(HttpResponse response) {
         narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), response);
-        Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(logData);
-        for(String loggerName : loggerNamesToLog) {
-            buffer.add(logData);
-        }
-    }
-
-    public void flush() {
-        buffer.flush();
+        EventBus.publish(logData);
     }
 
     public String getContext() {
@@ -75,21 +52,12 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
         this.snapshot = snapshot;
     }
 
-    public void setBufferSizeLimit(Integer size) {
-        buffer.setBufferSizeLimit(size);
-    }
-
-    public Integer getBufferSizeLimit() {
-        return buffer.getBufferSizeLimit();
-    }
-
     // PRIVATE
 
     @testVisible
     private final String AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS');
     private String userContext = null;
     @testVisible
-    private narrate_LogEventBuffer buffer = new narrate_LogEventBuffer();
     private narrate_CodeLocationSnapshot snapshot;
 
 

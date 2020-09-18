@@ -36,13 +36,17 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
         System.debug('REST[Remote]=' + request.remoteAddress);
         System.debug('REST[Headers]=' + request.headers);
         System.debug('REST[Params]=' + request.params);
-        System.debug('REST[Body]=' + request.requestBody);
+        lastLog = 'REST[Body]=' + (request.requestBody!=null ? request.requestBody.toString() : null);
+        System.debug(lastLog);
+        lastLevel = LoggingLevel.DEBUG;
     }
 
     public void restResponse(RestResponse response) {
         System.debug('REST[Status]=' + response.statusCode);
         System.debug('REST[Headers]=' + response.headers);
-        System.debug('REST[Body]=' + response.responseBody);
+        lastLevel = LoggingLevel.DEBUG;
+        lastLog = 'REST[Body]=' + (response.responseBody!=null ? response.responseBody.toString() : null);
+        System.debug(lastLog);
     }
 
     public void httpRequest(HttpRequest request) {
@@ -50,6 +54,8 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
         System.debug('HTTP[URI]=' + request.getEndpoint());
         System.debug('HTTP[Body]=' + request.getBody());
         // TODO: IT would be lovely to print headers here but Apex provides no way to retrieve the headers of an HttpRequest
+        lastLevel = LoggingLevel.DEBUG;
+        lastLog = 'HTTP[Body]=' + request.getBody();
     }
 
     public void httpResponse(HttpResponse response) {
@@ -60,11 +66,9 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
             System.debug('HTTP[Header="' + headerKey + '"]=' + response.getHeader(headerKey));
         }
         System.debug('HTTP[Body]=' + response.getBody());
+        lastLog = 'HTTP[Body]=' + response.getBody();
     }
 
-    public void flush() {
-        // Nothing to do
-    }
     public String getContext() {
         return context;
     }

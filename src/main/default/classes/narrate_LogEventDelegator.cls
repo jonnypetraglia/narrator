@@ -9,17 +9,19 @@ public with sharing class narrate_LogEventDelegator {
         for(narrate_LogEvent__e event : events) {
             Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(event);
             for(String loggerName : loggerNamesToLog) {
+                if(eventsForLoggers.get(loggerName)==null){
+                    eventsForLoggers.put(loggerName, new List<narrate_LogEvent__e>());
+                }
                 eventsForLoggers.get(loggerName).add(event);
             }
         }
         // Instantiate & emit the events as a list for each logger
         for(String loggerName : eventsForLoggers.keySet()){
-            List<narrate_LogEvent__e> events = eventsForLoggers.get(loggerName);
             if(!loggers.containsKey(loggerName)) {
                 loggers.put(loggerName, instantiateLogger(loggerName));
             }
             if(loggers.get(loggerName) != null) {
-                loggers.get(loggerName).log(events);
+                loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
             }
         }
     }
@@ -35,7 +37,7 @@ public with sharing class narrate_LogEventDelegator {
             // TODO: If loggerType implements ILogger
             return (narrate_ILogger) loggerType.newInstance();
         } catch(Exception e) {
-            System.debug('NARRATOR ERROR: \n' + e.getStackTraceString()());
+            System.debug('NARRATOR ERROR: \n' + e.getStackTraceString());
             return null;
         }
     }
