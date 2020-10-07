@@ -25,10 +25,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>narrate_EventREST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>narrate_IFilterLogic</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -38,14 +34,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>narrate_INarrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_LogEventBuffer</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_LogEventBufferTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -78,10 +66,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>narrate_SimpleFilterLogicTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_SimpleLogger</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
