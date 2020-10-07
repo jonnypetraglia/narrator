@@ -37,14 +37,12 @@ public class narrate_LogEventDelegatorTEST {
 
 
     public class TestLogger implements narrate_ILogger {
-        List<narrate_LogEvent__e> events = new List<narrate_LogEvent__e>();
-        public void log(narrate_LogEvent__e event) {
-            System.assertEquals('INFO', event.narrate_Level__c);
-            System.assertEquals('This should log', event.narrate_Message__c);
-            events.add(event);
-        }
-        public void flush() {
-            System.assertEquals(1, events.size());
+        public Integer log(List<narrate_LogEvent__e> events) {
+            for(narrate_LogEvent__e event : events){
+                System.assertEquals('This should log', event.narrate_Message__c);
+                System.assertEquals('INFO', event.narrate_Level__c);
+            }
+            return events.size();
         }
     }
 }

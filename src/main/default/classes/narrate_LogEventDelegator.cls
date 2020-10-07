@@ -4,19 +4,25 @@ public with sharing class narrate_LogEventDelegator {
     // This is where the magic happens
     // @PlatformEventListen or whatever
     public void receiveEvents(List<narrate_LogEvent__e> events) {
+        // Create lists for each Logger
+        Map<String, List<narrate_LogEvent__e>> eventsForLoggers = new Map<String, List<narrate_LogEvent__e>>();
         for(narrate_LogEvent__e event : events) {
             Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(event);
             for(String loggerName : loggerNamesToLog) {
-                if(!loggers.containsKey(loggerName)) {
-                    loggers.put(loggerName, instantiateLogger(loggerName));
+                if(eventsForLoggers.get(loggerName)==null){
+                    eventsForLoggers.put(loggerName, new List<narrate_LogEvent__e>());
                 }
-                if(loggers.get(loggerName) != null) {
-                    loggers.get(loggerName).log(event);
-                }
+                eventsForLoggers.get(loggerName).add(event);
             }
         }
-        for(narrate_ILogger logger : loggers.values()) {
-            logger.flush();
+        // Instantiate & emit the events as a list for each logger
+        for(String loggerName : eventsForLoggers.keySet()){
+            if(!loggers.containsKey(loggerName)) {
+                loggers.put(loggerName, instantiateLogger(loggerName));
+            }
+            if(loggers.get(loggerName) != null) {
+                loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
+            }
         }
     }
 
@@ -31,7 +37,7 @@ public with sharing class narrate_LogEventDelegator {
             // TODO: If loggerType implements ILogger
             return (narrate_ILogger) loggerType.newInstance();
         } catch(Exception e) {
-            System.debug(e.getMessage());
+            System.debug('NARRATOR ERROR: \n' + e.getStackTraceString());
             return null;
         }
     }
