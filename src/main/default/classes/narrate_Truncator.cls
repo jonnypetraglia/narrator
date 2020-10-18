@@ -7,7 +7,7 @@ global with sharing class narrate_Truncator implements Schedulable {
         truncate();
     }
     global void truncate(){
-        narrate_NarratorSettings__c settings = narrate_NarratorSettings__c.getOrgDefaults();
+        narrate_NarratorConfig__c settings = narrate_NarratorConfig__c.getOrgDefaults();
         Date after = settings.AutoTruncateDays__c != null ? Date.today().addDays(Integer.valueOf(-1 * settings.AutoTruncateDays__c)) : ALL_DATES;
         Integer max = settings.AutoTruncateMax__c != null ? Integer.valueOf(settings.AutoTruncateMax__c) : DEFAULT_MAX;
         deleteSObjects(getObjectsToDelete(after, max));

@@ -208,9 +208,9 @@ public virtual without sharing class Narrate {
         System.debug(logLevel, message);
     }
     @testVisible
-    private static narrate_NarratorSettings__c settings {get {
+    private static narrate_NarratorConfig__c settings {get {
         if(settings==null){
-            settings = narrate_NarratorSettings__c.getInstance();
+            settings = narrate_NarratorConfig__c.getInstance();
         }
         return settings;
     } set;}

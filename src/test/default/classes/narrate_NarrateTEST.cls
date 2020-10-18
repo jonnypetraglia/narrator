@@ -184,7 +184,7 @@ public with sharing class narrate_NarrateTEST {
     static TestNarrator setupTestNarrator() {
         TestNarrator narrator = new TestNarrator();
         Narrate.narrators = new List<narrate_INarrator> {narrator};
-        Narrate.settings = new narrate_NarratorSettings__c(EnabledTests__c=true);
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
         return narrator;
     }
 
