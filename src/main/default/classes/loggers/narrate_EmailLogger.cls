@@ -20,7 +20,7 @@ public class narrate_EmailLogger implements narrate_ILogger {
                 }
             }
         }catch(Exception error){
-            System.debug('NARRATOR ERROR: \n' + error.getStackTraceString());
+            throw new narrate_NarratorException(error, 'narrate_EmailLogger');
         }
         return count;
     }

@@ -1,5 +1,5 @@
 public with sharing class narrate_LogEventDelegator {
-    Map<String, narrate_ILogger> loggers =new Map<String, narrate_ILogger>();
+    Map<String, narrate_ILogger> loggers = new Map<String, narrate_ILogger>();
 
     // This is where the magic happens
     // @PlatformEventListen or whatever
@@ -9,36 +9,27 @@ public with sharing class narrate_LogEventDelegator {
         for(narrate_LogEvent__e event : events) {
             Set<String> loggerNamesToLog = narrate_LoggingSettingsManager.getLoggerNamesForSettingsThatMatchFilter(event);
             for(String loggerName : loggerNamesToLog) {
-                if(eventsForLoggers.get(loggerName)==null){
-                    eventsForLoggers.put(loggerName, new List<narrate_LogEvent__e>());
+                try {
+                    // TODO: If loggerType implements ILogger
+                    loggers.put(loggerName, (narrate_ILogger) (Type.forName(loggerName)).newInstance());
+                    if(eventsForLoggers.get(loggerName)==null){
+                        eventsForLoggers.put(loggerName, new List<narrate_LogEvent__e>());
+                    }
+                    eventsForLoggers.get(loggerName).add(event);
+                } catch(Exception error){
+                    System.debug(LoggingLevel.FATAL, 'WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());
                 }
-                eventsForLoggers.get(loggerName).add(event);
             }
         }
         // Instantiate & emit the events as a list for each logger
-        for(String loggerName : eventsForLoggers.keySet()){
-            if(!loggers.containsKey(loggerName)) {
-                loggers.put(loggerName, instantiateLogger(loggerName));
-            }
-            if(loggers.get(loggerName) != null) {
+        for(String loggerName : eventsForLoggers.keySet()) {
+            try {
                 loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
+            } catch(narrate_NarratorException error) {
+                System.debug('NARRATOR ERROR: \n' + error.getStackTraceString());
+            } catch(Exception error) {
+                System.debug(LoggingLevel.FATAL, 'WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());
             }
-        }
-    }
-
-    //// Private
-
-    @testVisible
-    private static narrate_ILogger instantiateLogger(String className) {
-        try {
-            System.debug(className);
-            Type loggerType = Type.forName(className);
-            System.debug(loggerType);
-            // TODO: If loggerType implements ILogger
-            return (narrate_ILogger) loggerType.newInstance();
-        } catch(Exception e) {
-            System.debug('NARRATOR ERROR: \n' + e.getStackTraceString());
-            return null;
         }
     }
 }

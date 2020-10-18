@@ -22,58 +22,32 @@ DONE. Away we go:
 
 
 ```apex
-  Log.debug('Yo, we logging now!');
-  Log.debug('How {0} is this?', new String[] { 'amazing' });
-  Log.info('Now im info');
+  Log.start('YO WE LOGGING NOW'); // I can optionally give a context -a unique string-, or have one generated for me
+  Log.debug('How {0} is this?', 'amazing');
+  Log.debug('Just pass in {0} or {1} or {2} or {3} and it is all converted to a single string for you', new Object[] { 42, new Account(), new SomeDTOClass(), 'whatever you want'})
+  Log.info('Now I am info');
   Log.fine('All the system levels are built right in!');
   Log.wtf('And more!');
   Log.log('wack', 'And you can make your own!!!');
 
-  Log.start('I can optionally give a context -a unique string-, or have one generated for me');
-  Log.setBufferSizeLimit(3); // Maybe now I feel like having a buffer
-  Log.debug('Now I continue as normal');
-  Log.warn('Then after the third log,');
-  Log.wtf('It gets flushed for you!') // Flushes afer executing this statement
-
-  Log.debug('Or I can do it manually');
-  Log.flush(); // flush at any time!
-  
   try {
     Integer theAnswerToLifeTheUniverseAndEverything = 42 / 0;
   } catch(Exception error) {
     Log.error('Woah, an exception! I have a method specifically for that to make it all pretty and such!');
     Log.except(error);
   }
-
-  Log.debug('Thanks for chatting with me!');
-  Log.finish(); // This is just an alias for flush but it really gives some nice closure, doesn't it?
 ```
 
 
 ### Sample Custom Logger
 
-SimpleLogger is a supplied virtual class that makes it stupid simple to set up your own logger by overriding *one* function.
-
-```apex
-public class ExcitableLogger extends narrate_SimpleLogger {
-    public Integer processEvents() {
-      for(narrate_LogEvent___e logEvent : buffer) {
-        System.debug(buffer.narrate_Message__c + '!!!');
-      }
-      return buffer.size();
-    }
-}
-```
-
-If if you want to create your own Logger from scratch, it's *two* methods to override:
+If if you want to create your own Logger from scratch, it's *one* method to override:
 
 ```apex
 public class ShoutingLogger implements narrate_ILogger {
+    // Highly highly highly recommend that this function swallows all errors. Otherwise a bug in your logging framework could break your production code, which would REALLY suck.
     void log(narrate_LogEvent__e data) {
       System.debug(data.narrate_Message__c.toUppercase());
-    }
-    void flush() {
-      System.debug('WE\'RE FLUSHING BUT I DON\'T KNOW WHY I\'M TELLING YOU THAT');
     }
 }
 ```
@@ -84,15 +58,12 @@ public class ShoutingLogger implements narrate_ILogger {
 What's a narrator? Well, it's simple: a Narrator says the things, a Logger logs the things.
 
 ```apex
-public class narrate_SystemDebugNarrator implements narrate_INarrator {
+public class narrate_MyFirstNarrator implements narrate_INarrator {
     public void log(String level, String message, List<Object> values) {
         System.debug('Hear ye, hear ye, I doth proclaim, at a level of ' + level + ', ' + message + ' is wack');
     }
     public void except(Exception error) {
         System.debug('Oh heelllllll no, you did not just throw a ' + error.getTypeName());
-    }
-    public void flush() {
-        // Nothing to do
     }
     void restRequest(RestRequest request) {
       System.debug('REQUESTING FROM URI: ' + request.requestURI);
@@ -100,13 +71,24 @@ public class narrate_SystemDebugNarrator implements narrate_INarrator {
     void restResponse(RestResponse response) {
       System.debug('RESPONSE STATUS CODE: ' + response.statusCode);
     }
+    void httpRequest(HttpRequest request) {
+      System.debug('HTTP FROM ENDPOINT: ' + request.getEndpoint());
+    }
+    void httpResponse(HttpResponse response) {
+      System.debug('HTTP STATUS CODE: ' + response.getStatusCode());
+    }
     public String getContext() {
         return context;
     }
     public void setContext(String context) {
         this.context = context;
     }
+    void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap){
+      snapshot = snap;
+    }
     private String context;
+    private narrate_CodeLocationSnapshot snapshot;
+}
 ```
 
 
@@ -129,8 +111,7 @@ This is all *in addition* to everything that's offered by [apex-unified-logging]
   - Logs are grouped by Execution Context (and allows you to give a custom message to each as well!)
   - Gives you a lot of Apex goodies!
     - A Log Creator object!
-    - A SimpleLogger abstract class that makes it so easy, it takes as little as extending the class with _1 function_ to create your own Logger!
-    - 4 example loggers that are fully functional and fully extendable! (Platform Event, Email, Instant Notification, Console)
+    - 4 example narrators that are fully functional and fully extendable! (Platform Event, Email, Instant Notification, Console)
     - A Code Location object! Get the exact place in code your log with the call of a function down to class, method, and line!
     - A Simple Filter Logic object!
     - *F U N* utilities! for! logging!
