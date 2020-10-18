@@ -17,12 +17,18 @@ public virtual without sharing class Narrate {
     public static void debug(String message, List<Object> values) {
         log(DEBUG, message, values);
     }
+    public static void debug(String message, Object param) {
+        log(DEBUG, message, asList(param));
+    }
     
     public static void info(String message) {
         log(INFO, message, new List<Object>());
     }
     public static void info(String message, List<Object> values) {
         log(INFO, message, values);
+    }
+    public static void info(String message, Object param) {
+        log(INFO, message, asList(param));
     }
     
     public static void warn(String message) {
@@ -31,12 +37,18 @@ public virtual without sharing class Narrate {
     public static void warn(String message, List<Object> values) {
         log(WARN, message, values);
     }
+    public static void warn(String message, Object param) {
+        log(WARN, message, asList(param));
+    }
     
     public static void error(String message) {
         log(ERROR, message, new List<Object>());
     }
     public static void error(String message, List<Object> values) {
         log(ERROR, message, values);
+    }
+    public static void error(String message, Object param) {
+        log(ERROR, message, asList(param));
     }
     
     public static void wtf(String message) {
@@ -45,12 +57,18 @@ public virtual without sharing class Narrate {
     public static void wtf(String message, List<Object> values) {
         log(WTF, message, values);
     }
+    public static void wtf(String message, Object param) {
+        log(WTF, message, asList(param));
+    }
     
     public static void fine(String message) {
         log(FINE, message, new List<Object>());
     }
     public static void fine(String message, List<Object> values) {
         log(FINE, message, values);
+    }
+    public static void fine(String message, Object param) {
+        log(FINE, message, asList(param));
     }
 
     public static void finer(String message) {
@@ -59,6 +77,9 @@ public virtual without sharing class Narrate {
     public static void finer(String message, List<Object> values) {
         log(FINER, message, values);
     }
+    public static void finer(String message, Object param) {
+        log(FINER, message, asList(param));
+    }
     
     public static void finest(String message) {
         log(FINEST, message, new List<Object>());
@@ -66,46 +87,78 @@ public virtual without sharing class Narrate {
     public static void finest(String message, List<Object> values) {
         log(FINEST, message, values);
     }
+    public static void finest(String message, Object param) {
+        log(FINEST, message, asList(param));
+    }
 
     public static void log(String level, String message, List<Object> values) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.log(level, message, values);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.log(level, message, values);
+            }
+        } else {
+            output(level, String.format(message, values));
         }
     }
 
-    public static void except(Exception error) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.except(error);
+    public static void except(Exception ohno) {
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.except(ohno);
+            }
+        } else {
+            output(ERROR, ohno.getTypeName() + ': ' + ohno.getMessage());
+            output(ERROR, ohno.getStackTraceString());
         }
     }
 
     public static void http(HttpRequest request) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.httpRequest(request);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.httpRequest(request);
+            }
+        } else {
+            output(DEBUG, request == null ? '' : request.toString());
         }
     }
 
     public static void http(HttpResponse response) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.httpResponse(response);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.httpResponse(response);
+            }
+        } else {
+            output(DEBUG, response == null ? '' : response.toString());
         }
     }
 
     public static void rest(RestRequest request) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.restRequest(request);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.restRequest(request);
+            }
+        } else {
+            output(DEBUG, request == null ? '' : request.toString());
         }
     }
 
     public static void rest(RestResponse response) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.restResponse(response);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.restResponse(response);
+            }
+        } else {
+            output(DEBUG, response == null ? '' : response.toString());
         }
     }
 
     public static void start(String context) {
-        for(narrate_INarrator narrator : narrators) {
-            narrator.setContext(context);
+        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
+            for(narrate_INarrator narrator : narrators) {
+                narrator.setContext(context);
+            }
+        } else {
+            output(DEBUG, 'Starting context: ' + context);
         }
     }
 
@@ -122,5 +175,36 @@ public virtual without sharing class Narrate {
 
     public static narrate_CodeLocationSnapshot makeSnapshot() {
         return narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
+    }
+    private static Boolean narratorIsEnabled() {
+        return !Test.isRunningTest() && narrate_NarratorSettings__c.getInstance().Enabled__c;
+    }
+    private static Boolean narratorIsEnabledTesting() {
+        return Test.isRunningTest() && narrate_NarratorSettings__c.getInstance().EnabledTests__c;
+    }
+    private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
+    private static void output(String level, String message) {
+        LoggingLevel logLevel = LoggingLevel.DEBUG; // DEBUG, WTF, REST, and anything else
+        switch on level.toUpperCase() {
+            when 'INFO' {
+                logLevel = LoggingLevel.INFO;
+            }
+            when 'WARN' {
+                logLevel = LoggingLevel.WARN;
+            }
+            when 'ERROR', 'EXCEPT' {
+                logLevel = LoggingLevel.ERROR;
+            }
+            when 'FINE' {
+                logLevel = LoggingLevel.FINE;
+            }
+            when 'FINER' {
+                logLevel = LoggingLevel.FINER;
+            }
+            when 'FINEST' {
+                logLevel = LoggingLevel.FINEST;
+            }
+        }
+        System.debug(logLevel, message);
     }
 }
