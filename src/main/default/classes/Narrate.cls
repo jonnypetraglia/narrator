@@ -177,10 +177,10 @@ public virtual without sharing class Narrate {
         return narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
     }
     private static Boolean narratorIsEnabled() {
-        return !Test.isRunningTest() && narrate_NarratorSettings__c.getInstance().Enabled__c;
+        return !Test.isRunningTest() && settings.Enabled__c;
     }
     private static Boolean narratorIsEnabledTesting() {
-        return Test.isRunningTest() && narrate_NarratorSettings__c.getInstance().EnabledTests__c;
+        return Test.isRunningTest() && settings.EnabledTests__c;
     }
     private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
     private static void output(String level, String message) {
@@ -207,4 +207,11 @@ public virtual without sharing class Narrate {
         }
         System.debug(logLevel, message);
     }
+    @testVisible
+    private static narrate_NarratorSettings__c settings {get {
+        if(settings==null){
+            settings = narrate_NarratorSettings__c.getInstance();
+        }
+        return settings;
+    } set;}
 }
