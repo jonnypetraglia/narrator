@@ -55,7 +55,7 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
     // PRIVATE
 
     @testVisible
-    private final String AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS');
+    private final String AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS') + '  ' + System.Request.getCurrent().getRequestId();
     private String userContext = null;
     @testVisible
     private narrate_CodeLocationSnapshot snapshot;

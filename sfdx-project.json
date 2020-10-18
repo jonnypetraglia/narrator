@@ -5,12 +5,12 @@
             "default": true,
             "package": "Narrator",
             "versionName": "Acorn",
-            "versionNumber": "1.0.3.NEXT"
+            "versionNumber": "1.1.0.NEXT"
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://inspirato.lightning.force.com/",
-    "sourceApiVersion": "48.0",
+    "sourceApiVersion": "50.0",
     "packageAliases": {
         "Narrator": "0Ho3n000000XZAbCAO",
         "Narrator@1.0.0-1": "04t3n000000tNn0AAE",
