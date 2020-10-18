@@ -15,6 +15,10 @@
         <value xsi:type="xsd:string">[&quot;narrate_Level__c&quot;, &quot;!=&quot;, &quot;&quot;]</value>
     </values>
     <values>
+        <field>narrate_Quiddity__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
         <field>narrate_Value__c</field>
         <value xsi:nil="true"/>
     </values>

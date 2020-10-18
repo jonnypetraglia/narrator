@@ -20,10 +20,11 @@ public with sharing class narrate_LogEventDelegator {
                 loggerNamesToLog.removeAll(failedLoggerNames);
                 for(String loggerName : loggerNamesToLog) {
                     try {
-                        if(! ( Type.forName(loggerName) instanceof narrate_ILogger)){
+                        Object logger = Type.forName(loggerName).newInstance();
+                        if(!(logger instanceof narrate_ILogger)){
                             throw new InvalidMetadataException(loggerName);
                         }
-                        loggers.put(loggerName, (narrate_ILogger) (Type.forName(loggerName)).newInstance());
+                        loggers.put(loggerName, (narrate_ILogger) logger);
                         if(eventsForLoggers.get(loggerName)==null){
                             eventsForLoggers.put(loggerName, new List<narrate_LogEvent__e>());
                         }
