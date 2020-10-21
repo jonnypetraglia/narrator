@@ -161,14 +161,14 @@ public class narrate_UtilitiesTEST {
         }
         List<narrate_ExecutionContext__c> executionContexts = narrate_Utilities.makeMissingExecutionContextsFromEvents(logEvents);
         System.assertEquals(42-24, executionContexts.size());
-        Set<String> newContextNames = new Set<String>();
+        Set<String> newContextRequests = new Set<String>();
         for(narrate_ExecutionContext__c execContext : executionContexts) {
-            newContextNames.add(execContext.Name);
+            newContextRequests.add(execContext.narrate_Request__c);
         }
         for(Integer i=24; i<42; i++) {
-            System.assert(newContextNames.contains(i + ' pizza slices'), 'i=' + i + ';' + newContextNames);
+            System.assert(newContextRequests.contains(i + ' pizza slices'), 'i=' + i + ';' + newContextRequests);
         }
-        System.assertEquals(42-24, newContextNames.size());
+        System.assertEquals(42-24, newContextRequests.size());
     }
 
     @isTest
@@ -182,7 +182,7 @@ public class narrate_UtilitiesTEST {
             String potoooooooo = i + ' potato'; //Pot 8 O's
             System.assert(mapResult.containsKey(potoooooooo), 'i=' + i + ';' + mapResult);
             System.assertNotEquals(null, mapResult.get(potoooooooo), 'i=' + i);
-            System.assertEquals(potoooooooo, mapResult.get(potoooooooo).Name, 'i=' + i);
+            System.assertEquals(potoooooooo, mapResult.get(potoooooooo).narrate_Request__c, 'i=' + i);
         }
     }
 
