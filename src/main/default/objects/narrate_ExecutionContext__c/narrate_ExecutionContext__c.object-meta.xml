@@ -159,6 +159,7 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Log Execution</label>
     <nameField>
+        <label>Name</label>
         <displayFormat>LOG-{000000}</displayFormat>
         <type>AutoNumber</type>
     </nameField>

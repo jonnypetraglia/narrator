@@ -152,7 +152,7 @@ public class narrate_UtilitiesTEST {
         narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
         List<narrate_ExecutionContext__c> preexistingExecutionContexts = new List<narrate_ExecutionContext__c>();
         for(Integer i=0; i<24; i++) {
-            preexistingExecutionContexts.add(new narrate_ExecutionContext__c(Name = i + ' pizza slices'));
+            preexistingExecutionContexts.add(new narrate_ExecutionContext__c(narrate_Request__c = i + ' pizza slices'));
         }
         insert preexistingExecutionContexts;
         List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
@@ -175,7 +175,7 @@ public class narrate_UtilitiesTEST {
     private static void makeMapOfExecutionContextsByRequest() {
         List<narrate_ExecutionContext__c> executionContexts = new List<narrate_ExecutionContext__c>();
         for(Integer i=0; i<10; i++) {
-            executionContexts.add(new narrate_ExecutionContext__c(Name = i + ' potato'));
+            executionContexts.add(new narrate_ExecutionContext__c(narrate_Request__c = i + ' potato'));
         }
         Map<String, narrate_ExecutionContext__c> mapResult = narrate_Utilities.makeMapOfExecutionContextsByRequest(executionContexts);
         for(Integer i=0; i<10; i++) {
@@ -192,7 +192,7 @@ public class narrate_UtilitiesTEST {
         narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
         List<narrate_ExecutionContext__c> preexistingExecutionContextsToInsert = new List<narrate_ExecutionContext__c>();
         for(Integer i=0; i<13; i++) {
-            preexistingExecutionContextsToInsert.add(new narrate_ExecutionContext__c(Name = 'I have ' + i + ' cookies'));
+            preexistingExecutionContextsToInsert.add(new narrate_ExecutionContext__c(narrate_Request__c = 'I have ' + i + ' cookies'));
         }
         insert preexistingExecutionContextsToInsert;
         Map<ID, narrate_ExecutionContext__c> preexistingExecutionContexts = new Map<ID, narrate_ExecutionContext__c>([SELECT Name FROM narrate_ExecutionContext__c WHERE Id IN :preexistingExecutionContextsToInsert]);
