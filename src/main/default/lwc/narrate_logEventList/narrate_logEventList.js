@@ -28,8 +28,8 @@ export default class narrate_logEventList extends LightningElement {
         for(var index = 0; index < logEntries.length; index++) {
             const logEntry = logEntries[index];
             if(!this.logs) this.logs = {};
-            if(!this.logs[logEntry.narrate_Context__c]) this.logs[logEntry.narrate_Context__c] = [];
-            this.logs[logEntry.narrate_Context__c].push(logEntry);
+            if(!this.logs[logEntry.narrate_Request__c]) this.logs[logEntry.narrate_Request__c] = [];
+            this.logs[logEntry.narrate_Request__c].push(logEntry);
         }
     }
     

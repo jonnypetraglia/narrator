@@ -157,12 +157,12 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Log</label>
+    <label>Log Execution</label>
     <nameField>
-        <label>Log Context</label>
-        <type>Text</type>
+        <displayFormat>LOG-{000000}</displayFormat>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Logs</pluralLabel>
+    <pluralLabel>Log Executions</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

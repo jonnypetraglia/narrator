@@ -5,36 +5,32 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
 
     public void log(String level, String message, List<Object> values) {
         String formattedMessage = String.format(message, narrate_Utilities.castToStringList(values));
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), level, formattedMessage);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(), level, formattedMessage, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
     public void except(Exception error) {
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(error), error);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(error), error, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
-    // TODO: Write test?
     public void restRequest(RestRequest request) {
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), request);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(), request, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
-    // TODO: Write test?
     public void restResponse(RestResponse response) {
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), response);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(), response, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
-    // TODO: Write test?
     public void httpRequest(HttpRequest request) {
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), request);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(), request, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
-    // TODO: Write test?
     public void httpResponse(HttpResponse response) {
-        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(getFullContext(), snapshot.snap(), response);
+        narrate_LogEvent__e logData = narrate_Utilities.constructLogEvent(snapshot.snap(), response, CURRENT_REQUEST_ID, CURRENT_REQUEST_QUIDDITY);
         EventBus.publish(logData);
     }
 
@@ -61,6 +57,10 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
     private narrate_CodeLocationSnapshot snapshot;
 
 
+    @testVisible
+    private static final System.Request CURRENT_REQUEST = System.Request.getCurrent();
+    private static final String CURRENT_REQUEST_ID {get { return CURRENT_REQUEST_ID;}}
+    private static final String CURRENT_REQUEST_QUIDDITY {get {return CURRENT_REQUEST_QUIDDITY;}}
     @testVisible
     private String getFullContext() {
         return AUTO_CONTEXT + (userContext!=null ? (' ' + + userContext) : '');

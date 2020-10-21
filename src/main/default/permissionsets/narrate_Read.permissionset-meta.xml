@@ -37,11 +37,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>narrate_LogEntry__c.narrate_Context__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>narrate_LogEntry__c.narrate_Line__c</field>
         <readable>true</readable>
     </fieldPermissions>

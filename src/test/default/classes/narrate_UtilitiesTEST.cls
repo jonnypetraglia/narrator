@@ -28,7 +28,6 @@ public class narrate_UtilitiesTEST {
     private static void constructEntryFromEvent() {
         DateTime timestamp = DateTime.now();
         narrate_LogEntry__c result = narrate_Utilities.constructEntryFromEvent(new narrate_LogEvent__e(
-            narrate_Context__c = 'MuhContext',
             narrate_Class__c = 'MuhClass',
             narrate_Method__c = 'MuhMethod',
             narrate_Line__c = 42,
@@ -37,7 +36,6 @@ public class narrate_UtilitiesTEST {
             narrate_User__c = UserInfo.getUserId()
         ), UserInfo.getUserId());  // Not technically an ExecutionContext ID but who cares lol
         System.assertEquals(UserInfo.getUserId(), result.narrate_ExecutionContext__c);
-        System.assertEquals('MuhContext', result.narrate_Context__c);
         System.assertEquals('MuhClass', result.narrate_Class__c);
         System.assertEquals('MuhMethod', result.narrate_Method__c);
         System.assertEquals(42, result.narrate_Line__c);
@@ -49,8 +47,7 @@ public class narrate_UtilitiesTEST {
     private static void constructLogEvent() {
         DateTime timestamp = DateTime.now();
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_UtilitiesTest.class.getName()).snap();
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, 'MuhLevel', 'MAH BOI!');
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, 'MuhLevel', 'MAH BOI!', 'RequestId', 'Quiddity');
         System.assertEquals('MuhLevel', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -62,8 +59,7 @@ public class narrate_UtilitiesTEST {
     @isTest
     private static void constructLogEventFromException() {
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_UtilitiesTest.class.getName()).snap();
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, new DmlException('MAH BOI!'));
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, new DmlException('MAH BOI!'), 'RequestId', 'Quiddity');
         System.assertEquals('Except', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -77,8 +73,7 @@ public class narrate_UtilitiesTEST {
         RestRequest request = new RestRequest();
         request.requestBody = Blob.valueOf('Hello there');
         request.httpMethod = 'GET';
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, request);
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, request, 'RequestId', 'Quiddity');
         System.assertEquals('Rest', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -92,8 +87,7 @@ public class narrate_UtilitiesTEST {
         RestResponse response = new RestResponse();
         response.responseBody = Blob.valueOf('General Kenobi!');
         response.statusCode = 200;
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, response);
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, response, 'RequestId', 'Quiddity');
         System.assertEquals('Rest', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -107,8 +101,7 @@ public class narrate_UtilitiesTEST {
         HttpRequest request = new HttpRequest();
         request.setBody('Hello there');
         request.setMethod('GET');
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, request);
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, request, 'RequestId', 'Quiddity');
         System.assertEquals('Rest', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -122,8 +115,7 @@ public class narrate_UtilitiesTEST {
         HttpResponse response = new HttpResponse();
         response.setBody('General Kenobi!');
         response.setStatusCode(200);
-        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent('MuhContext', snappy, response);
-        System.assertEquals('MuhContext', result.narrate_Context__c);
+        narrate_LogEvent__e result = narrate_Utilities.constructLogEvent(snappy, response, 'RequestId', 'Quiddity');
         System.assertEquals('Rest', result.narrate_Level__c);
         System.assertEquals(snappy.theClass, result.narrate_Class__c);
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
@@ -132,28 +124,28 @@ public class narrate_UtilitiesTEST {
     }
 
     @isTest
-    private static void extractContexts() {
+    private static void extractRequestsFromLogEvents() {
         narrate_CodeLocationSnapshot.Snapshot snappy = new narrate_CodeLocationSnapshot.Snapshot();
         List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
         for(Integer i=0; i<10; i++) {
-            logEvents.add(narrate_Utilities.constructLogEvent('Give me a ' + i + '!', snappy, 'Radda', 'Radda'));
+            logEvents.add(narrate_Utilities.constructLogEvent(snappy, 'Radda', 'Radda', 'Give me a ' + i + '!', 'Quiddity'));
         }
-        Set<String> contextResults = narrate_Utilities.extractContexts(logEvents);
+        Set<String> requestResults = narrate_Utilities.extractRequestsFromLogEvents(logEvents);
         for(Integer i=0; i<10; i++) {
-            System.assert(contextResults.contains('Give me a ' + i + '!'), 'i=' + i + ';' + contextResults);
+            System.assert(requestResults.contains('Give me a ' + i + '!'), 'i=' + i + ';' + requestResults);
         }
     }
 
-    @isTest
-    private static void constructExecutionContextsForContexts() {
-        Map<String, Integer> contexts = new Map<String, Integer> {'This'=>0, 'That'=>0, 'The Other'=>0, 'Lunch'=>0};
-        for(narrate_ExecutionContext__c executionContext : narrate_Utilities.constructExecutionContextsForContexts(contexts.keySet())) {
-            contexts.put(executionContext.Name, contexts.get(executionContext.Name)+1);
-        }
-        for(String context : contexts.keySet()) {
-            System.assertEquals(1, contexts.get(context), context);
-        }
-    }
+    // @isTest
+    // private static void constructExecutionContextsForLogEvents() {
+    //     Map<String, Integer> contexts = new Map<String, Integer> {'This'=>0, 'That'=>0, 'The Other'=>0, 'Lunch'=>0};
+    //     for(narrate_ExecutionContext__c executionContext : narrate_Utilities.constructExecutionContextsForContexts(contexts.keySet())) {
+    //         contexts.put(executionContext.Name, contexts.get(executionContext.Name)+1);
+    //     }
+    //     for(String context : contexts.keySet()) {
+    //         System.assertEquals(1, contexts.get(context), context);
+    //     }
+    // }
 
     @isTest
     private static void makeMissingExecutionContextsFromEvents() {
@@ -165,7 +157,7 @@ public class narrate_UtilitiesTEST {
         insert preexistingExecutionContexts;
         List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
         for(Integer i=7; i<42; i++) {
-            logEvents.add(narrate_Utilities.constructLogEvent(i + ' pizza slices', snappy, 'Radda', 'Radda'));
+            logEvents.add(narrate_Utilities.constructLogEvent(snappy, 'Radda', 'Radda', i + ' pizza slices', 'Quiddity'));
         }
         List<narrate_ExecutionContext__c> executionContexts = narrate_Utilities.makeMissingExecutionContextsFromEvents(logEvents);
         System.assertEquals(42-24, executionContexts.size());
@@ -180,12 +172,12 @@ public class narrate_UtilitiesTEST {
     }
 
     @isTest
-    private static void makeMapOfExecutionContextsByName() {
+    private static void makeMapOfExecutionContextsByRequest() {
         List<narrate_ExecutionContext__c> executionContexts = new List<narrate_ExecutionContext__c>();
         for(Integer i=0; i<10; i++) {
             executionContexts.add(new narrate_ExecutionContext__c(Name = i + ' potato'));
         }
-        Map<String, narrate_ExecutionContext__c> mapResult = narrate_Utilities.makeMapOfExecutionContextsByName(executionContexts);
+        Map<String, narrate_ExecutionContext__c> mapResult = narrate_Utilities.makeMapOfExecutionContextsByRequest(executionContexts);
         for(Integer i=0; i<10; i++) {
             String potoooooooo = i + ' potato'; //Pot 8 O's
             System.assert(mapResult.containsKey(potoooooooo), 'i=' + i + ';' + mapResult);
@@ -206,9 +198,9 @@ public class narrate_UtilitiesTEST {
         Map<ID, narrate_ExecutionContext__c> preexistingExecutionContexts = new Map<ID, narrate_ExecutionContext__c>([SELECT Name FROM narrate_ExecutionContext__c WHERE Id IN :preexistingExecutionContextsToInsert]);
         List<narrate_LogEvent__e> logEvents = new List<narrate_LogEvent__e>();
         for(Integer i=0; i<42; i++) {
-            logEvents.add(narrate_Utilities.constructLogEvent('I have ' + i + ' cookies', snappy, 'Radda', 'Radda'));
+            logEvents.add(narrate_Utilities.constructLogEvent(snappy, 'Radda', 'Radda', 'I have ' + i + ' cookies', 'Quiddity'));
             if(i>36)
-                logEvents.add(narrate_Utilities.constructLogEvent('I have ' + i + ' cookies', snappy, 'Radda', 'Radda'));
+                logEvents.add(narrate_Utilities.constructLogEvent(snappy, 'Radda', 'Radda', 'I have ' + i + ' cookies', 'Quiddity'));
         }
         Test.startTest();
         List<narrate_LogEntry__c> createdEntries = narrate_Utilities.createLogEntriesAndNeededExecutionContexts(logEvents);
