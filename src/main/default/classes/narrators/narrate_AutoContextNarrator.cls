@@ -49,20 +49,33 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
     }
 
     // PRIVATE
-
-    @testVisible
-    private final String AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS') + '  ' + System.Request.getCurrent().getRequestId();
-    private String userContext = null;
-    @testVisible
-    private narrate_CodeLocationSnapshot snapshot;
-
-
     @testVisible
     private static final System.Request CURRENT_REQUEST = System.Request.getCurrent();
-    private static final String CURRENT_REQUEST_ID {get { return CURRENT_REQUEST_ID;}}
-    private static final String CURRENT_REQUEST_QUIDDITY {get {return CURRENT_REQUEST_QUIDDITY;}}
+    private static final String CURRENT_REQUEST_ID {get {
+        if(CURRENT_REQUEST_ID==null){
+            CURRENT_REQUEST_ID = CURRENT_REQUEST.getRequestId();
+        }
+        return CURRENT_REQUEST_ID;
+    } private set;}
+    private static final String CURRENT_REQUEST_QUIDDITY {get {
+        if(CURRENT_REQUEST_QUIDDITY==null){
+            CURRENT_REQUEST_QUIDDITY = String.valueOf(CURRENT_REQUEST.getQuiddity());
+        }
+        return CURRENT_REQUEST_QUIDDITY;
+    } private set;}
     @testVisible
     private String getFullContext() {
         return AUTO_CONTEXT + (userContext!=null ? (' ' + + userContext) : '');
     }
+
+    @testVisible
+    private final String AUTO_CONTEXT {get {
+        if(AUTO_CONTEXT==null){
+            AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS') + '  ' + CURRENT_REQUEST_ID;
+        }
+        return AUTO_CONTEXT;
+    } private set;}
+    private String userContext = null;
+    @testVisible
+    private narrate_CodeLocationSnapshot snapshot;
 }
