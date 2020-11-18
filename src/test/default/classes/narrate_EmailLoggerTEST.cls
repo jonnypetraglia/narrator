@@ -44,6 +44,21 @@ public class narrate_EmailLoggerTEST {
         System.assert(testEmail.PlainTextBody.contains('Don\'t Panic'), testEmail.PlainTextBody);
     }
 
+    @isTest
+    public static void logFailure() {
+        try {
+            narrate_EmailLogger logger = new narrate_EmailLogger();
+            logger.recipients = new String[] {'bademail'};
+            logger.log(null);
+            System.assert(false, 'Expected exception to be thrown but none was.');
+        }catch(narrate_NarratorException error){
+            List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c, narrate_Request__c, narrate_Quiddity__c FROM narrate_LogEntry__c];
+            System.assertEquals(0, testEntries.size(), testEntries + '');
+        }catch(Exception error){
+            System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');
+        }
+    }
+
     private static narrate_LogEvent__e generateTestLogEvent(){
         return new narrate_LogEvent__e(
             narrate_Level__c = 'grok',

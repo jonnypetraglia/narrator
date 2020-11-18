@@ -6,6 +6,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.debug('Application');
         System.assertEquals('Debug', narrator.loggedLevel);
         System.assertEquals('Application', narrator.loggedMessage);
+        Narrate.debug('Application', testValue());
+        System.assertEquals('Debug', narrator.loggedLevel);
+        System.assertEquals('Application!!!', narrator.loggedMessage);
         Narrate.debug('Application', testValues());
         System.assertEquals('Debug', narrator.loggedLevel);
         System.assertEquals('Application!!!', narrator.loggedMessage);
@@ -17,6 +20,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.info('Presentation');
         System.assertEquals('Info', narrator.loggedLevel);
         System.assertEquals('Presentation', narrator.loggedMessage);
+        Narrate.info('Presentation', testValue());
+        System.assertEquals('Info', narrator.loggedLevel);
+        System.assertEquals('Presentation!!!', narrator.loggedMessage);
         Narrate.info('Presentation', testValues());
         System.assertEquals('Info', narrator.loggedLevel);
         System.assertEquals('Presentation!!!', narrator.loggedMessage);
@@ -28,6 +34,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.warn('Session');
         System.assertEquals('Warn', narrator.loggedLevel);
         System.assertEquals('Session', narrator.loggedMessage);
+        Narrate.warn('Session', testValue());
+        System.assertEquals('Warn', narrator.loggedLevel);
+        System.assertEquals('Session!!!', narrator.loggedMessage);
         Narrate.warn('Session', testValues());
         System.assertEquals('Warn', narrator.loggedLevel);
         System.assertEquals('Session!!!', narrator.loggedMessage);
@@ -39,6 +48,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.error('Transport');
         System.assertEquals('Error', narrator.loggedLevel);
         System.assertEquals('Transport', narrator.loggedMessage);
+        Narrate.error('Transport', testValue());
+        System.assertEquals('Error', narrator.loggedLevel);
+        System.assertEquals('Transport!!!', narrator.loggedMessage);
         Narrate.error('Transport', testValues());
         System.assertEquals('Error', narrator.loggedLevel);
         System.assertEquals('Transport!!!', narrator.loggedMessage);
@@ -50,6 +62,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.fine('Network');
         System.assertEquals('Fine', narrator.loggedLevel);
         System.assertEquals('Network', narrator.loggedMessage);
+        Narrate.fine('Network', testValue());
+        System.assertEquals('Fine', narrator.loggedLevel);
+        System.assertEquals('Network!!!', narrator.loggedMessage);
         Narrate.fine('Network', testValues());
         System.assertEquals('Fine', narrator.loggedLevel);
         System.assertEquals('Network!!!', narrator.loggedMessage);
@@ -61,6 +76,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.finer('Data Link');
         System.assertEquals('Finer', narrator.loggedLevel);
         System.assertEquals('Data Link', narrator.loggedMessage);
+        Narrate.finer('Data Link', testValue());
+        System.assertEquals('Finer', narrator.loggedLevel);
+        System.assertEquals('Data Link!!!', narrator.loggedMessage);
         Narrate.finer('Data Link', testValues());
         System.assertEquals('Finer', narrator.loggedLevel);
         System.assertEquals('Data Link!!!', narrator.loggedMessage);
@@ -72,6 +90,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.finest('Physical');
         System.assertEquals('Finest', narrator.loggedLevel);
         System.assertEquals('Physical', narrator.loggedMessage);
+        Narrate.finest('Physical', testValue());
+        System.assertEquals('Finest', narrator.loggedLevel);
+        System.assertEquals('Physical!!!', narrator.loggedMessage);
         Narrate.finest('Physical', testValues());
         System.assertEquals('Finest', narrator.loggedLevel);
         System.assertEquals('Physical!!!', narrator.loggedMessage);
@@ -83,6 +104,9 @@ public with sharing class narrate_NarrateTEST {
         Narrate.wtf('Electrons');
         System.assertEquals('Wtf', narrator.loggedLevel);
         System.assertEquals('Electrons', narrator.loggedMessage);
+        Narrate.wtf('Electrons', testValue());
+        System.assertEquals('Wtf', narrator.loggedLevel);
+        System.assertEquals('Electrons!!!', narrator.loggedMessage);
         Narrate.wtf('Electrons', testValues());
         System.assertEquals('Wtf', narrator.loggedLevel);
         System.assertEquals('Electrons!!!', narrator.loggedMessage);
@@ -137,6 +161,23 @@ public with sharing class narrate_NarrateTEST {
         System.assertEquals('Farewell', narrator.loggedMessage);
     }
 
+    @isTest
+    private static void narratorDisabled(){
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=false);
+        Narrate.debug('Herpaderp');
+        Narrate.info('Herpaderp');
+        Narrate.warn('Herpaderp');
+        Narrate.error('Herpaderp');
+        Narrate.fine('Herpaderp');
+        Narrate.finer('Herpaderp');
+        Narrate.finest('Herpaderp');
+        Narrate.except(new DmlException('Test Exception'));
+        Narrate.rest(new RestRequest());
+        Narrate.rest(new RestResponse());
+        Narrate.http(new HttpRequest());
+        Narrate.http(new HttpResponse());
+    }
+
     public class TestNarrator implements narrate_INarrator {
         private String loggedLevel, loggedMessage;
         private List<Object> loggedValues;
@@ -178,7 +219,10 @@ public with sharing class narrate_NarrateTEST {
         return narrator;
     }
 
+    static String testValue() {
+        return 'Don\'t Panic';
+    }
     static List<String> testValues() {
-        return new List<String>{'Don\'t Panic'};
+        return new List<String>{testValue()};
     }
 }

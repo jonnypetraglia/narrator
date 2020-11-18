@@ -24,11 +24,16 @@ public class narrate_RecordLoggerTEST {
 
     @isTest
     public static void testLogFailure() {
-        narrate_LogEvent__e event = new narrate_LogEvent__e();
-        narrate_RecordLogger logger = new narrate_RecordLogger();
-        Integer successCount = logger.log(new List<narrate_LogEvent__e>{event});
-        System.assertEquals(0, successCount);
-        List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c, narrate_Request__c, narrate_Quiddity__c FROM narrate_LogEntry__c];
-        System.assertEquals(0, testEntries.size(), testEntries + '');
+        try {
+            narrate_RecordLogger logger = new narrate_RecordLogger();
+            logger.log(null);
+            System.assert(false, 'Expected exception to be thrown but none was.');
+        }catch(narrate_NarratorException error){
+            List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c, narrate_Request__c, narrate_Quiddity__c FROM narrate_LogEntry__c];
+            System.assertEquals(0, testEntries.size(), testEntries + '');
+            System.assertNotEquals(null, error.getMessage(), 'Honestly just tryna get stupid code coverage.');
+        }catch(Exception error){
+            System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');
+        }
     }
 }
