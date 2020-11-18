@@ -10,15 +10,12 @@ public class narrate_CodeLocationSnapshot {
         this.enclosingClassName = enclosingClassName;
     }
 
-    private narrate_CodeLocationSnapshot() {}
-
     public class Snapshot {
         public String theClass, theMethod;
         public Integer theLine;
     }
 
     public Snapshot snap() {
-        List<String> stacktrace = new DmlException().getStackTraceString().split('\n');
         return getSnapshotFromStacktrace((new DmlException('FakeException')).getStackTraceString().split('\n'));
     }
 

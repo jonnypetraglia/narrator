@@ -2,7 +2,7 @@ public with sharing class narrate_LogEventDelegator {
     // This is where the magic happens
     // @PlatformEventListen or whatever
     public void receiveEvents(List<narrate_LogEvent__e> events) {
-        if(!narrate_LoggingSettingsManager.hasActiveSettings()){
+        if(narrate_LoggingSettingsManager.hasActiveSettings()){
             Map<String, List<narrate_LogEvent__e>> eventsForLoggers = narrate_LoggingSettingsManager.getEventsByLoggerNamesForSettingsThatMatchLoggerSettings(events);
             Map<String, narrate_ILogger> loggers = instantiateLoggersByName(eventsForLoggers.keySet());
             logEventsToLoggers(eventsForLoggers, loggers);
@@ -34,7 +34,7 @@ public with sharing class narrate_LogEventDelegator {
             try {
                 loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
             } catch(narrate_NarratorException error) {
-                System.debug('NARRATOR ERROR: \n' + error.getStackTraceString());
+                System.debug('NARRATOR ERROR: \n' + error.getMessage() + ' - ' + error.getStackTraceString());
             } catch(Exception error) {
                 System.debug(LoggingLevel.ERROR, 'WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());
             }
