@@ -41,5 +41,6 @@ public with sharing class narrate_LogEventDelegator {
         }
     }
     
+    @testVisible
     public class InvalidMetadataException extends Exception{}
 }

@@ -10,5 +10,4 @@
 ### In Progress
 
 - [ ] LoggingSettingsManager tests  
-- [ ] LogEventDelegator tests
 

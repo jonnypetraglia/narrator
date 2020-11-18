@@ -6,6 +6,6 @@ global class narrate_NarratorException extends Exception {
         this.cause = cause;
     }
     override global String getMessage(){
-        return 'NARRATOR ERROR: ' + context + '\n' + cause.getStackTraceString();
+        return 'NARRATOR ERROR: ' + context + (cause!=null ? ('\n' + cause.getStackTraceString()) : '');
     }
 }
