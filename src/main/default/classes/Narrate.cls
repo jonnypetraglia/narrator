@@ -97,7 +97,7 @@ public virtual without sharing class Narrate {
                 narrator.log(level, message, values);
             }
         } else {
-            output(level, String.format(message, values));
+            systemDebugOutput(level, String.format(message, values));
         }
     }
 
@@ -107,8 +107,8 @@ public virtual without sharing class Narrate {
                 narrator.except(ohno);
             }
         } else {
-            output(ERROR, ohno.getTypeName() + ': ' + ohno.getMessage());
-            output(ERROR, ohno.getStackTraceString());
+            systemDebugOutput(ERROR, ohno.getTypeName() + ': ' + ohno.getMessage());
+            systemDebugOutput(ERROR, ohno.getStackTraceString());
         }
     }
 
@@ -118,7 +118,7 @@ public virtual without sharing class Narrate {
                 narrator.httpRequest(request);
             }
         } else {
-            output(DEBUG, request == null ? '' : request.toString());
+            systemDebugOutput(DEBUG, request == null ? '' : request.toString());
         }
     }
 
@@ -128,7 +128,7 @@ public virtual without sharing class Narrate {
                 narrator.httpResponse(response);
             }
         } else {
-            output(DEBUG, response == null ? '' : response.toString());
+            systemDebugOutput(DEBUG, response == null ? '' : response.toString());
         }
     }
 
@@ -138,7 +138,7 @@ public virtual without sharing class Narrate {
                 narrator.restRequest(request);
             }
         } else {
-            output(DEBUG, request == null ? '' : request.toString());
+            systemDebugOutput(DEBUG, request == null ? '' : request.toString());
         }
     }
 
@@ -148,7 +148,7 @@ public virtual without sharing class Narrate {
                 narrator.restResponse(response);
             }
         } else {
-            output(DEBUG, response == null ? '' : response.toString());
+            systemDebugOutput(DEBUG, response == null ? '' : response.toString());
         }
     }
 
@@ -173,7 +173,7 @@ public virtual without sharing class Narrate {
         return Test.isRunningTest() && settings.EnabledTests__c;
     }
     private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
-    private static void output(String level, String message) {
+    private static void systemDebugOutput(String level, String message) {
         LoggingLevel logLevel = LoggingLevel.DEBUG; // DEBUG, WTF, REST, and anything else
         switch on level.toUpperCase() {
             when 'INFO' {
