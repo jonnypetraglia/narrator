@@ -66,6 +66,7 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
             System.debug('HTTP[Header="' + headerKey + '"]=' + response.getHeader(headerKey));
         }
         System.debug('HTTP[Body]=' + response.getBody());
+        lastLevel = LoggingLevel.DEBUG;
         lastLog = 'HTTP[Body]=' + response.getBody();
     }
 

@@ -12,8 +12,12 @@
                 <field>narrate_ExecutionContext__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>narrate_Level__c</field>
+                <behavior>Readonly</behavior>
+                <field>narrate_Quiddity__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>narrate_Request__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -21,6 +25,10 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>narrate_Level__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>narrate_Class__c</field>

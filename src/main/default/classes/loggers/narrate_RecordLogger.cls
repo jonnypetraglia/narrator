@@ -8,7 +8,7 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
                 }
             }
         }catch(Exception error){
-            System.debug('NARRATOR ERROR: \n' + error.getStackTraceString());
+            throw new narrate_NarratorException(error, 'narrate_RecordLogger');
         }
         return count;
     }

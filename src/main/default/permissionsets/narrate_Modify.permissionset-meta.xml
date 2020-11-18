@@ -17,17 +17,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>narrate_ExecutionContext__c.narrate_Quiddity__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>narrate_ExecutionContext__c.narrate_Request__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>narrate_ExecutionContext__c.narrate_StartTime__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>narrate_LogEntry__c.narrate_Class__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>narrate_LogEntry__c.narrate_Context__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -48,6 +53,16 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>narrate_LogEntry__c.narrate_Method__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>narrate_LogEntry__c.narrate_Quiddity__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>narrate_LogEntry__c.narrate_Request__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

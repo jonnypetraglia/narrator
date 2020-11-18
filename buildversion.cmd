@@ -1,1 +1,0 @@
-sfdx force:package:version:create -v Prod -p Narrator -x >> "makepkg.log"

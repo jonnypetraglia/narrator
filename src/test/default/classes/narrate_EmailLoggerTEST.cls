@@ -50,8 +50,8 @@ public class narrate_EmailLoggerTEST {
             narrate_Class__c = 'Classy',
             narrate_Method__c = 'Methody',
             narrate_Line__c = 42,
-            narrate_Message__c = 'Don\'t Panic',
-            narrate_Context__c = 'Where\'s your towel?'
+            narrate_Message__c = 'Don\'t Panic'
+            // TODO: Request & Quiddity?
         );
     }
 }

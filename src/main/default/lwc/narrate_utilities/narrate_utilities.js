@@ -58,7 +58,7 @@ const EVENT_URL = '/services/data/v48.0/apexrest/narrate_EventREST';
 const LIST_COLUMNS = [
     {
         type: "text",
-        fieldName: "narrate_Context__c",
+        fieldName: "narrate_Request__c",
         label: "Context",
         initialWidth: 200
     },
