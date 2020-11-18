@@ -1,6 +1,5 @@
 # Narrator TODO
 
-Mmm whatsa saaaayy
 
 ### Todo
 
@@ -10,11 +9,6 @@ Mmm whatsa saaaayy
 
 ### In Progress
 
-- [ ] Truncator tests  
 - [ ] LoggingSettingsManager tests  
 - [ ] LogEventDelegator tests
-- [ ] RecordLogger & EmailLogger exception code coverage
 
-### Done ✓
-
-- [x] Apex can't do 'Custom Notifications' yet so the best way is afawcett's https://github.com/afawcett/customnotificationdemo  

@@ -1,13 +1,12 @@
-global with sharing class narrate_Truncator implements Schedulable {
+global with sharing class narrate_LogEntryTruncator implements Schedulable {
     global static final Integer DEFAULT_MAX = 10000;
-    private static final Date ALL_DATES = Date.newInstance(1990, 1, 1);
+    private static final Date ALL_DATES = Date.newInstance(1952, 3, 4);
     private static final Integer ALL_RECORDS = 1000000000;
     global void execute(SchedulableContext sc){
         System.debug('NARRATOR MSG - Beginning Narrator Record Truncation');
         truncate();
     }
     global void truncate(){
-        narrate_NarratorConfig__c settings = narrate_NarratorConfig__c.getOrgDefaults();
         Date after = settings.AutoTruncateDays__c != null ? Date.today().addDays(Integer.valueOf(-1 * settings.AutoTruncateDays__c)) : ALL_DATES;
         Integer max = settings.AutoTruncateMax__c != null ? Integer.valueOf(settings.AutoTruncateMax__c) : DEFAULT_MAX;
         deleteSObjects(getObjectsToDelete(after, max));
@@ -25,8 +24,17 @@ global with sharing class narrate_Truncator implements Schedulable {
             System.debug('NARRATOR MSG - ' + toBeDeleted.size() + ' records successfully truncated.');
         }
     }
+    @testVisible
     private List<SObject> getObjectsToDelete(Date after, Integer max) {
         List<narrate_ExecutionContext__c> recordsToSave = [SELECT Id FROM narrate_ExecutionContext__c WHERE narrate_EndTime__c >= :after ORDER BY narrate_EndTime__c DESC LIMIT :max];
         return [SELECT Id FROM narrate_ExecutionContext__c WHERE ID NOT IN :recordsToSave];
     }
+
+    @testVisible
+    private narrate_NarratorConfig__c settings {get {
+        if(settings==null){
+            settings = narrate_NarratorConfig__c.getOrgDefaults();
+        }
+        return settings;
+    } private set;}
 }
