@@ -64,17 +64,6 @@ public class narrate_SystemDebugNarratorTEST {
         System.assertEquals(LoggingLevel.DEBUG, narrator.lastLevel);
         System.assertEquals('HTTP[Body]=Laterz', narrator.lastLog);
     }
-
-    @IsTest
-    private static void context() {
-        narrate_SystemDebugNarrator narrator = new narrate_SystemDebugNarrator();
-        System.assertEquals(null, narrator.getContext());
-        narrator.setContext('First Context');
-        System.assertEquals('First Context', narrator.getContext());
-        narrator.setContext('Second Context');
-        System.assertEquals('Second Context', narrator.getContext());
-    }
-
     @IsTest
     private static void defaultToDebug() {
         narrate_SystemDebugNarrator narrator = new narrate_SystemDebugNarrator();

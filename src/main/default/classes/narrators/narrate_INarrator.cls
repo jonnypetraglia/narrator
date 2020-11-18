@@ -5,7 +5,5 @@ public interface narrate_INarrator {
     void restResponse(RestResponse request);
     void httpRequest(HttpRequest request);
     void httpResponse(HttpResponse request);
-    String getContext();
-    void setContext(String context);
     void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap);
 }

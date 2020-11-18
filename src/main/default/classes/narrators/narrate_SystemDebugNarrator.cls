@@ -14,12 +14,11 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
         if(values == null) {
             values = new List<Object>();
         }
-        String premsg = context != null ? '[' + context + '] ' : '';
         LoggingLevel lvl = loggingLevels.containsKey(level.toUpperCase()) ? loggingLevels.get(level.toUpperCase()) : LoggingLevel.DEBUG;
         String msg = message == null ? null : String.format(message, narrate_Utilities.castToStringList(values));
-        System.debug(lvl, premsg + msg);
+        System.debug(lvl, msg);
         lastLevel = lvl;
-        lastLog = premsg + msg;
+        lastLog = msg;
     }
 
     public void except(Exception error) {
@@ -70,20 +69,12 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
         lastLog = 'HTTP[Body]=' + response.getBody();
     }
 
-    public String getContext() {
-        return context;
-    }
-    public void setContext(String context) {
-        this.context = context;
-    }
-
     public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snapshot) {
         // Don't care
     }
 
     //// Private
 
-    private String context;
     @TestVisible
     private String lastLog;
     @TestVisible

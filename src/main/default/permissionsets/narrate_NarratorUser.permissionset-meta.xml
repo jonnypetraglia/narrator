@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <classAccesses>
-        <apexClass>narrate_AutoContextNarrator</apexClass>
+        <apexClass>narrate_PlatformEventNarrator</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>narrate_AutoContextNarratorTEST</apexClass>
+        <apexClass>narrate_PlatformEventNarratorTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>

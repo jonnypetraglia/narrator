@@ -137,17 +137,9 @@ public with sharing class narrate_NarrateTEST {
         System.assertEquals('Farewell', narrator.loggedMessage);
     }
 
-    @isTest
-    private static void start() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.start('Contexty!');
-        System.assertEquals('Contexty!', narrator.getContext());
-    }
-
     public class TestNarrator implements narrate_INarrator {
         private String loggedLevel, loggedMessage;
         private List<Object> loggedValues;
-        private String testContext;
         TestNarrator() {}
         public void log(String level, String message, List<Object> values) {
             loggedLevel = level;
@@ -176,8 +168,6 @@ public with sharing class narrate_NarrateTEST {
             loggedLevel = 'REST';
             loggedMessage = response.responseBody.toString();
         }
-        public String getContext() {return testContext;}
-        public void setContext(String context) { testContext = context;}
         public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap) {}
     }
 

@@ -1,7 +1,6 @@
-public without sharing class narrate_AutoContextNarrator implements narrate_INarrator {
+public without sharing class narrate_PlatformEventNarrator implements narrate_INarrator {
 
-    public narrate_AutoContextNarrator() {
-    }
+    public narrate_PlatformEventNarrator() {}
 
     public void log(String level, String message, List<Object> values) {
         String formattedMessage = String.format(message, narrate_Utilities.castToStringList(values));
@@ -34,16 +33,6 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
         EventBus.publish(logData);
     }
 
-    public String getContext() {
-        return userContext;
-    }
-
-    public void setContext(String context) {
-        if(this.userContext==null) {
-            this.userContext = context;
-        }
-    }
-
     public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snapshot) {
         this.snapshot = snapshot;
     }
@@ -63,19 +52,6 @@ public without sharing class narrate_AutoContextNarrator implements narrate_INar
         }
         return CURRENT_REQUEST_QUIDDITY;
     } private set;}
-    @testVisible
-    private String getFullContext() {
-        return AUTO_CONTEXT + (userContext!=null ? (' ' + + userContext) : '');
-    }
-
-    @testVisible
-    private final String AUTO_CONTEXT {get {
-        if(AUTO_CONTEXT==null){
-            AUTO_CONTEXT = System.now().formatGmt('HH:mm:ss.SSS') + '  ' + CURRENT_REQUEST_ID;
-        }
-        return AUTO_CONTEXT;
-    } private set;}
-    private String userContext = null;
     @testVisible
     private narrate_CodeLocationSnapshot snapshot;
 }

@@ -152,20 +152,10 @@ public virtual without sharing class Narrate {
         }
     }
 
-    public static void start(String context) {
-        if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.setContext(context);
-            }
-        } else {
-            output(DEBUG, 'Starting context: ' + context);
-        }
-    }
-
     @testVisible
     private static List<narrate_INarrator> narrators {get {
         if(narrators == null) {
-            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator(), new narrate_AutoContextNarrator()};
+            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator(), new narrate_PlatformEventNarrator()};
             for(narrate_INarrator narrator : narrators) {
                 narrator.setCodeLocationSnapshot(makeSnapshot());
             }
