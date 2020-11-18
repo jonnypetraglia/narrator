@@ -1,0 +1,5 @@
+{
+    "packageDescription": "The End-all-be-all to Salesforce Logging",
+    "permSetDefaults": ["narrate_Manage"],
+    "testSuiteDefault": "narrate_AllTests"
+}
