@@ -25,8 +25,26 @@ public without sharing class narrate_LoggingSettingsManager {
         }
         return filtersBySettingsId;
     } private set;}
+
+    public static Boolean hasActiveSettings() {
+        return !activeSettings.isEmpty();
+    }
     
-    public static Set<String> getLoggerNamesForSettingsThatMatchFilter(narrate_LogEvent__e logData) {
+    public static Map<String, List<narrate_LogEvent__e>> getEventsByLoggerNamesForSettingsThatMatchLoggerSettings(List<narrate_LogEvent__e> events){
+        Map<String, List<narrate_LogEvent__e>> eventsByLoggerName = new Map<String, List<narrate_LogEvent__e>>();
+        for(narrate_LogEvent__e event : events){
+            Set<String> loggerNamesToLogForevent = getLoggerNamesForSettingsThatMatchLoggerSettings(event);
+            for(String loggerName : loggerNamesToLogForevent){
+                if(!eventsByLoggerName.containsKey(loggerName)){
+                    eventsByLoggerName.put(loggerName, new List<narrate_LogEvent__e>());
+                }
+                eventsByLoggerName.get(loggerName).add(event);
+            }
+        }
+        return eventsByLoggerName;
+    }
+    
+    private static Set<String> getLoggerNamesForSettingsThatMatchLoggerSettings(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
             if(filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null))) {

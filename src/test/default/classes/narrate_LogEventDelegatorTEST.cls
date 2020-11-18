@@ -22,6 +22,17 @@ public class narrate_LogEventDelegatorTEST {
         delegator.receiveEvents(new List<narrate_LogEvent__e>{infoEvent, errorEvent});
     }
 
+    @isTest
+    private static void instantiateLoggersByName() {
+        Set<String> testLoggerNames = new Set<String>{'narrate_LogEventDelegatorTEST.TestLogger', 'narrate_Truncator', 'narrate_ThisIsNotEvenARealClass'};
+        narrate_LogEventDelegator delegator = new narrate_LogEventDelegator();
+        Map<String, narrate_ILogger> resultLoggers = delegator.instantiateLoggersByName(testLoggerNames);
+        System.assert(resultLoggers.containsKey('narrate_LogEventDelegatorTEST.TestLogger'), 'TestLogger class was not instantiated in results.');
+        System.assert(!resultLoggers.containsKey('narrate_Truncator'), 'Result contained class that is not an instance of narrate_ILogger.');
+        System.assert(!resultLoggers.containsKey('narrate_ThisIsNotEvenARealClass'), 'Result contained class name that doesn\'t even exist. I\'m not even mad, that\'s amazing.');
+        System.assertEquals(1, resultLoggers.size(), 'An incorrect number of instantiated logger classes was returned.');
+    }
+    // logEventsToLoggers
 
     public class TestLogger implements narrate_ILogger {
         public Integer log(List<narrate_LogEvent__e> events) {
