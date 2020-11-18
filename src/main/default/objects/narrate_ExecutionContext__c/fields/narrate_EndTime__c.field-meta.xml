@@ -4,7 +4,7 @@
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <label>End Time</label>
-    <summarizedField>narrate_LogEntry__c.CreatedDate</summarizedField>
+    <summarizedField>narrate_LogEntry__c.narrate_Timestamp__c</summarizedField>
     <summaryForeignKey>narrate_LogEntry__c.narrate_ExecutionContext__c</summaryForeignKey>
     <summaryOperation>max</summaryOperation>
     <trackTrending>false</trackTrending>
