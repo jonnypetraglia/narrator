@@ -5,7 +5,6 @@
     <columns>MasterLabel</columns>
     <columns>narrate_Loggers__c</columns>
     <columns>narrate_Logic__c</columns>
-    <columns>narrate_Value__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

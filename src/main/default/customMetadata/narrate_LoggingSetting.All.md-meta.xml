@@ -18,8 +18,4 @@
         <field>narrate_Quiddity__c</field>
         <value xsi:type="xsd:string"></value>
     </values>
-    <values>
-        <field>narrate_Value__c</field>
-        <value xsi:nil="true"/>
-    </values>
 </CustomMetadata>
