@@ -12,9 +12,7 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                if(String.isEmpty(settings.narrate_Logic__c)) {
-                    filtersBySettingsId.put(settings.Id, null);
-                } else {
+                if(String.isNotEmpty(settings.narrate_Logic__c)) {
                     try {
                         filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic((String[])JSON.deserialize(settings.narrate_Logic__c, String[].class)));
                     } catch(JSONException jsonError) {
@@ -44,10 +42,11 @@ public without sharing class narrate_LoggingSettingsManager {
         return eventsByLoggerName;
     }
     
+    @testVisible
     private static Set<String> getLoggerNamesForSettingsThatMatchLoggerSettings(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
-            if(filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData) && setting.narrate_Loggers__c != null))) {
+            if(setting.narrate_Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
                 result.addAll(setting.narrate_Loggers__c.split('[,;]'));
             }
         }
