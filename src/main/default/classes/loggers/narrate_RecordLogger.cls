@@ -18,7 +18,6 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
         return count;
     }
 
-    @testVisible
     private List<narrate_LogEntry__c> createLogEntriesForLogEvents(List<narrate_LogEvent__e> events, Map<String, narrate_ExecutionContext__c> executionContextsByRequest){
         List<narrate_LogEntry__c> entries = new List<narrate_LogEntry__c>();
         for(narrate_LogEvent__e event : events){
@@ -37,18 +36,18 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
             narrate_Line__c = logEvent.narrate_Line__c,
             narrate_Message__c = logEvent.narrate_Message__c,
             narrate_Method__c = logEvent.narrate_Method__c,
-            narrate_Quiddity__c = logEvent.narrate_Quiddity__c,
             narrate_Timestamp__c = logEvent.narrate_Timestamp__c,
             narrate_User__c = logEvent.narrate_User__c
         );
     }
 
     @testVisible
-    private Map<String, narrate_ExecutionContext__c> createExecutionContextsForLogEvents(List<narrate_LogEvent__e> events){
+    private static Map<String, narrate_ExecutionContext__c> createExecutionContextsForLogEvents(List<narrate_LogEvent__e> events){
         Map<String, narrate_ExecutionContext__c> result = new Map<String, narrate_ExecutionContext__c>();
         for(narrate_LogEvent__e event : events){
             result.put(event.narrate_Request__c, new narrate_ExecutionContext__c(narrate_Request__c = event.narrate_Request__c, narrate_Quiddity__c = event.narrate_Quiddity__c));
         }
+        result.remove(null);
         return result;
     }
 

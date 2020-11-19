@@ -52,7 +52,7 @@ public class narrate_EmailLoggerTEST {
             logger.log(null);
             System.assert(false, 'Expected exception to be thrown but none was.');
         }catch(narrate_NarratorException error){
-            List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c, narrate_Request__c, narrate_Quiddity__c FROM narrate_LogEntry__c];
+            List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c FROM narrate_LogEntry__c];
             System.assertEquals(0, testEntries.size(), testEntries + '');
         }catch(Exception error){
             System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');

@@ -1,5 +1,9 @@
 @isTest
 public class narrate_PlatformEventNarratorTEST {
+    static {
+        narrate_PlatformEventNarrator.CURRENT_REQUEST_ID = 'MuhRequest';
+        narrate_PlatformEventNarrator.CURRENT_REQUEST_QUIDDITY = 'MuhQuiddity';
+    }
     @isTest
     private static void log() {
         EventBusSubscriber testSubscriber = getEventBusSubscriber();
@@ -83,10 +87,13 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals('MAH BOI!', result.narrate_Message__c);
         System.assertEquals(timestamp, result.narrate_Timestamp__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
     private static void constructLogEventFromException() {
+
         narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_PlatformEventNarratorTEST.class.getName()).snap();
         narrate_LogEvent__e result = narrate_PlatformEventNarrator.constructLogEvent(snappy, new DmlException('MAH BOI!'));
         System.assertEquals('Except', result.narrate_Level__c);
@@ -94,6 +101,8 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals('MAH BOI!', result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
@@ -108,6 +117,8 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(JSON.serialize(request), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
@@ -122,6 +133,8 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(JSON.serialize(response), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
@@ -136,6 +149,8 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(request.toString(), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
@@ -150,6 +165,8 @@ public class narrate_PlatformEventNarratorTEST {
         System.assertEquals(snappy.theMethod, result.narrate_Method__c);
         System.assertEquals(snappy.theLine, result.narrate_Line__c);
         System.assertEquals(response.toString(), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     private static EventBusSubscriber getEventBusSubscriber(){

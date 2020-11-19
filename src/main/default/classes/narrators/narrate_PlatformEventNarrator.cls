@@ -132,16 +132,16 @@ public without sharing class narrate_PlatformEventNarrator implements narrate_IN
         return result;
     }
     @testVisible
-    private static final System.Request CURRENT_REQUEST = System.Request.getCurrent();
     private static final String CURRENT_REQUEST_ID {get {
         if(CURRENT_REQUEST_ID==null){
-            CURRENT_REQUEST_ID = CURRENT_REQUEST.getRequestId();
+            CURRENT_REQUEST_ID =  System.Request.getCurrent().getRequestId();
         }
         return CURRENT_REQUEST_ID;
     } private set;}
+    @testVisible
     private static final String CURRENT_REQUEST_QUIDDITY {get {
         if(CURRENT_REQUEST_QUIDDITY==null){
-            CURRENT_REQUEST_QUIDDITY = String.valueOf(CURRENT_REQUEST.getQuiddity());
+            CURRENT_REQUEST_QUIDDITY = String.valueOf( System.Request.getCurrent().getQuiddity());
         }
         return CURRENT_REQUEST_QUIDDITY;
     } private set;}
