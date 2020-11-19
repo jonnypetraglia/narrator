@@ -57,4 +57,45 @@ public class narrate_RecordLoggerTEST {
         System.assertEquals('MAH BOI!', result.narrate_Message__c);
         System.assertEquals(timestamp, result.narrate_Timestamp__c);
     }
+
+    @isTest
+    private static void createExecutionContextsForLogEvents(){
+        List<narrate_LogEvent__e> testEvents = new List<narrate_LogEvent__e>();
+        for(Integer i=0; i<100; i++){
+            testEvents.add(new narrate_LogEvent__e(
+                narrate_Request__c='Request' + i,
+                narrate_Quiddity__c='Quiddity' + i
+            ));
+        }
+        Map<String, narrate_ExecutionContext__c> resultContexts = narrate_RecordLogger.createExecutionContextsForLogEvents(testEvents);
+        for(Integer i=0; i<100; i++){
+            System.assert(resultContexts.containsKey('Request' + i));
+            System.assertEquals('Request' + i, resultContexts.get('Request' + i).narrate_Request__c);
+            System.assertEquals('Quiddity' + i, resultContexts.get('Request' + i).narrate_Quiddity__c);
+        }
+    }
+
+    @isTest
+    private static void loadExecutionContextsByRequest(){
+        List<narrate_ExecutionContext__c> executionContexts = new List<narrate_ExecutionContext__c>();
+        for(Integer i=0; i<100; i++){
+            executionContexts.add(new narrate_ExecutionContext__c(
+                narrate_Request__c='Request' + i,
+                narrate_Quiddity__c='Quiddity' + i
+            ));
+        }
+        insert executionContexts;
+        Map<String, Id> requestsToId = new Map<String, Id>();
+        for(narrate_ExecutionContext__c context : executionContexts){
+            requestsToId.put(context.narrate_Request__c, context.Id);
+        }
+        Map<String, narrate_ExecutionContext__c> resultContexts = narrate_RecordLogger.loadExecutionContextsByRequest(requestsToId.keySet());
+        for(Integer i=0; i<100; i++){
+            System.assert(resultContexts.containsKey('Request' + i));
+            narrate_ExecutionContext__c resultContext = resultContexts.get('Request' + i);
+            System.assertEquals('Request' + i, resultContext.narrate_Request__c);
+            System.assertEquals('Quiddity' + i, resultContext.narrate_Quiddity__c);
+            System.assertEquals(requestsToId.get('Request' + i), resultContext.Id);
+        }
+    }
 }
