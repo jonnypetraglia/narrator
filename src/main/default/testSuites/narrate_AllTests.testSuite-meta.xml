@@ -9,5 +9,4 @@
     <testClassName>narrate_RecordLoggerTEST</testClassName>
     <testClassName>narrate_SimpleFilterLogicTEST</testClassName>
     <testClassName>narrate_SystemDebugNarratorTEST</testClassName>
-    <testClassName>narrate_UtilitiesTEST</testClassName>
 </ApexTestSuite>

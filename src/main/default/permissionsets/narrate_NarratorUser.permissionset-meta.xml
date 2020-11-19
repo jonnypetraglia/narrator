@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <classAccesses>
-        <apexClass>narrate_PlatformEventNarrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_PlatformEventNarratorTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>narrate_CodeLocationSnapshot</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -49,7 +41,19 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>narrate_LoggingSettingsManagerTEST</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>narrate_NarrateTEST</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>narrate_PlatformEventNarrator</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>narrate_PlatformEventNarratorTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -74,14 +78,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>narrate_SystemDebugNarratorTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_Utilities</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_UtilitiesTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <hasActivationRequired>false</hasActivationRequired>

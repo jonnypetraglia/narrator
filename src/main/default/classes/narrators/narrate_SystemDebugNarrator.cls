@@ -15,7 +15,7 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
             values = new List<Object>();
         }
         LoggingLevel lvl = loggingLevels.containsKey(level.toUpperCase()) ? loggingLevels.get(level.toUpperCase()) : LoggingLevel.DEBUG;
-        String msg = message == null ? null : String.format(message, narrate_Utilities.castToStringList(values));
+        String msg = message == null ? null : String.format(message, castToStringList(values));
         System.debug(lvl, msg);
         lastLevel = lvl;
         lastLog = msg;
@@ -74,6 +74,15 @@ public with sharing class narrate_SystemDebugNarrator implements narrate_INarrat
     }
 
     //// Private
+
+    private static List<String> castToStringList(List<Object> values) {
+        List<String> result = new List<String>();
+        if(values!= null) {
+            for(Object value : values)
+                result.add('' + value);
+        }
+        return result;
+    }
 
     @TestVisible
     private String lastLog;

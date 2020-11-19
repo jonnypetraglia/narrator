@@ -36,4 +36,23 @@ public class narrate_RecordLoggerTEST {
             System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');
         }
     }
+
+    @isTest
+    private static void constructEntryFromEvent() {
+        DateTime timestamp = DateTime.now();
+        narrate_LogEntry__c result = narrate_RecordLogger.constructEntryFromEvent(new narrate_LogEvent__e(
+            narrate_Class__c = 'MuhClass',
+            narrate_Method__c = 'MuhMethod',
+            narrate_Line__c = 42,
+            narrate_Message__c = 'MAH BOI!',
+            narrate_Timestamp__c = timestamp,
+            narrate_User__c = UserInfo.getUserId()
+        ), UserInfo.getUserId());  // Not technically an ExecutionContext ID but who cares lol
+        System.assertEquals(UserInfo.getUserId(), result.narrate_ExecutionContext__c);
+        System.assertEquals('MuhClass', result.narrate_Class__c);
+        System.assertEquals('MuhMethod', result.narrate_Method__c);
+        System.assertEquals(42, result.narrate_Line__c);
+        System.assertEquals('MAH BOI!', result.narrate_Message__c);
+        System.assertEquals(timestamp, result.narrate_Timestamp__c);
+    }
 }
