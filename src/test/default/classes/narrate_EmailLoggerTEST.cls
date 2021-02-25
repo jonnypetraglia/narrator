@@ -38,7 +38,7 @@ public class narrate_EmailLoggerTEST {
         System.assertEquals(1, testEmails.size());
         Messaging.SingleEmailMessage testEmail = testEmails.get(0);
         System.assertEquals(testEmail.toAddresses, new String[]{'test@test.test'});
-        System.assert(testEmail.Subject.contains('grok'), testEmail.Subject);
+        System.assert(testEmail.Subject.contains('DeepThought'), 'Subject does not contain the Request: ' + testEmail.Subject);
         System.assert(testEmail.PlainTextBody.contains('Classy'), testEmail.PlainTextBody);
         System.assert(testEmail.PlainTextBody.contains('Methody'), testEmail.PlainTextBody);
         System.assert(testEmail.PlainTextBody.contains('Don\'t Panic'), testEmail.PlainTextBody);
@@ -59,14 +59,81 @@ public class narrate_EmailLoggerTEST {
         }
     }
 
+    @isTest
+    public static void groupLogEventsByRequest(){
+        // groupLogEventsByRequest
+    }
+
+    @isTest
+    public static void wrapHtmlTable(){
+        List<String> htmlLines = new List<String>{'Test', 'List'};
+        List<String> resultList = (new narrate_EmailLogger()).wrapHtmlTable(htmlLines);
+        System.assertEquals(htmlLines.get(0), '<html>');
+        System.assertEquals(htmlLines.get(1), '<body>');
+        System.assertEquals(htmlLines.get(2), '<table>');
+        System.assertEquals(htmlLines.get(3), '<tr><th>Level</th><th>Class</th><th>Method</th><th>Line</th><th>Message</th></tr>');
+        System.assertEquals(htmlLines.get(4), 'Test');
+        System.assertEquals(htmlLines.get(5), 'List');
+        System.assertEquals(htmlLines.get(6), '</table>');
+        System.assertEquals(htmlLines.get(7), '</body>');
+        System.assertEquals(htmlLines.get(8), '</html>');
+    }
+
+    @isTest
+    public static void formatLogEventsAsHTMLTableRows(){
+        List<narrate_LogEvent__e> testEvents = new List<narrate_LogEvent__e>{
+            new narrate_LogEvent__e(
+                narrate_Level__c = 'LevelA',
+                narrate_Class__c = 'ClassA',
+                narrate_Method__c = 'MethodA',
+                narrate_Line__c = 24,
+                narrate_Message__c = 'Herp'
+            ),
+            new narrate_LogEvent__e(
+                narrate_Level__c = 'LevelB',
+                narrate_Class__c = 'ClassB',
+                narrate_Method__c = 'MethodB',
+                narrate_Line__c = 42,
+                narrate_Message__c = 'Derp'
+            )
+        };
+        List<String> resultList = (new narrate_EmailLogger()).formatLogEventsAsHTMLTableRows(testEvents);
+        System.assertEquals(resultList.get(0), '<tr><td>LevelA</td><td>ClassA</td><td>MethodA</td><td>24</td><td>Herp</td></tr>');
+        System.assertEquals(resultList.get(1), '<tr><td>LevelB</td><td>ClassB</td><td>MethodB</td><td>42</td><td>Derp</td></tr>');
+    }
+
+    @isTest
+    public static void formatLogEventsAsHumanReadableText(){
+        List<narrate_LogEvent__e> testEvents = new List<narrate_LogEvent__e>{
+            new narrate_LogEvent__e(
+                narrate_Level__c = 'LevelA',
+                narrate_Class__c = 'ClassA',
+                narrate_Method__c = 'MethodA',
+                narrate_Line__c = 24,
+                narrate_Message__c = 'Herp'
+            ),
+            new narrate_LogEvent__e(
+                narrate_Level__c = 'LevelB',
+                narrate_Class__c = 'ClassB',
+                narrate_Method__c = 'MethodB',
+                narrate_Line__c = 42,
+                narrate_Message__c = 'Derp'
+            )
+        };
+        List<String> resultList = (new narrate_EmailLogger()).formatLogEventsAsHumanReadableText(testEvents);
+        System.assertEquals(resultList.get(0), '[LevelA] ClassA.MethodA:24\tHerp');
+        System.assertEquals(resultList.get(1), '[LevelB] ClassB.MethodB:42\tDerp');
+    }
+
     private static narrate_LogEvent__e generateTestLogEvent(){
         return new narrate_LogEvent__e(
             narrate_Level__c = 'grok',
             narrate_Class__c = 'Classy',
             narrate_Method__c = 'Methody',
+            narrate_Request__c = 'DeepThought',
+            narrate_Quiddity__c = 'yerawizardharry',
             narrate_Line__c = 42,
             narrate_Message__c = 'Don\'t Panic'
-            // TODO: Request & Quiddity?
         );
     }
 }

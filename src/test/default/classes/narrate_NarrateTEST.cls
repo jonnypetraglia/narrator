@@ -1,164 +1,173 @@
 @isTest
 public with sharing class narrate_NarrateTEST {
-    @isTest
-    private static void logDebug() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.debug('Application');
-        System.assertEquals('Debug', narrator.loggedLevel);
-        System.assertEquals('Application', narrator.loggedMessage);
-        Narrate.debug('Application', testValue());
-        System.assertEquals('Debug', narrator.loggedLevel);
-        System.assertEquals('Application!!!', narrator.loggedMessage);
-        Narrate.debug('Application', testValues());
-        System.assertEquals('Debug', narrator.loggedLevel);
-        System.assertEquals('Application!!!', narrator.loggedMessage);
+    static {
+        Narrate.CURRENT_REQUEST_ID = 'MuhRequest';
+        Narrate.CURRENT_REQUEST_QUIDDITY = 'MuhQuiddity';
     }
 
     @isTest
-    private static void logInfo() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.info('Presentation');
-        System.assertEquals('Info', narrator.loggedLevel);
-        System.assertEquals('Presentation', narrator.loggedMessage);
-        Narrate.info('Presentation', testValue());
-        System.assertEquals('Info', narrator.loggedLevel);
-        System.assertEquals('Presentation!!!', narrator.loggedMessage);
-        Narrate.info('Presentation', testValues());
-        System.assertEquals('Info', narrator.loggedLevel);
-        System.assertEquals('Presentation!!!', narrator.loggedMessage);
+    private static void log() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.log('Level', 'Message', new List<String>{'values'});
+        Test.getEventBus().deliver();
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
-
-    @isTest
-    private static void logWarn() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.warn('Session');
-        System.assertEquals('Warn', narrator.loggedLevel);
-        System.assertEquals('Session', narrator.loggedMessage);
-        Narrate.warn('Session', testValue());
-        System.assertEquals('Warn', narrator.loggedLevel);
-        System.assertEquals('Session!!!', narrator.loggedMessage);
-        Narrate.warn('Session', testValues());
-        System.assertEquals('Warn', narrator.loggedLevel);
-        System.assertEquals('Session!!!', narrator.loggedMessage);
-    }
-
-    @isTest
-    private static void logError() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.error('Transport');
-        System.assertEquals('Error', narrator.loggedLevel);
-        System.assertEquals('Transport', narrator.loggedMessage);
-        Narrate.error('Transport', testValue());
-        System.assertEquals('Error', narrator.loggedLevel);
-        System.assertEquals('Transport!!!', narrator.loggedMessage);
-        Narrate.error('Transport', testValues());
-        System.assertEquals('Error', narrator.loggedLevel);
-        System.assertEquals('Transport!!!', narrator.loggedMessage);
-    }
-
-    @isTest
-    private static void logFine() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.fine('Network');
-        System.assertEquals('Fine', narrator.loggedLevel);
-        System.assertEquals('Network', narrator.loggedMessage);
-        Narrate.fine('Network', testValue());
-        System.assertEquals('Fine', narrator.loggedLevel);
-        System.assertEquals('Network!!!', narrator.loggedMessage);
-        Narrate.fine('Network', testValues());
-        System.assertEquals('Fine', narrator.loggedLevel);
-        System.assertEquals('Network!!!', narrator.loggedMessage);
-    }
-
-    @isTest
-    private static void logFiner() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.finer('Data Link');
-        System.assertEquals('Finer', narrator.loggedLevel);
-        System.assertEquals('Data Link', narrator.loggedMessage);
-        Narrate.finer('Data Link', testValue());
-        System.assertEquals('Finer', narrator.loggedLevel);
-        System.assertEquals('Data Link!!!', narrator.loggedMessage);
-        Narrate.finer('Data Link', testValues());
-        System.assertEquals('Finer', narrator.loggedLevel);
-        System.assertEquals('Data Link!!!', narrator.loggedMessage);
-    }
-
-    @isTest
-    private static void logFinest() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.finest('Physical');
-        System.assertEquals('Finest', narrator.loggedLevel);
-        System.assertEquals('Physical', narrator.loggedMessage);
-        Narrate.finest('Physical', testValue());
-        System.assertEquals('Finest', narrator.loggedLevel);
-        System.assertEquals('Physical!!!', narrator.loggedMessage);
-        Narrate.finest('Physical', testValues());
-        System.assertEquals('Finest', narrator.loggedLevel);
-        System.assertEquals('Physical!!!', narrator.loggedMessage);
-    }
-
-    @isTest
-    private static void logWtf() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.wtf('Electrons');
-        System.assertEquals('Wtf', narrator.loggedLevel);
-        System.assertEquals('Electrons', narrator.loggedMessage);
-        Narrate.wtf('Electrons', testValue());
-        System.assertEquals('Wtf', narrator.loggedLevel);
-        System.assertEquals('Electrons!!!', narrator.loggedMessage);
-        Narrate.wtf('Electrons', testValues());
-        System.assertEquals('Wtf', narrator.loggedLevel);
-        System.assertEquals('Electrons!!!', narrator.loggedMessage);
-    }
-
-
+    
     @isTest
     private static void except() {
-        TestNarrator narrator = setupTestNarrator();
-        Narrate.except(new DmlException('Test Exception'));
-        System.assertEquals('Except', narrator.loggedLevel);
-        System.assertEquals('Test Exception', narrator.loggedMessage);
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.except(new DmlException());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
-
+    
     @isTest
     private static void restRequest() {
-        TestNarrator narrator = setupTestNarrator();
-        RestRequest req = new RestRequest();
-        req.requestBody = Blob.valueOf('Greetings');
-        Narrate.rest(req);
-        System.assertEquals('REST', narrator.loggedLevel);
-        System.assertEquals('Greetings', narrator.loggedMessage);
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.rest(new RestRequest());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
 
     @isTest
     private static void restResponse() {
-        TestNarrator narrator = setupTestNarrator();
-        RestResponse res = new RestResponse();
-        res.responseBody = Blob.valueOf('Farewell');
-        Narrate.rest(res);
-        System.assertEquals('REST', narrator.loggedLevel);
-        System.assertEquals('Farewell', narrator.loggedMessage);
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.rest(new RestResponse());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
-
+    
     @isTest
     private static void httpRequest() {
-        TestNarrator narrator = setupTestNarrator();
-        HttpRequest req = new HttpRequest();
-        req.setBody('Greetings');
-        Narrate.http(req);
-        System.assertEquals('HTTP', narrator.loggedLevel);
-        System.assertEquals('Greetings', narrator.loggedMessage);
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.http(new HttpRequest());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
+    }
+    
+    @isTest
+    private static void httpResponse() {
+        EventBusSubscriber testSubscriber = getEventBusSubscriber();
+        System.assertEquals(0, testSubscriber.Position, 'Sanity check failed on EventBusSubscriber position.');
+        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
+        Narrate.snapshot = narrate_CodeLocationSnapshot.newInstanceForClass('DoesntMatter');
+        Narrate.http(new HttpResponse());
+        Test.getEventBus().deliver(); 
+        EventBusSubscriber resultSubscriber = getEventBusSubscriber();
+        System.assertEquals(1, resultSubscriber.Position, 'Check on Position for EventBusSubscriber failed');
     }
 
     @isTest
-    private static void httpResponse() {
-        TestNarrator narrator = setupTestNarrator();
-        HttpResponse res = new HttpResponse();
-        res.setBody('Farewell');
-        Narrate.http(res);
-        System.assertEquals('HTTP', narrator.loggedLevel);
-        System.assertEquals('Farewell', narrator.loggedMessage);
+    private static void constructLogEvent() {
+        DateTime timestamp = DateTime.now();
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, 'MuhLevel', 'MAH BOI!');
+        System.assertEquals('MuhLevel', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals('MAH BOI!', result.narrate_Message__c);
+        System.assertEquals(timestamp, result.narrate_Timestamp__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromException() {
+
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, new DmlException('MAH BOI!'));
+        System.assertEquals('Except', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals('MAH BOI!', result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromRestRequest() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        RestRequest request = new RestRequest();
+        request.requestBody = Blob.valueOf('Hello there');
+        request.httpMethod = 'GET';
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, request);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(JSON.serialize(request), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromRestResponse() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        RestResponse response = new RestResponse();
+        response.responseBody = Blob.valueOf('General Kenobi!');
+        response.statusCode = 200;
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, response);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(JSON.serialize(response), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromHttpRequest() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        HttpRequest request = new HttpRequest();
+        request.setBody('Hello there');
+        request.setMethod('GET');
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, request);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(request.toString(), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
+    }
+
+    @isTest
+    private static void constructLogEventFromHttpResponse() {
+        narrate_CodeLocationSnapshot.Snapshot snappy = narrate_CodeLocationSnapshot.newInstanceForClass(narrate_NarrateTEST.class.getName()).snap();
+        HttpResponse response = new HttpResponse();
+        response.setBody('General Kenobi!');
+        response.setStatusCode(200);
+        narrate_LogEvent__e result = Narrate.constructLogEvent(snappy, response);
+        System.assertEquals('Rest', result.narrate_Level__c);
+        System.assertEquals(snappy.theClass, result.narrate_Class__c);
+        System.assertEquals(snappy.theMethod, result.narrate_Method__c);
+        System.assertEquals(snappy.theLine, result.narrate_Line__c);
+        System.assertEquals(response.toString(), result.narrate_Message__c);
+        System.assertEquals('MuhRequest', result.narrate_Request__c);
+        System.assertEquals('MuhQuiddity', result.narrate_Quiddity__c);
     }
 
     @isTest
@@ -168,6 +177,7 @@ public with sharing class narrate_NarrateTEST {
         Narrate.info('Herpaderp');
         Narrate.warn('Herpaderp');
         Narrate.error('Herpaderp');
+        Narrate.wtf('Herpaderp');
         Narrate.fine('Herpaderp');
         Narrate.finer('Herpaderp');
         Narrate.finest('Herpaderp');
@@ -178,51 +188,33 @@ public with sharing class narrate_NarrateTEST {
         Narrate.http(new HttpResponse());
     }
 
-    public class TestNarrator implements narrate_INarrator {
-        private String loggedLevel, loggedMessage;
-        private List<Object> loggedValues;
-        TestNarrator() {}
-        public void log(String level, String message, List<Object> values) {
-            loggedLevel = level;
-            loggedMessage = message;
-            if(values != null && values.contains('Don\'t Panic')) {
-                loggedMessage += '!!!';
+    @isTest
+    private static void coveringOverloadSignatures(){
+        Narrate.debug('Herp', 'Derp');
+        Narrate.debug('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.info('Herp', 'Derp');
+        Narrate.info('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.warn('Herp', 'Derp');
+        Narrate.warn('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.error('Herp', 'Derp');
+        Narrate.error('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.wtf('Herp', 'Derp');
+        Narrate.wtf('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.fine('Herp', 'Derp');
+        Narrate.fine('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.finer('Herp', 'Derp');
+        Narrate.finer('Herp', new String[]{'Derpy', 'Derp'});
+        Narrate.finest('Herp', 'Derp');
+        Narrate.finest('Herp', new String[]{'Derpy', 'Derp'});
+    }
+
+    private static EventBusSubscriber getEventBusSubscriber(){
+        List<EventBusSubscriber> subscribers = [SELECT Name, Position, Retries, LastError FROM EventBusSubscriber WHERE Topic='narrate_LogEvent__e' AND Type='ApexTrigger'];
+        for(EventBusSubscriber subscriber : subscribers){
+            if(subscriber.Name == 'narrate_LogEvent'){
+                return subscriber;
             }
         }
-        public void except(Exception error) {
-            loggedLevel = 'Except';
-            loggedMessage = error.getMessage();
-        }
-        public void httpRequest(httpRequest request) {
-            loggedLevel = 'HTTP';
-            loggedMessage = request.getBody();
-        }
-        public void httpResponse(httpResponse response) {
-            loggedLevel = 'HTTP';
-            loggedMessage = response.getBody();
-        }
-        public void restRequest(RestRequest request) {
-            loggedLevel = 'REST';
-            loggedMessage = request.requestBody.toString();
-        }
-        public void restResponse(RestResponse response) {
-            loggedLevel = 'REST';
-            loggedMessage = response.responseBody.toString();
-        }
-        public void setCodeLocationSnapshot(narrate_CodeLocationSnapshot snap) {}
-    }
-
-    static TestNarrator setupTestNarrator() {
-        TestNarrator narrator = new TestNarrator();
-        Narrate.narrators = new List<narrate_INarrator> {narrator};
-        Narrate.settings = new narrate_NarratorConfig__c(EnabledTests__c=true);
-        return narrator;
-    }
-
-    static String testValue() {
-        return 'Don\'t Panic';
-    }
-    static List<String> testValues() {
-        return new List<String>{testValue()};
+        return null;
     }
 }

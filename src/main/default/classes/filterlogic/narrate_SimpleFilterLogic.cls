@@ -2,31 +2,24 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
     private String fieldName, logic, whatToCompareTo;
     private static Map<String, Pattern> patternCache = new Map<String, Pattern>();
 
-    public narrate_SimpleFilterLogic(String[] filterLogic) {
-        fieldName = filterLogic[0];
-        logic = filterLogic[1];
-        if(filterLogic.size() > 2) {
-            whatToCompareTo = filterLogic[2];
+    public narrate_SimpleFilterLogic(){}
+
+    public void setLogic(String filterLogic) {
+        this.logic = filterLogic;
+        String[] parsedFilterLogic = (String[])JSON.deserialize(logic, String[].class);
+        this.fieldName = parsedFilterLogic[0];
+        this.logic = parsedFilterLogic[1];
+        if(parsedFilterLogic.size() > 2) {
+            this.whatToCompareTo = parsedFilterLogic[2];
         }
-    }
-
-    public void setWhatToCompareTo(String whatToCompareTo) {
-        this.whatToCompareTo = whatToCompareTo;
-    }
-
-    public void setLogic(String logic) {
-        this.logic = logic;
     }
 
     public boolean evaluate(SObject compareTo) {
         
         boolean result = false;
         try {
-            System.debug('bro evaluate ' + fieldName + ' is of ' + compareTo.getSObjectType());
-            System.debug('bro isSet ' + compareTo.isSet(fieldName));
             if(compareTo.isSet(fieldName)) {
                 Object val = compareTo.get(fieldName);
-                System.debug('bro val ' + val);
                 if(val == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
                     result = evaluateShared(val, whatToCompareTo);
                 } else {
@@ -65,9 +58,8 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
                 }
             }
         } catch(Exception e) {
-            System.debug(LoggingLevel.ERROR, e.getStackTraceString());
+            System.debug(LoggingLevel.ERROR, 'NARRATOR MSG - ' + e.getStackTraceString());
         }
-        System.debug('bro totally ' + result);
         return result;
     }
 

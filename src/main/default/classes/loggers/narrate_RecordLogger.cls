@@ -18,6 +18,12 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
         return count;
     }
 
+    @InvocableMethod(label='Narrator Record Logger' description='Save as a Log entry' category='narrate_LogEvent__e')
+    public static List<narrate_LogEvent__e> logInvokableMethod(List<narrate_LogEvent__e> logEvents) {
+        new narrate_RecordLogger().log(logEvents);
+        return logEvents;
+    }
+
     private List<narrate_LogEntry__c> createLogEntriesForLogEvents(List<narrate_LogEvent__e> events, Map<String, narrate_ExecutionContext__c> executionContextsByRequest){
         List<narrate_LogEntry__c> entries = new List<narrate_LogEntry__c>();
         for(narrate_LogEvent__e event : events){

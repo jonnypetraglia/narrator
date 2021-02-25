@@ -9,6 +9,7 @@ public virtual without sharing class Narrate {
                 FINEST = LoggingLevel.FINEST.name().toLowerCase().capitalize(),
                 WTF = 'Wtf',
                 EXCEPT = 'Except',
+                HTTP_ = 'Http',
                 REST = 'Rest';
 
     public static void debug(String message) {
@@ -20,7 +21,6 @@ public virtual without sharing class Narrate {
     public static void debug(String message, Object param) {
         log(DEBUG, message, asList(param));
     }
-    
     public static void info(String message) {
         log(INFO, message, new List<Object>());
     }
@@ -30,7 +30,6 @@ public virtual without sharing class Narrate {
     public static void info(String message, Object param) {
         log(INFO, message, asList(param));
     }
-    
     public static void warn(String message) {
         log(WARN, message, new List<Object>());
     }
@@ -40,7 +39,6 @@ public virtual without sharing class Narrate {
     public static void warn(String message, Object param) {
         log(WARN, message, asList(param));
     }
-    
     public static void error(String message) {
         log(ERROR, message, new List<Object>());
     }
@@ -50,7 +48,7 @@ public virtual without sharing class Narrate {
     public static void error(String message, Object param) {
         log(ERROR, message, asList(param));
     }
-    
+    // "What a Terrible Failure"
     public static void wtf(String message) {
         log(WTF, message, new List<Object>());
     }
@@ -60,7 +58,6 @@ public virtual without sharing class Narrate {
     public static void wtf(String message, Object param) {
         log(WTF, message, asList(param));
     }
-    
     public static void fine(String message) {
         log(FINE, message, new List<Object>());
     }
@@ -70,7 +67,6 @@ public virtual without sharing class Narrate {
     public static void fine(String message, Object param) {
         log(FINE, message, asList(param));
     }
-
     public static void finer(String message) {
         log(FINER, message, new List<Object>());
     }
@@ -80,7 +76,6 @@ public virtual without sharing class Narrate {
     public static void finer(String message, Object param) {
         log(FINER, message, asList(param));
     }
-    
     public static void finest(String message) {
         log(FINEST, message, new List<Object>());
     }
@@ -90,82 +85,166 @@ public virtual without sharing class Narrate {
     public static void finest(String message, Object param) {
         log(FINEST, message, asList(param));
     }
-
     public static void log(String level, String message, List<Object> values) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.log(level, message, values);
-            }
-        } else {
-            systemDebugOutput(level, String.format(message, values));
+            String formattedMessage = String.format(message, castToStringList(values));
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(), level, formattedMessage);
+            Database.SaveResult result = EventBus.publish(logData);
         }
+        systemDebugOutput(level, String.format(message, values));
     }
-
     public static void except(Exception ohno) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.except(ohno);
-            }
-        } else {
-            systemDebugOutput(ERROR, ohno.getTypeName() + ': ' + ohno.getMessage());
-            systemDebugOutput(ERROR, ohno.getStackTraceString());
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(ohno), ohno);
+            EventBus.publish(logData);
         }
+        systemDebugOutput(ERROR, ohno.getTypeName() + ': ' + ohno.getMessage());
+        systemDebugOutput(ERROR, ohno.getStackTraceString());
     }
-
     public static void http(HttpRequest request) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.httpRequest(request);
-            }
-        } else {
-            systemDebugOutput(DEBUG, request == null ? '' : request.toString());
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(), request);
+            EventBus.publish(logData);
         }
+        systemDebugOutput(DEBUG, request == null ? '' : request.toString());
     }
-
     public static void http(HttpResponse response) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.httpResponse(response);
-            }
-        } else {
-            systemDebugOutput(DEBUG, response == null ? '' : response.toString());
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(), response);
+            EventBus.publish(logData);
         }
+        systemDebugOutput(DEBUG, response == null ? '' : response.toString());
     }
-
     public static void rest(RestRequest request) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.restRequest(request);
-            }
-        } else {
-            systemDebugOutput(DEBUG, request == null ? '' : request.toString());
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(), request);
+            EventBus.publish(logData);
         }
+        systemDebugOutput(DEBUG, request == null ? '' : request.toString());
     }
-
     public static void rest(RestResponse response) {
         if(narratorIsEnabled() || narratorIsEnabledTesting()) {
-            for(narrate_INarrator narrator : narrators) {
-                narrator.restResponse(response);
-            }
-        } else {
-            systemDebugOutput(DEBUG, response == null ? '' : response.toString());
+            narrate_LogEvent__e logData = constructLogEvent(snapshot.snap(), response);
+            EventBus.publish(logData);
         }
+        systemDebugOutput(DEBUG, response == null ? '' : response.toString());
     }
+
+    // PRIVATE
 
     @testVisible
-    private static List<narrate_INarrator> narrators {get {
-        if(narrators == null) {
-            narrators = new List<narrate_INarrator> {new narrate_SystemDebugNarrator(), new narrate_PlatformEventNarrator()};
-            for(narrate_INarrator narrator : narrators) {
-                narrator.setCodeLocationSnapshot(makeSnapshot());
-            }
-        }
-        return narrators;
-    } set;}
-
-    public static narrate_CodeLocationSnapshot makeSnapshot() {
-        return narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = level,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = message,
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
     }
+    @testVisible
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = Narrate.EXCEPT,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = error.getMessage(),
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
+    }
+    @testVisible
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = Narrate.REST,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = JSON.serialize(request),
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
+    }
+    @testVisible
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = Narrate.REST,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = JSON.serialize(response),
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
+    }
+    @testVisible
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = Narrate.REST,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = request.toString(),
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
+    }
+    @testVisible
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
+        return new narrate_LogEvent__e(
+            narrate_Class__c = codeLocation.theClass,
+            narrate_Level__c = Narrate.REST,
+            narrate_Line__c = codeLocation.theLine,
+            narrate_Message__c = response.toString(),
+            narrate_Method__c = codeLocation.theMethod,
+            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            narrate_Request__c = CURRENT_REQUEST_ID,
+            narrate_Timestamp__c = System.now(),
+            narrate_User__c = UserInfo.getUserId()
+        );
+    }
+    private static List<String> castToStringList(List<Object> values) {
+        List<String> result = new List<String>();
+        if(values!= null) {
+            for(Object value : values)
+                result.add('' + value);
+        }
+        return result;
+    }
+    @testVisible
+    private static final String CURRENT_REQUEST_ID {get {
+        if(CURRENT_REQUEST_ID==null){
+            CURRENT_REQUEST_ID =  System.Request.getCurrent().getRequestId();
+        }
+        return CURRENT_REQUEST_ID;
+    } private set;}
+    @testVisible
+    private static final String CURRENT_REQUEST_QUIDDITY {get {
+        if(CURRENT_REQUEST_QUIDDITY==null){
+            CURRENT_REQUEST_QUIDDITY = String.valueOf( System.Request.getCurrent().getQuiddity());
+        }
+        return CURRENT_REQUEST_QUIDDITY;
+    } private set;}
+    @testVisible
+    private static narrate_CodeLocationSnapshot snapshot {get {
+        if(snapshot==null){
+            snapshot = narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
+        }
+        return snapshot;
+    } set;}
     private static Boolean narratorIsEnabled() {
         return !Test.isRunningTest() && settings.Enabled__c;
     }
@@ -175,6 +254,7 @@ public virtual without sharing class Narrate {
     private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
     private static void systemDebugOutput(String level, String message) {
         LoggingLevel logLevel = LoggingLevel.DEBUG; // DEBUG, WTF, REST, and anything else
+        // Switch here gives us guaranteed O(1)
         switch on level.toUpperCase() {
             when 'INFO' {
                 logLevel = LoggingLevel.INFO;

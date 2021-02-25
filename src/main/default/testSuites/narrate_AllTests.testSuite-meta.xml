@@ -5,8 +5,6 @@
     <testClassName>narrate_LogEntryTruncatorTEST</testClassName>
     <testClassName>narrate_LogEventDelegatorTEST</testClassName>
     <testClassName>narrate_NarrateTEST</testClassName>
-    <testClassName>narrate_PlatformEventNarratorTEST</testClassName>
     <testClassName>narrate_RecordLoggerTEST</testClassName>
     <testClassName>narrate_SimpleFilterLogicTEST</testClassName>
-    <testClassName>narrate_SystemDebugNarratorTEST</testClassName>
 </ApexTestSuite>

@@ -25,10 +25,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>narrate_INarrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>narrate_LogEventDelegator</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -49,14 +45,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>narrate_PlatformEventNarrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_PlatformEventNarratorTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>narrate_RecordLogger</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -70,14 +58,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>narrate_SimpleFilterLogicTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_SystemDebugNarrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>narrate_SystemDebugNarratorTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <hasActivationRequired>false</hasActivationRequired>

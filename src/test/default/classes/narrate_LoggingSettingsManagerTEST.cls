@@ -2,7 +2,7 @@
 public class narrate_LoggingSettingsManagerTEST {
 
     @isTest
-    private static void getEventsByLoggerNamesForSettingsThatMatchLoggerSettings(){
+    private static void getEventsByLoggerNamesForSettingsThatMatchActiveLoggerSettings(){
         List<narrate_LoggingSetting__mdt> testSettings = new List<narrate_LoggingSetting__mdt>();
         testSettings.add(testLoggingSetting('InfoLogger', 'narrate_Level__c', '=', 'INFO'));
         testSettings.add(testLoggingSetting('DerpLogger', 'narrate_Message__c', 'CONTAINS', 'Derp'));
@@ -16,7 +16,7 @@ public class narrate_LoggingSettingsManagerTEST {
         testEvents.add(new narrate_LogEvent__e(narrate_Level__c='INFO', narrate_Message__c='Listen, I think it is time we get pizza'));
 
 
-        Map<String, List<narrate_LogEvent__e>> resultEventsByLoggerName = narrate_LoggingSettingsManager.getEventsByLoggerNamesForSettingsThatMatchLoggerSettings(testEvents);
+        Map<String, List<narrate_LogEvent__e>> resultEventsByLoggerName = narrate_LoggingSettingsManager.getEventsByLoggerNamesForSettingsThatMatchActiveLoggerSettings(testEvents);
         System.assertEquals(2, resultEventsByLoggerName.size());
         System.assert(resultEventsByLoggerName.containsKey('InfoLogger'));
         System.assert(resultEventsByLoggerName.containsKey('DerpLogger'));

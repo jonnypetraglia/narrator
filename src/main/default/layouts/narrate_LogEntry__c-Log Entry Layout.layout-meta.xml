@@ -12,14 +12,6 @@
                 <field>narrate_ExecutionContext__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>narrate_Quiddity__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>narrate_Request__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>narrate_User__c</field>
             </layoutItems>

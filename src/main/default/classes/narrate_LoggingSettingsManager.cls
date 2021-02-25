@@ -12,12 +12,9 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                if(String.isNotEmpty(settings.narrate_Logic__c)) {
-                    try {
-                        filtersBySettingsId.put(settings.Id, new narrate_SimpleFilterLogic((String[])JSON.deserialize(settings.narrate_Logic__c, String[].class)));
-                    } catch(JSONException jsonError) {
-                        // Dude that's on you, not on me.
-                    }
+                narrate_IFilterLogic filterLogic = createFilterLogicForLogic(settings.narrate_Logic__c);
+                if(filterLogic!=null){
+                    filtersBySettingsId.put(settings.Id, filterLogic);
                 }
             }
         }
@@ -28,10 +25,11 @@ public without sharing class narrate_LoggingSettingsManager {
         return !activeSettings.isEmpty();
     }
     
-    public static Map<String, List<narrate_LogEvent__e>> getEventsByLoggerNamesForSettingsThatMatchLoggerSettings(List<narrate_LogEvent__e> events){
+    public static Map<String, List<narrate_LogEvent__e>> getEventsByLoggerNamesForSettingsThatMatchActiveLoggerSettings(List<narrate_LogEvent__e> events){
         Map<String, List<narrate_LogEvent__e>> eventsByLoggerName = new Map<String, List<narrate_LogEvent__e>>();
         for(narrate_LogEvent__e event : events){
             Set<String> loggerNamesToLogForevent = getLoggerNamesForSettingsThatMatchLoggerSettings(event);
+            // Add Event to the List<> of each Logger that it qualifies for based on the settings that were evaluated
             for(String loggerName : loggerNamesToLogForevent){
                 if(!eventsByLoggerName.containsKey(loggerName)){
                     eventsByLoggerName.put(loggerName, new List<narrate_LogEvent__e>());
@@ -48,6 +46,22 @@ public without sharing class narrate_LoggingSettingsManager {
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
             if(setting.narrate_Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
                 result.addAll(setting.narrate_Loggers__c.split('[,;]'));
+            }
+        }
+        return result;
+    }
+
+    // Eventually this will/may be the entry point for more complex dependency injection based on different types of IFilterLogic
+    private static narrate_IFilterLogic createFilterLogicForLogic(String logicString){
+        narrate_IFilterLogic result;
+        if(String.isNotEmpty(logicString)) {
+                try {
+                result = new narrate_SimpleFilterLogic();
+                result.setLogic(logicString);
+            } catch(JSONException jsonError) {
+                System.debug('NARRATOR MSG - Error parsing JSON logic: ' + logicString);
+                result = null;
+                // Dude that's on you, not on me.
             }
         }
         return result;

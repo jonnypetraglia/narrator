@@ -56,16 +56,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>narrate_LogEntry__c.narrate_Quiddity__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>narrate_LogEntry__c.narrate_Request__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>narrate_LogEntry__c.narrate_Timestamp__c</field>
         <readable>true</readable>
