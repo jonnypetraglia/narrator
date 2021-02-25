@@ -26,7 +26,7 @@ global with sharing class narrate_LogEntryTruncator implements Schedulable {
     }
     @testVisible
     private List<SObject> getObjectsToDelete(Date after, Integer max) {
-        List<narrate_ExecutionContext__c> recordsToSave = [SELECT Id FROM narrate_ExecutionContext__c WHERE narrate_EndTime__c >= :after ORDER BY narrate_EndTime__c DESC LIMIT :max];
+        List<narrate_ExecutionContext__c> recordsToSave = [SELECT Id FROM narrate_ExecutionContext__c WHERE EndTime__c >= :after ORDER BY EndTime__c DESC LIMIT :max];
         return [SELECT Id FROM narrate_ExecutionContext__c WHERE ID NOT IN :recordsToSave];
     }
 

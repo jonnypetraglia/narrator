@@ -27,7 +27,7 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
     private List<narrate_LogEntry__c> createLogEntriesForLogEvents(List<narrate_LogEvent__e> events, Map<String, narrate_ExecutionContext__c> executionContextsByRequest){
         List<narrate_LogEntry__c> entries = new List<narrate_LogEntry__c>();
         for(narrate_LogEvent__e event : events){
-            narrate_ExecutionContext__c execContext = executionContextsByRequest.get(event.narrate_Request__c);
+            narrate_ExecutionContext__c execContext = executionContextsByRequest.get(event.Request__c);
             entries.add(constructEntryFromEvent(event, execContext?.Id));
         }
         return entries;
@@ -36,14 +36,14 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
     @testVisible
     private static narrate_LogEntry__c constructEntryFromEvent(narrate_LogEvent__e logEvent, Id executionContextId) {
         return new narrate_LogEntry__c(
-            narrate_Class__c = logEvent.narrate_Class__c,
-            narrate_ExecutionContext__c = executionContextId,
-            narrate_Level__c = logEvent.narrate_Level__c,
-            narrate_Line__c = logEvent.narrate_Line__c,
-            narrate_Message__c = logEvent.narrate_Message__c,
-            narrate_Method__c = logEvent.narrate_Method__c,
-            narrate_Timestamp__c = logEvent.narrate_Timestamp__c,
-            narrate_User__c = logEvent.narrate_User__c
+            Class__c = logEvent.Class__c,
+            ExecutionContext__c = executionContextId,
+            Level__c = logEvent.Level__c,
+            Line__c = logEvent.Line__c,
+            Message__c = logEvent.Message__c,
+            Method__c = logEvent.Method__c,
+            Timestamp__c = logEvent.Timestamp__c,
+            User__c = logEvent.User__c
         );
     }
 
@@ -51,7 +51,7 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
     private static Map<String, narrate_ExecutionContext__c> createExecutionContextsForLogEvents(List<narrate_LogEvent__e> events){
         Map<String, narrate_ExecutionContext__c> result = new Map<String, narrate_ExecutionContext__c>();
         for(narrate_LogEvent__e event : events){
-            result.put(event.narrate_Request__c, new narrate_ExecutionContext__c(narrate_Request__c = event.narrate_Request__c, narrate_Quiddity__c = event.narrate_Quiddity__c));
+            result.put(event.Request__c, new narrate_ExecutionContext__c(Request__c = event.Request__c, Quiddity__c = event.Quiddity__c));
         }
         result.remove(null);
         return result;
@@ -60,9 +60,9 @@ public with sharing class narrate_RecordLogger implements narrate_ILogger {
     @testVisible
     private static Map<String, narrate_ExecutionContext__c> loadExecutionContextsByRequest(Set<String> requests) {
         Map<String, narrate_ExecutionContext__c> result = new Map<String, narrate_ExecutionContext__c>();
-        List<narrate_ExecutionContext__c> execs = [SELECT Id, Name, narrate_Request__c, narrate_Quiddity__c FROM narrate_ExecutionContext__c WHERE narrate_Request__c IN :requests];
+        List<narrate_ExecutionContext__c> execs = [SELECT Id, Name, Request__c, Quiddity__c FROM narrate_ExecutionContext__c WHERE Request__c IN :requests];
         for(narrate_ExecutionContext__c exec : execs){
-            result.put(exec.narrate_Request__c, exec);
+            result.put(exec.Request__c, exec);
         }
         return result;
     }

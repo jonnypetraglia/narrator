@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>narrate_EndTime__c</fullName>
+    <fullName>EndTime__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <label>End Time</label>
-    <summarizedField>narrate_LogEntry__c.narrate_Timestamp__c</summarizedField>
-    <summaryForeignKey>narrate_LogEntry__c.narrate_ExecutionContext__c</summaryForeignKey>
+    <summarizedField>narrate_LogEntry__c.Timestamp__c</summarizedField>
+    <summaryForeignKey>narrate_LogEntry__c.ExecutionContext__c</summaryForeignKey>
     <summaryOperation>max</summaryOperation>
     <trackTrending>false</trackTrending>
     <type>Summary</type>

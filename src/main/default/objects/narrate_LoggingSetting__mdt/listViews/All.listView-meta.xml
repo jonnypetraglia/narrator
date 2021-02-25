@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All</fullName>
-    <columns>narrate_Active__c</columns>
+    <columns>Active__c</columns>
     <columns>MasterLabel</columns>
-    <columns>narrate_Loggers__c</columns>
-    <columns>narrate_Logic__c</columns>
+    <columns>Loggers__c</columns>
+    <columns>Logic__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

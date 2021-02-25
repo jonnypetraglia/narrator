@@ -12,19 +12,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Active__c</field>
+                <field>Active__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>DeveloperName</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>narrate_Quiddity__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
-                <field>narrate_Loggers__c</field>
+                <field>Loggers__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -38,7 +34,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Logic__c</field>
+                <field>Logic__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

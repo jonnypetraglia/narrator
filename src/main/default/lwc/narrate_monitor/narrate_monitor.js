@@ -145,6 +145,6 @@ export default class narrate_Monitor extends LightningElement {
     }
 
     isCurrentUser(log) {
-        return log.narrate_User__c === USER_ID;
+        return log.User__c === USER_ID;
     }
 }

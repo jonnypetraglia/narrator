@@ -301,115 +301,115 @@ public class narrate_SimpleFilterLogicTEST {
     @isTest
     public static void DateTime_IsNull() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS NULL"]');
-        System.assertEquals(true, filterLogic.evaluate( new narrate_LogEntry__c(narrate_Timestamp__c=null)));
-        System.assertEquals(false, filterLogic.evaluate( new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
+        filterLogic.setLogic('["Timestamp__c", "IS NULL"]');
+        System.assertEquals(true, filterLogic.evaluate( new narrate_LogEntry__c(Timestamp__c=null)));
+        System.assertEquals(false, filterLogic.evaluate( new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
     }
 
     @isTest
     public static void DateTime_IsNotNull() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS NOT NULL"]');
-        System.assertEquals(true, filterLogic.evaluate( new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
-        System.assertEquals(false, filterLogic.evaluate( new narrate_LogEntry__c(narrate_Timestamp__c=null)));
+        filterLogic.setLogic('["Timestamp__c", "IS NOT NULL"]');
+        System.assertEquals(true, filterLogic.evaluate( new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
+        System.assertEquals(false, filterLogic.evaluate( new narrate_LogEntry__c(Timestamp__c=null)));
     }
 
     @isTest
     public static void DateTime_Equals() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "=", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(-42))));
+        filterLogic.setLogic('["Timestamp__c", "=", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(-42))));
     }
 
     @isTest
     public static void DateTime_NotEquals() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "!=", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(42))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
+        filterLogic.setLogic('["Timestamp__c", "!=", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(42))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
     }
 
     @isTest
     public static void DateTime_GreaterThan() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", ">", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(42))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(-42))));
+        filterLogic.setLogic('["Timestamp__c", ">", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(42))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(-42))));
     }
 
     @isTest
     public static void DateTime_LessThan() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "<", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(-42))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(42))));
+        filterLogic.setLogic('["Timestamp__c", "<", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(-42))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(42))));
     }
 
     @isTest
     public static void DateTime_GreaterThanOrEqual() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", ">=", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(42))));
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(-42))));
+        filterLogic.setLogic('["Timestamp__c", ">=", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(42))));
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(-42))));
     }
 
     @isTest
     public static void DateTime_LessThanOrEqual() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "<=", "1952-03-11T00:00:00Z"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(-42))));
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=testDateGMT().addDays(42))));
+        filterLogic.setLogic('["Timestamp__c", "<=", "1952-03-11T00:00:00Z"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(-42))));
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=testDateGMT().addDays(42))));
     }
 
     @isTest
     public static void DateTime_IsToday() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS TODAY"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT().addDays(-1))));
+        filterLogic.setLogic('["Timestamp__c", "IS TODAY"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT().addDays(-1))));
     }
 
     @isTest
     public static void DateTime_IsYesterday() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS YESTERDAY"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT().addDays(-1))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT())));
+        filterLogic.setLogic('["Timestamp__c", "IS YESTERDAY"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT().addDays(-1))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT())));
     }
 
     @isTest
     public static void DateTime_IsThisMonth() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS THIS MONTH"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=DateTime.now().dateGMT().addMonths(-1))));
+        filterLogic.setLogic('["Timestamp__c", "IS THIS MONTH"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=DateTime.now().dateGMT().addMonths(-1))));
     }
 
     @isTest
     public static void DateTime_IsThisYear() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS THIS YEAR"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT())));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT().addYears(1))));
+        filterLogic.setLogic('["Timestamp__c", "IS THIS YEAR"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT())));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT().addYears(1))));
     }
 
     @isTest
     public static void DateTime_IsFuture() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS FUTURE"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT().addDays(1))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT().addDays(-1))));
+        filterLogic.setLogic('["Timestamp__c", "IS FUTURE"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT().addDays(1))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT().addDays(-1))));
     }
 
     @isTest
     public static void DateTime_IsPast() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        filterLogic.setLogic('["narrate_Timestamp__c", "IS PAST"]');
-        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT().addDays(-1))));
-        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(narrate_Timestamp__c=nowGMT().addDays(1))));
+        filterLogic.setLogic('["Timestamp__c", "IS PAST"]');
+        System.assertEquals(true, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT().addDays(-1))));
+        System.assertEquals(false, filterLogic.evaluate(new narrate_LogEntry__c(Timestamp__c=nowGMT().addDays(1))));
     }
 
 

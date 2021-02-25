@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>narrate_ExecutionContext__c</fullName>
+    <fullName>ExecutionContext__c</fullName>
     <externalId>false</externalId>
     <label>Log</label>
     <referenceTo>narrate_ExecutionContext__c</referenceTo>

@@ -3,19 +3,15 @@
     <label>All</label>
     <protected>false</protected>
     <values>
-        <field>narrate_Active__c</field>
+        <field>Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
-        <field>narrate_Loggers__c</field>
+        <field>Loggers__c</field>
         <value xsi:type="xsd:string">narrate_RecordLogger</value>
     </values>
     <values>
-        <field>narrate_Logic__c</field>
-        <value xsi:type="xsd:string">[&quot;narrate_Level__c&quot;, &quot;!=&quot;, &quot;&quot;]</value>
-    </values>
-    <values>
-        <field>narrate_Quiddity__c</field>
-        <value xsi:type="xsd:string"></value>
+        <field>Logic__c</field>
+        <value xsi:type="xsd:string">[&quot;Level__c&quot;, &quot;!=&quot;, &quot;&quot;]</value>
     </values>
 </CustomMetadata>

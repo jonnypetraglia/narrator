@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>narrate_Timestamp__c</fullName>
+    <fullName>Message__c</fullName>
     <externalId>false</externalId>
-    <label>Timestamp</label>
-    <required>false</required>
+    <label>Message</label>
+    <length>2000</length>
     <trackTrending>false</trackTrending>
-    <type>DateTime</type>
+    <type>LongTextArea</type>
+    <visibleLines>10</visibleLines>
 </CustomField>

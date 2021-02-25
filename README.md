@@ -46,7 +46,7 @@ If if you want to create your own Logger from scratch, it's *one* method to over
 public class ShoutingLogger implements narrate_ILogger {
     // Highly highly highly recommend that this function swallows all errors. Otherwise a bug in your logging framework could break your production code, which would REALLY suck.
     void log(narrate_LogEvent__e data) {
-      System.debug(data.narrate_Message__c.toUppercase());
+      System.debug(data.Message__c.toUppercase());
     }
 }
 ```
@@ -108,7 +108,7 @@ For the implementation of such logic, as $200 textbooks would say: "The exercise
 The Logging Settings Custom Metadata expects the Logic field to be a **JSON Array** of Strings:
 
 ```apex
-setting.narrate_Logic__c = '["Email", "DOES NOT CONTAIN", "avocado"]';
+setting.Logic__c = '["Email", "DOES NOT CONTAIN", "avocado"]';
 ```
 
 

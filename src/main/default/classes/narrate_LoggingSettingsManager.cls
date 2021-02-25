@@ -3,7 +3,7 @@ public without sharing class narrate_LoggingSettingsManager {
     @testVisible
     private static List<narrate_LoggingSetting__mdt> activeSettings {get {
         if(activeSettings==null) {
-            activeSettings = [SELECT narrate_Logic__c, narrate_Loggers__c FROM narrate_LoggingSetting__mdt WHERE narrate_Active__c = true];
+            activeSettings = [SELECT Logic__c, Loggers__c FROM narrate_LoggingSetting__mdt WHERE Active__c = true];
         }
         return activeSettings;
     } private set;}
@@ -12,7 +12,7 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                narrate_IFilterLogic filterLogic = createFilterLogicForLogic(settings.narrate_Logic__c);
+                narrate_IFilterLogic filterLogic = createFilterLogicForLogic(settings.Logic__c);
                 if(filterLogic!=null){
                     filtersBySettingsId.put(settings.Id, filterLogic);
                 }
@@ -44,8 +44,8 @@ public without sharing class narrate_LoggingSettingsManager {
     private static Set<String> getLoggerNamesForSettingsThatMatchLoggerSettings(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
-            if(setting.narrate_Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
-                result.addAll(setting.narrate_Loggers__c.split('[,;]'));
+            if(setting.Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
+                result.addAll(setting.Loggers__c.split('[,;]'));
             }
         }
         return result;

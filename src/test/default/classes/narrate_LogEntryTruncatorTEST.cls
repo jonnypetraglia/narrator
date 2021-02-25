@@ -10,7 +10,7 @@ public class narrate_LogEntryTruncatorTEST {
         insert testExecutionContexts;
         List<narrate_LogEntry__c> testLogEntries = generateTestLogEntries(testExecutionContexts);
         insert testLogEntries;
-        System.assertEquals(TEST_RECORD_QUANTITY, [SELECT Id FROM narrate_ExecutionContext__c WHERE narrate_EndTime__c != null].size());
+        System.assertEquals(TEST_RECORD_QUANTITY, [SELECT Id FROM narrate_ExecutionContext__c WHERE EndTime__c != null].size());
     }
 
     @isTest
@@ -95,8 +95,8 @@ public class narrate_LogEntryTruncatorTEST {
         List<narrate_LogEntry__c> entries = new List<narrate_LogEntry__c>();
         for(Integer i=0; i<testExecutionContexts.size(); i++){
             entries.add(new narrate_LogEntry__c(
-                narrate_ExecutionContext__c=testExecutionContexts.get(i).Id,
-                narrate_Timestamp__c=TEST_DATE.addDays(-1 * i - 1)
+                ExecutionContext__c=testExecutionContexts.get(i).Id,
+                Timestamp__c=TEST_DATE.addDays(-1 * i - 1)
             ));
         }
         return entries;

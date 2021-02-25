@@ -9,7 +9,7 @@ public virtual without sharing class Narrate {
                 FINEST = LoggingLevel.FINEST.name().toLowerCase().capitalize(),
                 WTF = 'Wtf',
                 EXCEPT = 'Except',
-                HTTP_ = 'Http',
+                X_HTTP = 'Http',
                 REST = 'Rest';
 
     public static void debug(String message) {
@@ -135,85 +135,85 @@ public virtual without sharing class Narrate {
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = level,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = message,
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = level,
+            Line__c = codeLocation.theLine,
+            Message__c = message,
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = Narrate.EXCEPT,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = error.getMessage(),
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = Narrate.EXCEPT,
+            Line__c = codeLocation.theLine,
+            Message__c = error.getMessage(),
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = Narrate.REST,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = JSON.serialize(request),
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = Narrate.REST,
+            Line__c = codeLocation.theLine,
+            Message__c = JSON.serialize(request),
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = Narrate.REST,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = JSON.serialize(response),
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = Narrate.REST,
+            Line__c = codeLocation.theLine,
+            Message__c = JSON.serialize(response),
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = Narrate.REST,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = request.toString(),
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = Narrate.REST,
+            Line__c = codeLocation.theLine,
+            Message__c = request.toString(),
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     @testVisible
     private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
         return new narrate_LogEvent__e(
-            narrate_Class__c = codeLocation.theClass,
-            narrate_Level__c = Narrate.REST,
-            narrate_Line__c = codeLocation.theLine,
-            narrate_Message__c = response.toString(),
-            narrate_Method__c = codeLocation.theMethod,
-            narrate_Quiddity__c = CURRENT_REQUEST_QUIDDITY,
-            narrate_Request__c = CURRENT_REQUEST_ID,
-            narrate_Timestamp__c = System.now(),
-            narrate_User__c = UserInfo.getUserId()
+            Class__c = codeLocation.theClass,
+            Level__c = Narrate.REST,
+            Line__c = codeLocation.theLine,
+            Message__c = response.toString(),
+            Method__c = codeLocation.theMethod,
+            Quiddity__c = CURRENT_REQUEST_QUIDDITY,
+            Request__c = CURRENT_REQUEST_ID,
+            Timestamp__c = System.now(),
+            User__c = UserInfo.getUserId()
         );
     }
     private static List<String> castToStringList(List<Object> values) {

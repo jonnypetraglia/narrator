@@ -9,7 +9,7 @@ function validRegex(input) {
 
 function logMatchesFilter(log, filter, maxLengthToTest) {
     const matcher = (input) => {return typeof filter == RegExp ? filter.test(input) : input.includes(filter); }
-    return ['narrate_Message__c', 'narrate_Class__c', 'narrate_Method__c', 'narrate_User__c'].reduce((result, field) => {
+    return ['Message__c', 'Class__c', 'Method__c', 'User__c'].reduce((result, field) => {
         return result || (log[field].length <= maxLengthToTest && matcher(log[field]));
     }, false);
 }
@@ -58,31 +58,31 @@ const EVENT_URL = '/services/data/v48.0/apexrest/narrate_EventREST';
 const LIST_COLUMNS = [
     {
         type: "text",
-        fieldName: "narrate_Request__c",
+        fieldName: "Request__c",
         label: "Context",
         initialWidth: 200
     },
     {
         type: "text",
-        fieldName: "narrate_Level__c",
+        fieldName: "Level__c",
         label: "Level",
         initialWidth: 100
     },
     {
         type: "text",
-        fieldName: "narrate_Class__c",
+        fieldName: "Class__c",
         label: "Class",
         initialWidth: 200
     },
     {
         type: "text",
-        fieldName: "narrate_Method__c",
+        fieldName: "Method__c",
         label: "Method",
         initialWidth: 200
     },
     {
         type: "text",
-        fieldName: "narrate_Message__c",
+        fieldName: "Message__c",
         label: "Message"
     },
 ];

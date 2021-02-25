@@ -60,9 +60,9 @@ class narrate_Logger {
         };
         /*
         narrate_StackTraceEvent stackTrace = new narrate_StackTraceEvent(CLASS_NAME);
-        currentEvent.narrate_Class__c = stackTrace.theClass;
-        currentEvent.narrate_Method__c = stackTrace.theMethod;
-        currentEvent.narrate_Line__c = stackTrace.theLine;
+        currentEvent.Class__c = stackTrace.theClass;
+        currentEvent.Method__c = stackTrace.theMethod;
+        currentEvent.Line__c = stackTrace.theLine;
         */ //TODO: set stack trace variables?
         publishEvent(currentEvent)
             .then((response) => {

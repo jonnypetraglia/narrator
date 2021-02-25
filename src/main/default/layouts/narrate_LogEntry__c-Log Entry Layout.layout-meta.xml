@@ -9,29 +9,29 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>narrate_ExecutionContext__c</field>
+                <field>ExecutionContext__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_User__c</field>
+                <field>User__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>narrate_Level__c</field>
+                <field>Level__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Class__c</field>
+                <field>Class__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Method__c</field>
+                <field>Method__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Line__c</field>
+                <field>Line__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -44,7 +44,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>narrate_Message__c</field>
+                <field>Message__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

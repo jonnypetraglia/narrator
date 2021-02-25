@@ -52,7 +52,7 @@ public class narrate_EmailLoggerTEST {
             logger.log(null);
             System.assert(false, 'Expected exception to be thrown but none was.');
         }catch(narrate_NarratorException error){
-            List<narrate_LogEntry__c> testEntries = [SELECT narrate_Level__c, narrate_Class__c, narrate_Method__c, narrate_Line__c, narrate_Message__c FROM narrate_LogEntry__c];
+            List<narrate_LogEntry__c> testEntries = [SELECT Level__c, Class__c, Method__c, Line__c, Message__c FROM narrate_LogEntry__c];
             System.assertEquals(0, testEntries.size(), testEntries + '');
         }catch(Exception error){
             System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');
@@ -83,18 +83,18 @@ public class narrate_EmailLoggerTEST {
     public static void formatLogEventsAsHTMLTableRows(){
         List<narrate_LogEvent__e> testEvents = new List<narrate_LogEvent__e>{
             new narrate_LogEvent__e(
-                narrate_Level__c = 'LevelA',
-                narrate_Class__c = 'ClassA',
-                narrate_Method__c = 'MethodA',
-                narrate_Line__c = 24,
-                narrate_Message__c = 'Herp'
+                Level__c = 'LevelA',
+                Class__c = 'ClassA',
+                Method__c = 'MethodA',
+                Line__c = 24,
+                Message__c = 'Herp'
             ),
             new narrate_LogEvent__e(
-                narrate_Level__c = 'LevelB',
-                narrate_Class__c = 'ClassB',
-                narrate_Method__c = 'MethodB',
-                narrate_Line__c = 42,
-                narrate_Message__c = 'Derp'
+                Level__c = 'LevelB',
+                Class__c = 'ClassB',
+                Method__c = 'MethodB',
+                Line__c = 42,
+                Message__c = 'Derp'
             )
         };
         List<String> resultList = (new narrate_EmailLogger()).formatLogEventsAsHTMLTableRows(testEvents);
@@ -106,18 +106,18 @@ public class narrate_EmailLoggerTEST {
     public static void formatLogEventsAsHumanReadableText(){
         List<narrate_LogEvent__e> testEvents = new List<narrate_LogEvent__e>{
             new narrate_LogEvent__e(
-                narrate_Level__c = 'LevelA',
-                narrate_Class__c = 'ClassA',
-                narrate_Method__c = 'MethodA',
-                narrate_Line__c = 24,
-                narrate_Message__c = 'Herp'
+                Level__c = 'LevelA',
+                Class__c = 'ClassA',
+                Method__c = 'MethodA',
+                Line__c = 24,
+                Message__c = 'Herp'
             ),
             new narrate_LogEvent__e(
-                narrate_Level__c = 'LevelB',
-                narrate_Class__c = 'ClassB',
-                narrate_Method__c = 'MethodB',
-                narrate_Line__c = 42,
-                narrate_Message__c = 'Derp'
+                Level__c = 'LevelB',
+                Class__c = 'ClassB',
+                Method__c = 'MethodB',
+                Line__c = 42,
+                Message__c = 'Derp'
             )
         };
         List<String> resultList = (new narrate_EmailLogger()).formatLogEventsAsHumanReadableText(testEvents);
@@ -127,13 +127,13 @@ public class narrate_EmailLoggerTEST {
 
     private static narrate_LogEvent__e generateTestLogEvent(){
         return new narrate_LogEvent__e(
-            narrate_Level__c = 'grok',
-            narrate_Class__c = 'Classy',
-            narrate_Method__c = 'Methody',
-            narrate_Request__c = 'DeepThought',
-            narrate_Quiddity__c = 'yerawizardharry',
-            narrate_Line__c = 42,
-            narrate_Message__c = 'Don\'t Panic'
+            Level__c = 'grok',
+            Class__c = 'Classy',
+            Method__c = 'Methody',
+            Request__c = 'DeepThought',
+            Quiddity__c = 'yerawizardharry',
+            Line__c = 42,
+            Message__c = 'Don\'t Panic'
         );
     }
 }

@@ -13,29 +13,29 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_NumberOfEntries__c</field>
+                <field>NumberOfEntries__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_Quiddity__c</field>
+                <field>Quiddity__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_Request__c</field>
+                <field>Request__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_Duration__c</field>
+                <field>Duration__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_StartTime__c</field>
+                <field>StartTime__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>narrate_EndTime__c</field>
+                <field>EndTime__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -81,12 +81,12 @@
         <excludeButtons>MassChangeOwner</excludeButtons>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
-        <fields>narrate_Level__c</fields>
-        <fields>narrate_Class__c</fields>
-        <fields>narrate_Method__c</fields>
-        <fields>narrate_Line__c</fields>
-        <fields>narrate_Message__c</fields>
-        <relatedList>narrate_LogEntry__c.narrate_ExecutionContext__c</relatedList>
+        <fields>Level__c</fields>
+        <fields>Class__c</fields>
+        <fields>Method__c</fields>
+        <fields>Line__c</fields>
+        <fields>Message__c</fields>
+        <relatedList>narrate_LogEntry__c.ExecutionContext__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>narrate_Request__c</fullName>
-    <deprecated>false</deprecated>
+    <fullName>Level__c</fullName>
+    <defaultValue>&quot;DEBUG&quot;</defaultValue>
     <externalId>false</externalId>
-    <label>Request</label>
-    <length>80</length>
-    <required>false</required>
+    <label>Level</label>
+    <length>255</length>
+    <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>

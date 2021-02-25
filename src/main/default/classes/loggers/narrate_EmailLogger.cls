@@ -54,7 +54,7 @@ public class narrate_EmailLogger implements narrate_ILogger {
     private List<String> formatLogEventsAsHumanReadableText(List<narrate_LogEvent__e> logEvents){
         List<String> result = new List<String>();
         for(narrate_LogEvent__e logEvent : logEvents){
-            result.add('[' + logEvent.narrate_Level__c + '] ' + logEvent.narrate_Class__c + '.' + logEvent.narrate_Method__c + ':' + logEvent.narrate_Line__c + '\t' + logEvent.narrate_Message__c);
+            result.add('[' + logEvent.Level__c + '] ' + logEvent.Class__c + '.' + logEvent.Method__c + ':' + logEvent.Line__c + '\t' + logEvent.Message__c);
         }
         return result;
     }
@@ -63,7 +63,7 @@ public class narrate_EmailLogger implements narrate_ILogger {
     private List<String> formatLogEventsAsHTMLTableRows(List<narrate_LogEvent__e> logEvents){
         List<String> result = new List<String>();
         for(narrate_LogEvent__e logEvent : logEvents){
-            result.add('<tr><td>' + logEvent.narrate_Level__c + '</td><td>' + logEvent.narrate_Class__c + '</td><td>' + logEvent.narrate_Method__c + '</td><td>' + logEvent.narrate_Line__c + '</td><td>' + logEvent.narrate_Message__c + '</td></tr>');
+            result.add('<tr><td>' + logEvent.Level__c + '</td><td>' + logEvent.Class__c + '</td><td>' + logEvent.Method__c + '</td><td>' + logEvent.Line__c + '</td><td>' + logEvent.Message__c + '</td></tr>');
         }
         return result;
     }
@@ -82,10 +82,10 @@ public class narrate_EmailLogger implements narrate_ILogger {
     private Map<String, List<narrate_LogEvent__e>> groupLogEventsByRequest(List<narrate_LogEvent__e> logEvents){
         Map<String, List<narrate_LogEvent__e>> result = new Map<String, List<narrate_LogEvent__e>>();
         for(narrate_LogEvent__e logEvent : logEvents){
-            if(!result.containsKey(logEvent.narrate_Request__c)){
-                result.put(logEvent.narrate_Request__c, new List<narrate_LogEvent__e>());
+            if(!result.containsKey(logEvent.Request__c)){
+                result.put(logEvent.Request__c, new List<narrate_LogEvent__e>());
             }
-            result.get(logEvent.narrate_Request__c).add(logEvent);
+            result.get(logEvent.Request__c).add(logEvent);
         }
         return result;
     }

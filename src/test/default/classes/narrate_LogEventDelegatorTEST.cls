@@ -4,19 +4,19 @@ public class narrate_LogEventDelegatorTEST {
     @isTest
     private static void receiveEvents() {
         narrate_LoggingSetting__mdt setting = new narrate_LoggingSetting__mdt(
-            narrate_Active__c = true,
-            narrate_Loggers__c = 'narrate_LogEventDelegatorTEST.TestLogger',
-            narrate_Logic__c = '["narrate_Level__c", "=", "INFO"]'
+            Active__c = true,
+            Loggers__c = 'narrate_LogEventDelegatorTEST.TestLogger',
+            Logic__c = '["Level__c", "=", "INFO"]'
         );
         narrate_LoggingSettingsManager.activeSettings = new List<narrate_LoggingSetting__mdt>{setting};
 
         narrate_LogEvent__e infoEvent = new narrate_LogEvent__e(
-            narrate_Level__c = 'INFO',
-            narrate_Message__c = 'This should log'
+            Level__c = 'INFO',
+            Message__c = 'This should log'
         );
         narrate_LogEvent__e errorEvent = new narrate_LogEvent__e(
-            narrate_Level__c = 'ERROR',
-            narrate_Message__c = 'This should not log'
+            Level__c = 'ERROR',
+            Message__c = 'This should not log'
         );
         narrate_LogEventDelegator delegator = new narrate_LogEventDelegator();
         delegator.receiveEvents(new List<narrate_LogEvent__e>{infoEvent, errorEvent});
@@ -46,8 +46,8 @@ public class narrate_LogEventDelegatorTEST {
         Map<String, List<narrate_LogEvent__e>> testLogEvents = new Map<String, List<narrate_LogEvent__e>>();
         for(String testLoggerName : testLoggers.keySet()){
             testLogEvents.put(testLoggerName, new List<narrate_LogEvent__e>{new narrate_LogEvent__e(
-                narrate_Level__c = 'INFO',
-                narrate_Message__c = 'This should log'
+                Level__c = 'INFO',
+                Message__c = 'This should log'
             )});
         }
         narrate_LogEventDelegator delegator = new narrate_LogEventDelegator();
@@ -62,8 +62,8 @@ public class narrate_LogEventDelegatorTEST {
         public Integer log(List<narrate_LogEvent__e> events) {
             logCalled = true;
             for(narrate_LogEvent__e event : events){
-                System.assertEquals('This should log', event.narrate_Message__c);
-                System.assertEquals('INFO', event.narrate_Level__c);
+                System.assertEquals('This should log', event.Message__c);
+                System.assertEquals('INFO', event.Level__c);
             }
             return events.size();
         }
