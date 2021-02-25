@@ -20,7 +20,6 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         boolean result = false;
         try {
             if(compareTo.isSet(fieldName)) {
-                Object val = compareTo.get(fieldName);
                 Object val = compareTo.isSet(fieldName) ? compareTo.get(fieldName) : null;
                 if(!compareTo.isSet(fieldName) || compareTo.get(fieldName) == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
                     result = evaluateShared(val, whatToCompareTo);
@@ -192,5 +191,27 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
     }
     private static Date todayGMT() {
         return nowGMT().dateGMT();
+    }
+
+    override public String toString(){
+        String result = fieldName + ' ' + logic;
+        if(whatToCompareTo!=null){
+            result+= ' ' + whatToCompareTo;
+        }
+        return result;
+    }
+
+    public static Integer getNumberOfArgsForLogic(String logic){
+        switch on logic {
+            when 'IS NULL', 'IS NOT NULL', 'IS TODAY', 'IS YESTERDAY', 'IS THIS MONTH', 'IS THIS YEAR', 'IS FUTURE', 'IS PAST' {
+                return 0;
+            }
+            when '=', '!=', '<', '>', '<=', '>=', 'MATCHES', 'DOES NOT MATCH', 'CONTAINS', 'DOES NOT CONTAIN', 'STARTS WITH', 'ENDS WITH' {
+                return 1;
+            }
+            when else {
+                return null; //TODO: Throw Exception;
+            }
+        }
     }
 }
