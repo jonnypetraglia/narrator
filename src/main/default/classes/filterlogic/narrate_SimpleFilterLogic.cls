@@ -16,47 +16,50 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
     }
 
     public boolean evaluate(SObject compareTo) {
-        
         boolean result = false;
         try {
-            if(compareTo.isSet(fieldName)) {
-                Object val = compareTo.isSet(fieldName) ? compareTo.get(fieldName) : null;
-                if(!compareTo.isSet(fieldName) || compareTo.get(fieldName) == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
-                    result = evaluateShared(val, whatToCompareTo);
-                } else {
-                    Map<String, Schema.SobjectField> objectFieldMap = compareTo.getSObjectType().getDescribe().fields.getMap();
-                    Schema.DisplayType fieldType = objectFieldMap.get(fieldName).getDescribe().getType();
-                    switch on fieldType {
-                        when BOOLEAN {
-                            result = evaluateBoolean((Boolean)val, whatToCompareTo == 'true');
-                        }
-                        when ID, REFERENCE {
-                            result = evaluateId((Id)val, whatToCompareTo == null ? null : Id.valueOf(whatToCompareTo));
-                        }
-                        when LONG, INTEGER {
-                            result = evaluateLong((Long)val, whatToCompareTo == null ? null : Long.valueOf(whatToCompareTo));
-                        }
-                        when CURRENCY, PERCENT {
-                            result = evaluateDecimal((Decimal)val, whatToCompareTo == null ? null : Decimal.valueOf(whatToCompareTo));
-                        }
-                        when DOUBLE  {
-                            result = evaluateDouble((Double)val, whatToCompareTo == null ? null : Double.valueOf(whatToCompareTo));
-                        }
-                        when DATE {
-                            result = evaluateDate((Date)val, whatToCompareTo == null ? null : Date.valueOf(whatToCompareTo));
-                        }
-                        when DATETIME {
-                            result = evaluateDateTime((DateTime)val, whatToCompareTo == null ? null : (DateTime)JSON.deserialize('"' + whatToCompareTo + '"', DateTime.class));
-                        }
-                        when STRING, EMAIL, ENCRYPTEDSTRING, MULTIPICKLIST, PHONE, TEXTAREA, URL, COMBOBOX, TIME {
-                            result = evaluateString((String)val, (String)whatToCompareTo);
-                        }
-                        when else {
-                            result = evaluateString(String.valueOf(val), String.valueOf(whatToCompareTo));
-                        }
-                        // Also: Address, Base64, DataCategoryGroupReference, 
+            Object val = compareTo.isSet(fieldName) ? compareTo.get(fieldName) : null;
+            if(!compareTo.isSet(fieldName) || compareTo.get(fieldName) == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
+                result = evaluateShared(val, whatToCompareTo);
+            } else {
+                Map<String, Schema.SobjectField> objectFieldMap = compareTo.getSObjectType().getDescribe().fields.getMap();
+                Schema.DisplayType fieldType = objectFieldMap.get(fieldName).getDescribe().getType();
+                switch on fieldType {
+                    when BOOLEAN {
+                        result = evaluateBoolean((Boolean)val, whatToCompareTo == 'true');
                     }
+                    when ID, REFERENCE {
+                        result = evaluateId((Id)val, whatToCompareTo == null ? null : Id.valueOf(whatToCompareTo));
+                    }
+                    when LONG, INTEGER {
+                        result = evaluateLong((Long)val, whatToCompareTo == null ? null : Long.valueOf(whatToCompareTo));
+                    }
+                    when CURRENCY, PERCENT {
+                        result = evaluateDecimal((Decimal)val, whatToCompareTo == null ? null : Decimal.valueOf(whatToCompareTo));
+                    }
+                    when DOUBLE  {
+                        result = evaluateDouble((Double)val, whatToCompareTo == null ? null : Double.valueOf(whatToCompareTo));
+                    }
+                    when DATE {
+                        result = evaluateDate((Date)val, whatToCompareTo == null ? null : Date.valueOf(whatToCompareTo));
+                    }
+                    when DATETIME {
+                        result = evaluateDateTime((DateTime)val, whatToCompareTo == null ? null : (DateTime)JSON.deserialize('"' + whatToCompareTo + '"', DateTime.class));
+                    }
+                    when STRING, EMAIL, ENCRYPTEDSTRING, MULTIPICKLIST, PHONE, TEXTAREA, URL, COMBOBOX, TIME {
+                        result = evaluateString((String)val, (String)whatToCompareTo);
+                    }
+                    when else {
+                        result = evaluateString(String.valueOf(val), String.valueOf(whatToCompareTo));
+                    }
+                    // Also: Address, Base64, DataCategoryGroupReference, 
                 }
+            }
+        } catch(SObjectException e) {
+            if(e.getMessage().startsWith('Invalid field: ')){
+                throw new narrate_InvalidFieldException('Invalid field:' + fieldName + ' on SObject ' + compareTo?.getSObjectType());
+            }else{
+                System.debug(LoggingLevel.ERROR, 'NARRATOR MSG - ' + e.getStackTraceString());
             }
         } catch(Exception e) {
             System.debug(LoggingLevel.ERROR, 'NARRATOR MSG - ' + e.getStackTraceString());

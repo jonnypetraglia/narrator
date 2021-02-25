@@ -498,12 +498,11 @@ public class narrate_SimpleFilterLogicTEST {
     @isTest
     public static void InvalidField() {
         narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
-        System.assertEquals(null, filterLogic.evaluate(new Account(Name='Shenanigans')));
         filterLogic.setLogic('["FullName", "ENDS_WITH", "Slartibartfast"]');
         try{
             filterLogic.evaluate(new Account(Name='Shenanigans'));
             System.assert(false, 'Expected invalid field to throw a parse exception.');
-        }catch(narrate_FilterLogicParseException error){
+        }catch(narrate_InvalidFieldException error){
             // Expected
         }catch(Exception error){
             System.assert(false, 'Expected invalid field to throw a parse exception.');

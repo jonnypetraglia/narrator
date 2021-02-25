@@ -1,0 +1,1 @@
+public with sharing class narrate_InvalidFieldException extends Exception {}

@@ -588,7 +588,7 @@ public class narrate_ComplexFilterLogicTEST {
         try{
             filterLogic.evaluate(new Account(Name='Shenanigans'));
             System.assert(false, 'Expected invalid field to throw a parse exception.');
-        }catch(narrate_FilterLogicParseException error){
+        }catch(narrate_InvalidFieldException error){
             // Expected
         }catch(Exception error){
             System.assert(false, 'Expected invalid field to throw a parse exception but received exception of type ' + error.getTypeName() + '.');

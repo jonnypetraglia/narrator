@@ -44,8 +44,12 @@ public without sharing class narrate_LoggingSettingsManager {
     private static Set<String> getLoggerNamesForSettingsThatMatchLoggerSettings(narrate_LogEvent__e logData) {
         Set<String> result = new Set<String>();
         for(narrate_LoggingSetting__mdt setting : activeSettings) {
-            if(setting.Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
-                result.addAll(setting.Loggers__c.split('[,;]'));
+            try{
+                if(setting.Loggers__c != null && filtersBySettingsId.containsKey(setting.Id) && (filtersBySettingsId.get(setting.Id) == null || (filtersBySettingsId.get(setting.Id).evaluate(logData)))) {
+                    result.addAll(setting.Loggers__c.split('[,;]'));
+                }
+            }catch(narrate_InvalidFieldException error){
+                System.debug('NARRATOR MSG - ' + error.getMessage());
             }
         }
         return result;
@@ -55,7 +59,7 @@ public without sharing class narrate_LoggingSettingsManager {
     private static narrate_IFilterLogic createFilterLogicForLogic(String logicString){
         narrate_IFilterLogic result;
         if(String.isNotEmpty(logicString)) {
-                try {
+            try {
                 result = new narrate_SimpleFilterLogic();
                 result.setLogic(logicString);
             } catch(JSONException jsonError) {

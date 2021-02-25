@@ -95,10 +95,13 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     @testVisible
     private PeekIterator parseOperator(PeekIterator iter){
         //System.debug('Parsing op');
-        if(iter.next()=='OR'){
+        String token = iter.next();
+        if(token=='OR'){
             operators.add(Operator.OP_OR);
-        }else{
+        }else if(token=='AND'){
             operators.add(Operator.OP_AND);
+        }else{
+            throw new narrate_FilterLogicParseException('Unknown Operator:' + token);
         }
         return iter;
     }
