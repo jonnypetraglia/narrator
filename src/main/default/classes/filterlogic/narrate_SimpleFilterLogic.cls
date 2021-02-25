@@ -1,4 +1,5 @@
 public without sharing class narrate_SimpleFilterLogic implements narrate_IFilterLogic {
+    @testVisible
     private String fieldName, logic, whatToCompareTo;
     private static Map<String, Pattern> patternCache = new Map<String, Pattern>();
 
@@ -20,7 +21,8 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         try {
             if(compareTo.isSet(fieldName)) {
                 Object val = compareTo.get(fieldName);
-                if(val == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
+                Object val = compareTo.isSet(fieldName) ? compareTo.get(fieldName) : null;
+                if(!compareTo.isSet(fieldName) || compareTo.get(fieldName) == null || logic == 'IS NULL' || logic == 'IS NOT NULL') {
                     result = evaluateShared(val, whatToCompareTo);
                 } else {
                     Map<String, Schema.SobjectField> objectFieldMap = compareTo.getSObjectType().getDescribe().fields.getMap();

@@ -495,6 +495,22 @@ public class narrate_SimpleFilterLogicTEST {
         System.assertEquals(false, filterLogic.evaluate(new Account(Name='Soda')));
     }
 
+    @isTest
+    public static void InvalidField() {
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic(new String[] {'FullName', ENDS_WITH, 'Slartibartfast'});
+        System.assertEquals(null, filterLogic.evaluate(new Account(Name='Shenanigans')));
+        narrate_SimpleFilterLogic filterLogic = new narrate_SimpleFilterLogic();
+        filterLogic.setLogic(new String[] {'FullName', ENDS_WITH, 'Slartibartfast'});
+        try{
+            filterLogic.evaluate(new Account(Name='Shenanigans'));
+            System.assert(false, 'Expected invalid field to throw a parse exception.');
+        }catch(narrate_FilterLogicParseException error){
+            // Expected
+        }catch(Exception error){
+            System.assert(false, 'Expected invalid field to throw a parse exception.');
+        }
+    }
+
     private static DateTime nowGMT() {
         return DateTime.now();
     }
