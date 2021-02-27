@@ -30,12 +30,12 @@ public class narrate_RecordLoggerTEST {
             narrate_RecordLogger logger = new narrate_RecordLogger();
             logger.log(null);
             System.assert(false, 'Expected exception to be thrown but none was.');
-        }catch(narrate_NarratorException error){
+        }catch(narrate_UnhandledException error){
             List<narrate_LogEntry__c> testEntries = [SELECT Level__c, Class__c, Method__c, Line__c, Message__c FROM narrate_LogEntry__c];
             System.assertEquals(0, testEntries.size(), testEntries + '');
             System.assertNotEquals(null, error.getMessage(), 'Honestly just tryna get stupid code coverage.');
         }catch(Exception error){
-            System.assertEquals('narrate_NarratorException', error.getTypeName(), 'Caught Exception is not the correct type.');
+            System.assertEquals('narrate_UnhandledException', error.getTypeName(), 'Caught Exception is not the correct type.');
         }
     }
 

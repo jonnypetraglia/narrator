@@ -23,7 +23,7 @@ public class narrate_EmailLogger implements narrate_ILogger {
                 }
             }
         }catch(Exception error){
-            throw new narrate_NarratorException(error, 'narrate_EmailLogger');
+            throw new narrate_UnhandledException(error, 'narrate_EmailLogger');
         }
         return count;
     }

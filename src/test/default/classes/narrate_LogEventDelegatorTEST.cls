@@ -72,7 +72,7 @@ public class narrate_LogEventDelegatorTEST {
         public boolean logCalled = false;
         public Integer log(List<narrate_LogEvent__e> events) {
             logCalled = true;
-            throw new narrate_NarratorException(new DmlException('NESTED FAIL!'), 'FAIL!');
+            throw new narrate_UnhandledException(new DmlException('NESTED FAIL!'), 'FAIL!');
         }
     }
     public class MiscExceptionLogger implements narrate_ILogger {

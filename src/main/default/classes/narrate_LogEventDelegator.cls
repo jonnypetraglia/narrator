@@ -32,7 +32,7 @@ public with sharing class narrate_LogEventDelegator {
         for(String loggerName : eventsForLoggers.keySet()) {
             try {
                 loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
-            } catch(narrate_NarratorException error) {
+            } catch(narrate_Exception error) {
                 System.debug('NARRATOR ERROR: \n' + error.getMessage() + ' - ' + error.getStackTraceString());
             } catch(Exception error) {
                 System.debug(LoggingLevel.ERROR, 'NARRATOR WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());

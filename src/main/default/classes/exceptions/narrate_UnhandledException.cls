@@ -1,7 +1,7 @@
-global class narrate_NarratorException extends Exception {
+global class narrate_UnhandledException extends narrate_Exception {
     private String context;
     private Exception cause;
-    global narrate_NarratorException(Exception cause, String context) {
+    global narrate_UnhandledException(Exception cause, String context) {
         this.context = context;
         this.cause = cause;
     }

@@ -49,7 +49,7 @@ public without sharing class narrate_LoggingSettingsManager {
                     result.addAll(setting.Loggers__c.split('[,;]'));
                 }
             }catch(narrate_InvalidFieldException error){
-                System.debug('NARRATOR MSG - ' + error.getMessage());
+                System.debug(error.getMessage());
             }
         }
         return result;

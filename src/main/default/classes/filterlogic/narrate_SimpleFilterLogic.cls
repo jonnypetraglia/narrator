@@ -57,7 +57,7 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
             }
         } catch(SObjectException e) {
             if(e.getMessage().startsWith('Invalid field: ')){
-                throw new narrate_InvalidFieldException('Invalid field:' + fieldName + ' on SObject ' + compareTo?.getSObjectType());
+                throw new narrate_InvalidFieldException(fieldName, String.valueOf(compareTo?.getSObjectType()));
             }else{
                 System.debug(LoggingLevel.ERROR, 'NARRATOR MSG - ' + e.getStackTraceString());
             }

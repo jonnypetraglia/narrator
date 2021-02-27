@@ -1,1 +1,0 @@
-public with sharing class narrate_FilterLogicParseException extends Exception {}
