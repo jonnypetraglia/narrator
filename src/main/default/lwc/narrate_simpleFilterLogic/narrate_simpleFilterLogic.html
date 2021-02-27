@@ -1,0 +1,26 @@
+<template>
+    <div>
+        <span style="display: inline-block;">
+            <lightning-combobox
+                name="field"
+                label="Field"
+                value={field}
+                placeholder="Select Field"
+                options={fields}
+                onchange={handleChangeField} ></lightning-combobox> 
+        </span>
+        <span if:true={fieldType} style="display: inline-block;">
+            <lightning-combobox
+                name="logic"
+                label="Logic"
+                value={logic}
+                options={logicOptions}
+                onchange={handleChangeLogic} ></lightning-combobox> 
+        </span>
+        <span if:true={valueType} style="display: inline-block;">
+            <lightning-input onchange={handleChangeCompareTo} type={valueType} value={compareTo} step={valueStep} formatter={valueFormat} label="Comparison Value"></lightning-input>
+        </span>
+    </div>
+
+    <!-- <button onclick={debugValue}>Show Value</button> -->
+</template>
