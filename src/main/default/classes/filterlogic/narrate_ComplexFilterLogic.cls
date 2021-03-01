@@ -7,7 +7,11 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     private List<Operator> operators = new List<Operator>();
     public void setLogic(String filterLogic) {
         String[] parsedLogic = (String[])JSON.deserialize(filterLogic, String[].class);
-        parseToken(new PeekIterator(parsedLogic));
+        PeekIterator peekIterator = new PeekIterator(parsedLogic);
+        parseToken(peekIterator);
+        if(peekIterator.hasNext()){
+            throw new narrate_FilterLogicParseException('Expected end of input, received: ' + peekIterator.next(), peekIterator.contentsAsString());
+        }
     }
 
     @testVisible

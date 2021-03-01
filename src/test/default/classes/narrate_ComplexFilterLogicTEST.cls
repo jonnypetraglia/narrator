@@ -566,7 +566,7 @@ public class narrate_ComplexFilterLogicTEST {
         testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'XOR'});
         complexFilterLogic.parseOperator(testIter);
         System.assertEquals(3, complexFilterLogic.operators.size(), 'Unexpected number of Operators in the ComplexFilterLogic.');
-        System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_XOR, complexFilterLogic.operators.get(1), 'Unexpected value for Operator.');
+        System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_XOR, complexFilterLogic.operators.get(2), 'Unexpected value for Operator.');
         if(testIter.hasNext()){
             System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
         }
@@ -660,6 +660,112 @@ public class narrate_ComplexFilterLogicTEST {
             System.debug(error.getStackTraceString());
             System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
         }
+    }
+
+    @isTest
+    private static void parseComplexExpression(){
+        String[] testExpression = new String[]{
+            '(',
+                '(', 'A', '>', '42', 'OR', 'B', '=', 'Pie', 'AND', 'C', 'IS FUTURE', ')',
+                'OR',
+                '(', 'D', 'IS YESTERDAY', ')',
+                'AND',
+                '(', 'E', 'IS NOT NULL', ')',
+            ')',
+            'AND',
+            'F', '=', 'pay respects'
+        };
+        narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
+        narrate_SimpleFilterLogic resultSimpleLogic;
+        narrate_ComplexFilterLogic expression, subExpression;
+        try{
+            complexFilterLogic.setLogic(String.valueOf(JSON.serialize(testExpression)));
+            System.debug(complexFilterLogic.toString());
+
+            System.assertEquals(2, complexFilterLogic.filterLogics.size(), 'Unexpected number of filters parsed.');
+
+            // (A > 42 OR B = Pie AND C IS FUTURE) OR (D IS YESTERDAY) AND (E IS NOT NULL)
+            System.assert(complexFilterLogic.filterLogics.get(0) instanceof narrate_ComplexFilterLogic, 'Expected first filter to be Complex.');
+            expression = (narrate_ComplexFilterLogic)complexFilterLogic.filterLogics.get(0);
+            System.assertEquals(3, expression.filterLogics.size(), 'Unexpected number of subfilters for first filter parsed.');
+            {
+                // A > 42 OR B = Pie AND C IS FUTURE
+                System.assert(expression.filterLogics.get(0) instanceof narrate_ComplexFilterLogic, 'Expected first filter subfilter to be Complex.');
+                subExpression = (narrate_ComplexFilterLogic)expression.filterLogics.get(0);
+                System.assertEquals(testComplexFilterLogic('["A", ">", "42", "OR", "B", "=", "Pie", "AND", "C", "IS FUTURE"]'), subExpression, 'Unexpected SimpleFilterLogic value.');
+                {
+                    // A > 42
+                    System.assert(subExpression.filterLogics.get(0) instanceof narrate_SimpleFilterLogic, 'Expected first filter subfilter value to be Simple.');
+                    resultSimpleLogic = (narrate_SimpleFilterLogic)subExpression.filterLogics.get(0);
+                    System.assertEquals(testSimpleFilterLogic('["A", ">", "42"]'), resultSimpleLogic, 'Unexpected SimpleFilterLogic value.');
+
+                    // OR
+                    System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_OR, subExpression.operators.get(0), 'Unexpected value for operator.');
+
+                    // B = Pie
+                    System.assert(subExpression.filterLogics.get(1) instanceof narrate_SimpleFilterLogic, 'Expected second filter subfilter value to be Simple.');
+                    resultSimpleLogic = (narrate_SimpleFilterLogic)subExpression.filterLogics.get(1);
+                    System.assertEquals(testSimpleFilterLogic('["B", "=", "Pie"]'), resultSimpleLogic, 'Unexpected SimpleFilterLogic value.');
+
+                    // AND
+                    System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_AND, subExpression.operators.get(1), 'Unexpected value for operator.');
+
+                    // C IS FUTURE
+                    System.assert(subExpression.filterLogics.get(2) instanceof narrate_SimpleFilterLogic, 'Expected second filter subfilter value to be Simple.');
+                    resultSimpleLogic = (narrate_SimpleFilterLogic)subExpression.filterLogics.get(2);
+                    System.assertEquals(testSimpleFilterLogic('["C", "IS FUTURE"]'), resultSimpleLogic, 'Unexpected SimpleFilterLogic value.');
+                }
+
+                // OR
+                System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_OR, expression.operators.get(0), 'Unexpected value for operator.');
+
+                // D IS YESTERDAY
+                System.assert(expression.filterLogics.get(1) instanceof narrate_ComplexFilterLogic, 'Expected second filter subfilter to be Complex.');
+                subExpression = (narrate_ComplexFilterLogic)expression.filterLogics.get(1);
+                System.assertEquals(1, subExpression.filterLogics.size(), 'Expected Complex logic to only contain 1 Simple logic.');
+                System.assertEquals(testSimpleFilterLogic('["D", "IS YESTERDAY"]'), subExpression.filterLogics.get(0), 'Unexpected SimpleFilterLogic value.');
+            }
+
+            // AND
+            System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_AND, expression.operators.get(1), 'Unexpected value for operator.');
+
+            // E IS NOT NULL
+            System.assert(expression.filterLogics.get(2) instanceof narrate_ComplexFilterLogic, 'Expected second filter subfilter to be Complex.');
+            subExpression = (narrate_ComplexFilterLogic)expression.filterLogics.get(2);
+            System.assertEquals(1, subExpression.filterLogics.size(), 'Expected Complex logic to only contain 1 Simple logic.');
+            System.assertEquals(testSimpleFilterLogic('["E", "IS NOT NULL"]'), subExpression.filterLogics.get(0), 'Unexpected SimpleFilterLogic value.');
+
+        }catch(Exception error){
+            System.debug(error.getStackTraceString());
+            System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
+        }
+    }
+
+    @isTest
+    private static void extraCloseParen(){
+        String[] testExpression = new String[]{'(', 'A', '>', '0', ')', ')'};
+        narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
+        try{
+            complexFilterLogic.setLogic('["(", "A", ">", "0", ")", ")"]');
+            System.assert(false, 'Expected invalid token to throw a parse exception.');
+        }catch(narrate_FilterLogicParseException err){
+            // Expected
+            System.assert(err.getMessage().endsWith('Expected end of input, received: )'), 'Unexpected error message.');
+        }catch(Exception error){
+            System.assert(false, 'Expected invalid token to throw a parse exception but received exception of type ' + error.getTypeName() + '.');
+        }
+    }
+
+    private static narrate_ComplexFilterLogic testComplexFilterLogic(String expression){
+        narrate_ComplexFilterLogic testLogic = new narrate_ComplexFilterLogic();
+        testLogic.setLogic(expression);
+        return testLogic;
+    }
+
+    private static narrate_SimpleFilterLogic testSimpleFilterLogic(String expression){
+        narrate_SimpleFilterLogic testLogic = new narrate_SimpleFilterLogic();
+        testLogic.setLogic(expression);
+        return testLogic;
     }
 
     private static DateTime nowGMT() {

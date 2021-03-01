@@ -196,6 +196,17 @@ public without sharing class narrate_SimpleFilterLogic implements narrate_IFilte
         return nowGMT().dateGMT();
     }
 
+    public Boolean equals(Object compareToObj) {
+        if(compareToObj === this){
+            return true;
+        }
+        if(!(compareToObj instanceof narrate_SimpleFilterLogic)){
+            return false;
+        }
+        narrate_SimpleFilterLogic compareTo = (narrate_SimpleFilterLogic)compareToObj;
+        return this.fieldName==compareTo.fieldName && this.logic==compareTo.logic && this.whatToCompareTo==compareTo.whatToCompareTo;
+    }
+
     override public String toString(){
         String result = fieldName + ' ' + logic;
         if(whatToCompareTo!=null){
