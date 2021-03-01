@@ -509,10 +509,13 @@ public class narrate_ComplexFilterLogicTEST {
 
     @isTest
     private static void parseCloseParen(){
+        String[] testExpression = new String[]{')'};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{')', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         testIter = complexFilterLogic.parseCloseParen(testIter);
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseCloseParen to advance the iterator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
         try{
             testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'MWAHAHAHA'});
             complexFilterLogic.parseCloseParen(testIter);
@@ -525,10 +528,13 @@ public class narrate_ComplexFilterLogicTEST {
     }
     @isTest
     private static void parseOpenParen(){
+        String[] testExpression = new String[]{'('};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'(', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         testIter = complexFilterLogic.parseOpenParen(testIter);
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseOpenParen to advance the iterator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
         try{
             testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'NARF'});
             complexFilterLogic.parseOpenParen(testIter);
@@ -541,17 +547,29 @@ public class narrate_ComplexFilterLogicTEST {
     }
     @isTest
     private static void parseOperator(){
+        String[] testExpression = new String[]{'AND'};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'AND', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         complexFilterLogic.parseOperator(testIter);
         System.assertEquals(1, complexFilterLogic.operators.size(), 'Unexpected number of Operators in the ComplexFilterLogic.');
         System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_AND, complexFilterLogic.operators.get(0), 'Unexpected value for Operator.');
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseOperator to advance the iterator.');
-        testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'OR', 'NEXT TOKEN'});
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
+        testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'OR'});
         complexFilterLogic.parseOperator(testIter);
         System.assertEquals(2, complexFilterLogic.operators.size(), 'Unexpected number of Operators in the ComplexFilterLogic.');
         System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_OR, complexFilterLogic.operators.get(1), 'Unexpected value for Operator.');
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseOperator to advance the iterator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
+        testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'XOR'});
+        complexFilterLogic.parseOperator(testIter);
+        System.assertEquals(3, complexFilterLogic.operators.size(), 'Unexpected number of Operators in the ComplexFilterLogic.');
+        System.assertEquals(narrate_ComplexFilterLogic.Operator.OP_XOR, complexFilterLogic.operators.get(1), 'Unexpected value for Operator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
         try{
             testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'YARP'});
             complexFilterLogic.parseOperator(testIter);
@@ -563,33 +581,40 @@ public class narrate_ComplexFilterLogicTEST {
         }
     }
     @isTest
-    private static void parseExpressionWithComparatee(){
+    private static void parseSimpleExpressionWithComparatee(){
+        String[] testExpression = new String[]{'Herp', '=', 'DERP'};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'Herp', '=', 'DERP', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         testIter = complexFilterLogic.parseExpression(testIter);
         System.assertEquals(1, complexFilterLogic.filterLogics.size(), 'Unexpected number of FilterLogics in the ComplexFilterLogic.');
         narrate_SimpleFilterLogic resultNestedFilterLogic = (narrate_SimpleFilterLogic)complexFilterLogic.filterLogics.get(0);
         System.assertEquals('Herp', resultNestedFilterLogic.fieldName, 'Unexpected value for fieldName.');
         System.assertEquals('=', resultNestedFilterLogic.logic, 'Unexpected value for logic');
         System.assertEquals('DERP', resultNestedFilterLogic.whatToCompareTo, 'Unexpected value for whatToCompareTo');
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseOperator to advance the iterator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
     }
     @isTest
-    private static void parseExpressionWithoutComparatee(){
+    private static void parseSimpleExpressionWithoutComparatee(){
+        String[] testExpression = new String[]{'Herp', 'IS NULL'};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'Herp', 'IS NULL', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         testIter = complexFilterLogic.parseExpression(testIter);
         System.assertEquals(1, complexFilterLogic.filterLogics.size(), 'Unexpected number of FilterLogics in the ComplexFilterLogic.');
         narrate_SimpleFilterLogic resultNestedFilterLogic = (narrate_SimpleFilterLogic)complexFilterLogic.filterLogics.get(0);
         System.assertEquals('Herp', resultNestedFilterLogic.fieldName, 'Unexpected value for fieldName.');
         System.assertEquals('IS NULL', resultNestedFilterLogic.logic, 'Unexpected value for logic');
         System.assertEquals(null, resultNestedFilterLogic.whatToCompareTo, 'Unexpected value for whatToCompareTo');
-        System.assertEquals('NEXT TOKEN', testIter.next(), 'Expected parseOperator to advance the iterator.');
+        if(testIter.hasNext()){
+            System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+        }
     }
     @isTest
     private static void parseInvalidExpression(){
+        String[] testExpression = new String[]{'Herp', 'IS NOT NULL', ')', 'NEXT TOKEN'};
         narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
-        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(new String[]{'Herp', 'IS NOT NULL', ')', 'NEXT TOKEN'});
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
         try{
             complexFilterLogic.parseOperator(testIter);
             System.assert(false, 'Expected invalid token to throw a parse exception.');
@@ -597,6 +622,43 @@ public class narrate_ComplexFilterLogicTEST {
             // Expected
         }catch(Exception error){
             System.assert(false, 'Expected invalid token to throw a parse exception but received exception of type ' + error.getTypeName() + '.');
+        }
+    }
+
+
+    @isTest
+    private static void parseExpressionWithOperator(){
+        String[] testExpression = new String[]{'Herp', '>=', '1000', 'AND', 'Derp', 'IS NOT NULL'};
+        narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
+        try{
+            complexFilterLogic.parseExpression(testIter);
+            complexFilterLogic.parseOperator(testIter);
+            complexFilterLogic.parseExpression(testIter);
+            if(testIter.hasNext()){
+                System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
+            }
+        }catch(Exception error){
+            System.debug(error.getStackTraceString());
+            System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
+        }
+    }
+
+    @isTest
+    private static void parseExpressionWithNestedExpressionOperator(){
+        String[] testExpression = new String[]{'Herp', '>=', '1000', 'AND', '(', 'Derp', 'IS NULL', 'OR', 'Derp', '=', '42', ')'};
+        narrate_ComplexFilterLogic complexFilterLogic = new narrate_ComplexFilterLogic();
+        narrate_ComplexFilterLogic.PeekIterator testIter = new narrate_ComplexFilterLogic.PeekIterator(testExpression);
+        try{
+            complexFilterLogic.parseExpression(testIter);
+            complexFilterLogic.parseOperator(testIter);
+            complexFilterLogic.parseNestedFilter(testIter);
+            if(testIter.hasNext()){
+                System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.peek());
+            }
+        }catch(Exception error){
+            System.debug(error.getStackTraceString());
+            System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
         }
     }
 

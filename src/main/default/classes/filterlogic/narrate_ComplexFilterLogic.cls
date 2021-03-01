@@ -1,33 +1,17 @@
 public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     @testVisible
+    private enum Operator { OP_AND, OP_OR, OP_XOR }
+    @testVisible
     private List<narrate_IFilterLogic> filterLogics = new List<narrate_IFilterLogic>();
     @testVisible
     private List<Operator> operators = new List<Operator>();
-    private String rawLogic;
     public void setLogic(String filterLogic) {
-        rawLogic = filterLogic;
-        setLogic((String[])JSON.deserialize(filterLogic, String[].class));
-    }
-    @testVisible
-    private enum Operator { OP_AND, OP_OR }
-    private void setLogic(String[] filterLogic) {
-        parseToken(new PeekIterator(filterLogic));
-    }
-    override public String toString(){
-        List<String> result = new List<String>();
-        for(Integer i=0; i<filterLogics.size(); i++){
-            result.add(filterLogics.get(i).toString());
-            if(i<operators.size()){
-                result.add(operators.get(i) == Operator.OP_OR ? 'OR' : 'AND');
-            }
-        }
-        return String.join(result, ' ').trim();
+        String[] parsedLogic = (String[])JSON.deserialize(filterLogic, String[].class);
+        parseToken(new PeekIterator(parsedLogic));
     }
 
-    public PeekIterator parseToken(PeekIterator iter){
-        if(!iter.hasNext()){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Unexpected end of input');
-        }
+    @testVisible
+    private PeekIterator parseToken(PeekIterator iter){
         String token = iter.peek();
         Boolean finished = false;
         //System.debug('WHAT');
@@ -51,7 +35,7 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
         //System.debug(filterLogics);
         //System.debug(operators);
         if(operators.size() != (filterLogics.size()-1)){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Bad logic format: ' + filterLogics.size() + ' filters and ' + operators.size() + ' ops');
+            throw new narrate_FilterLogicParseException(iter.contentsAsString(), 'Bad logic format: ' + filterLogics.size() + ' filters and ' + operators.size() + ' ops');
         }
         return iter;
     }
@@ -69,29 +53,20 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     }
     @testVisible
     private PeekIterator parseExpression(PeekIterator iter){
-        //System.debug('Parsing Expression ' + iter);
+        // System.debug('Parsing Expression ' + iter);
         List<String> params = new List<String>();
-        if(!iter.hasNext()){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Unexpected end of input');
-        }
         params.add(iter.next());
-        //System.debug('param ' + params);
-        if(!iter.hasNext()){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Unexpected end of input');
-        }
         params.add(iter.next());
-        //System.debug('params ' + params);
-        //System.debug('??????????????????? ' + narrate_SimpleFilterLogic.getNumberOfArgsForLogic(params.get(1)));
+        // System.debug('params ' + params);
+        // System.debug('??????????????????? ' + narrate_SimpleFilterLogic.getNumberOfArgsForLogic(params.get(1)));
         for(Integer i=0; i<narrate_SimpleFilterLogic.getNumberOfArgsForLogic(params.get(1)); i++){
-            if(!iter.hasNext()){
-                throw new narrate_FilterLogicParseException(rawLogic, 'Unexpected token: ' + iter.next());
-            }
             params.add(iter.next());
         }
-        //System.debug('Expression: ' + params);
+        // System.debug('Expression: ' + params);
         narrate_SimpleFilterLogic childFilter = new narrate_SimpleFilterLogic();
         childFilter.setLogic(JSON.serialize(params));
         filterLogics.add(childFilter);
+        // System.debug('Finished parsing expression: ' + iter);
         return iter;
     }
     @testVisible
@@ -102,8 +77,10 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
             operators.add(Operator.OP_OR);
         }else if(token=='AND'){
             operators.add(Operator.OP_AND);
+        }else if(token=='XOR'){
+            operators.add(Operator.OP_XOR);
         }else{
-            throw new narrate_FilterLogicParseException(rawLogic, 'Unknown Operator:' + token);
+            throw new narrate_FilterLogicParseException(iter.contentsAsString(), 'Unknown Operator:' + token);
         }
         return iter;
     }
@@ -111,7 +88,7 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     private PeekIterator parseOpenParen(PeekIterator iter){
         //System.debug('Parsing (');
         if(iter.next()!='('){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Expected to receive: (');
+            throw new narrate_FilterLogicParseException(iter.contentsAsString(), 'Expected to receive: (');
         }
         return iter;
     }
@@ -119,7 +96,7 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     private PeekIterator parseCloseParen(PeekIterator iter){
         //System.debug('Parsing )');
         if(iter.next()!=')'){
-            throw new narrate_FilterLogicParseException(rawLogic, 'Expected to receive: )');
+            throw new narrate_FilterLogicParseException(iter.contentsAsString(), 'Expected to receive: )');
         }
         return iter;
     }
@@ -143,6 +120,9 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
             return left && right.evaluate(compareTo);
         }else if(op==Operator.OP_OR){
             return left || right.evaluate(compareTo);
+        }else if(op==Operator.OP_XOR){
+            boolean rightResult = right.evaluate(compareTo);
+            return (left && !rightResult) || (!left && rightResult);
         }
         return false; //HOW WOULD THIS EVEN HAPPEN
     }
@@ -157,10 +137,52 @@ public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
             return index < contents.size();
         }
         public String next(){
+            if(!hasNext()){
+                System.debug('no has next');
+                throw new narrate_FilterLogicParseException('Unexpected end of input', contentsAsString());
+            }
             return contents.get(index++);
         }
         public String peek(){
+            if(!hasNext()){
+                System.debug('no has next');
+                throw new narrate_FilterLogicParseException('Unexpected end of input', contentsAsString());
+            }
             return contents.get(index);
         }
+        public String contentsAsString(){
+            return String.valueOf(JSON.serialize(contents));
+        }
+    }
+
+    override public String toString(){
+        List<String> result = new List<String>();
+        for(Integer i=0; i<filterLogics.size(); i++){
+            result.add(filterLogics.get(i).toString());
+            if(i<operators.size()){
+                result.add(operators.get(i) == Operator.OP_OR ? 'OR' : 'AND');
+            }
+        }
+        return String.join(result, ' ').trim();
+    }
+
+    public Boolean equals(Object compareToObj) {
+        if(compareToObj === this){
+            return true;
+        }
+        if(!(compareToObj instanceof narrate_ComplexFilterLogic)){
+            return false;
+        }
+        narrate_ComplexFilterLogic compareTo = (narrate_ComplexFilterLogic)compareToObj;
+        if(this.filterLogics.size() !=compareTo.filterLogics.size()){
+            return false;
+        }
+        boolean isEqual = true;
+        Integer i=0;
+        while(isEqual && i<filterLogics.size()){
+            isEqual = this.filterLogics[i] == compareTo.filterLogics[i];
+            i+=1;
+        }
+        return isEqual;
     }
 }
