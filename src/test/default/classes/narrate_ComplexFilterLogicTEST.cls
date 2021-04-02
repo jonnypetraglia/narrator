@@ -639,7 +639,7 @@ public class narrate_ComplexFilterLogicTEST {
                 System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.next());
             }
         }catch(Exception error){
-            System.debug(error.getStackTraceString());
+            System.debug(LoggingLevel.ERROR, error.getStackTraceString());
             System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
         }
     }
@@ -657,7 +657,7 @@ public class narrate_ComplexFilterLogicTEST {
                 System.assert(false, 'Expected Iterator to reach end of input, instead found: ' + testIter.peek());
             }
         }catch(Exception error){
-            System.debug(error.getStackTraceString());
+            System.debug(LoggingLevel.ERROR, error.getStackTraceString());
             System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
         }
     }
@@ -680,7 +680,7 @@ public class narrate_ComplexFilterLogicTEST {
         narrate_ComplexFilterLogic expression, subExpression;
         try{
             complexFilterLogic.setLogic(String.valueOf(JSON.serialize(testExpression)));
-            System.debug(complexFilterLogic.toString());
+            System.debug(LoggingLevel.ERROR, complexFilterLogic.toString());
 
             System.assertEquals(2, complexFilterLogic.filterLogics.size(), 'Unexpected number of filters parsed.');
 
@@ -736,7 +736,7 @@ public class narrate_ComplexFilterLogicTEST {
             System.assertEquals(testSimpleFilterLogic('["E", "IS NOT NULL"]'), subExpression.filterLogics.get(0), 'Unexpected SimpleFilterLogic value.');
 
         }catch(Exception error){
-            System.debug(error.getStackTraceString());
+            System.debug(LoggingLevel.ERROR, error.getStackTraceString());
             System.assert(false, 'Unknown Exception thrown: ' + error.getMessage());
         }
     }
