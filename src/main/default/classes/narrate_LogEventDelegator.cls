@@ -15,11 +15,11 @@ public with sharing class narrate_LogEventDelegator {
             try {
                 Object logger = Type.forName(loggerName).newInstance();
                 if(!(logger instanceof narrate_ILogger)){
-                    throw new InvalidMetadataException(loggerName);
+                    throw new narrate_InvalidMetadataException(loggerName);
                 }
                 loggers.put(loggerName, (narrate_ILogger) logger);
-            } catch(InvalidMetadataException error){
-                System.debug('NARRATOR ERROR: Tried to instantiate a class that is not a Logger - ' + loggerName);
+            } catch(narrate_InvalidMetadataException error){
+                System.debug(LoggingLevel.ERROR, error.getMessage());
             } catch(Exception error){
                 System.debug(LoggingLevel.ERROR, 'NARRATOR WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());
             }
@@ -33,13 +33,10 @@ public with sharing class narrate_LogEventDelegator {
             try {
                 loggers.get(loggerName).log(eventsForLoggers.get(loggerName));
             } catch(narrate_Exception error) {
-                System.debug('NARRATOR ERROR: \n' + error.getMessage() + ' - ' + error.getStackTraceString());
+                System.debug(LoggingLevel.ERROR, error.getMessage());
             } catch(Exception error) {
                 System.debug(LoggingLevel.ERROR, 'NARRATOR WHAT A TERRIBLE FAILURE: ' + error.getMessage() + '\n' + error.getStackTraceString());
             }
         }
     }
-    
-    @testVisible
-    public class InvalidMetadataException extends Exception{}
 }
