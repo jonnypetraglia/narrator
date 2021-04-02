@@ -12,7 +12,7 @@ public without sharing class narrate_LoggingSettingsManager {
         if(filtersBySettingsId == null) {
             filtersBySettingsId = new Map<Id, narrate_IFilterLogic>();
             for(narrate_LoggingSetting__mdt settings : activeSettings) {
-                narrate_IFilterLogic filterLogic = createFilterLogicForLogic(settings.Logic__c);
+                narrate_IFilterLogic filterLogic = createFilterLogicForLogic(settings.FilterLogic__c, settings.Logic__c);
                 if(filterLogic!=null){
                     filtersBySettingsId.put(settings.Id, filterLogic);
                 }
@@ -49,23 +49,30 @@ public without sharing class narrate_LoggingSettingsManager {
                     result.addAll(setting.Loggers__c.split('[,;]'));
                 }
             }catch(narrate_InvalidFieldException error){
-                System.debug(error.getMessage());
+                System.debug(LoggingLevel.ERROR, error.getMessage());
             }
         }
         return result;
     }
 
     // Eventually this will/may be the entry point for more complex dependency injection based on different types of IFilterLogic
-    private static narrate_IFilterLogic createFilterLogicForLogic(String logicString){
+    private static narrate_IFilterLogic createFilterLogicForLogic(String filterLogic, String logicString){
         narrate_IFilterLogic result;
-        if(String.isNotEmpty(logicString)) {
+        if(String.isNotEmpty(filterLogic) && String.isNotEmpty(logicString)) {
             try {
-                result = new narrate_SimpleFilterLogic();
+                Object logicObject = Type.forName(filterLogic).newInstance();
+                if(!(logicObject instanceof narrate_IFilterLogic)){
+                    throw new narrate_InvalidMetadataException(filterLogic);
+                }
+                result = (narrate_IFilterLogic)logicObject;
                 result.setLogic(logicString);
             } catch(JSONException jsonError) {
-                System.debug('NARRATOR MSG - Error parsing JSON logic: ' + logicString);
+                System.debug(LoggingLevel.ERROR, 'NARRATOR MSG - Error parsing JSON logic: ' + logicString);
                 result = null;
                 // Dude that's on you, not on me.
+            } catch(Exception error){
+                System.debug(LoggingLevel.ERROR, error.getMessage());
+                result = null;
             }
         }
         return result;

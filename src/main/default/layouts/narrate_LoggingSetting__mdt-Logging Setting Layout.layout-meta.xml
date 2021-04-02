@@ -22,6 +22,10 @@
                 <behavior>Required</behavior>
                 <field>Loggers__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FilterLogic__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
