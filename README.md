@@ -2,11 +2,34 @@
 
 The End-All-Be-All Logging framework to take care of all your logging needs.
 Use it as a great base that does all the boilerplate leaving you to focus on the important part.
-Or use the `Narrate` Apex class in half a second to start getting logging into your code in minutes.
+Or use the `Narrate` Apex class in half a second to start logging now.
 
 This is. The final word. In logging.
 
-### Setup
+## Full List of Features:
+
+This is all *in addition* to everything that's offered by [apex-unified-logging](https://github.com/rsoesemann/apex-unified-logging), which is what the project forked off of! *Major props for that lib!*
+
+  - You only have to write ONE function to create a custom Logger!
+  - Ships with a 'Log Entry' SObject, ready to hooked up & connected for persistent logging!
+  - Built in Loggers supplied:
+    - **Record Logger**
+    - **Email Logger**
+  - Schedulable auto-truncator Apex class configurable via Custom Settings!
+  - Converted Aura components from apex-unified-logging to LWC!
+  - A live Logging Monitor Lightning Web Component (and Flexipage!) that lets you see _all_ (or filtered) events _in real time_
+  - Have fine-grained control what logs you want and what logger to use via **Custom Metadata** without ever having to change code. Add complex filters through a dead simple front-end interface. Turn them on, turn them off, make them expire. Be free.
+  - @InvocableMethod!
+  - @AuraEnabled getLogEntries!
+  - Logs are grouped by Execution Context (and allows you to give a custom message to each as well!)
+  - Gives you a lot of Apex goodies!
+    - A Log Creator object!
+    - A Code Location object! Get the exact place in code your log with the call of a function down to class, method, and line!
+    - A Simple Filter Logic object!
+
+
+
+## Setup
 
 Narrator is designed to be extremely customizable but also extremely simple to get going. To turn it on and have every logging statement logged to an SObject record (`narrate_LogEntry__c`), just create a NarratorConfig hierarchical Custom Setting with "Active" checked. _That's literally it. Go start logging._
 
@@ -41,45 +64,22 @@ public static void except(MyCustomException ohno) {
 ```
 
 
-### Sample usage
+## Sample usage
 
 ```apex
-  Log.debug('How {0} is this?', 'amazing');
-  Log.debug('Just pass in {0} or {1} or {2} or {3} and it is all converted to a single string for you', new Object[] { 42, new Account(), new SomeCustomClass(), 'whatever you want'})
-  Log.info('Now I am info');
-  Log.fine('All the system levels are built right in!');
+  Narrate.debug('How {0} is this?', 'amazing');
+  Narrate.debug('Just pass in {0} or {1} or {2} or {3} and it is all converted to a single string for you', new Object[] { 42, new Account(), new SomeCustomClass(), 'whatever you want'})
+  Narrate.info('Now I am info');
+  Narrate.fine('All the system levels are built right in!');
   Log.wtf('And more!');
 
   try {
     Integer theAnswerToLifeTheUniverseAndEverything = 42 / 0;
   } catch(Exception error) {
-    Log.error('Woah, an exception! I have a method specifically for that to make it all pretty and such!');
-    Log.except(error);
+    Narrate.error('Woah, an exception! I have a method specifically for that to make it all pretty and such!');
+    Narrate.except(error);
   }
 ```
-
-
-
-### Full List of Features:
-
-This is all *in addition* to everything that's offered by [apex-unified-logging](https://github.com/rsoesemann/apex-unified-logging), which is what the project forked off of! *Major props for that lib!*
-
-  - You only have to write ONE function to create a custom Logger!
-  - Ships with a 'Log Entry' SObject, ready to hooked up & connected for persistent logging!
-  - Built in Loggers supplied:
-    - **Record Logger**
-    - **Email Logger**
-  - Schedulable auto-truncator Apex class configurable via Custom Settings!
-  - Converted Aura components from apex-unified-logging to LWC!
-  - A live Logging Monitor Lightning Web Component (and Flexipage!) that lets you see _all_ (or filtered) events _in real time_
-  - Have fine-grained control what logs you want and what logger to use via **Custom Metadata** without ever having to change code. Add complex filters through a dead simple front-end interface. Turn them on, turn them off, make them expire. Be free.
-  - @InvocableMethod!
-  - @AuraEnabled getLogEntries!
-  - Logs are grouped by Execution Context (and allows you to give a custom message to each as well!)
-  - Gives you a lot of Apex goodies!
-    - A Log Creator object!
-    - A Code Location object! Get the exact place in code your log with the call of a function down to class, method, and line!
-    - A Simple Filter Logic object!
 
 
 ## Configuration
