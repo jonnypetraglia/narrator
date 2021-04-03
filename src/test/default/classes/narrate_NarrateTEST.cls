@@ -87,7 +87,7 @@ public with sharing class narrate_NarrateTEST {
         System.assertEquals(snappy.theMethod, result.Method__c);
         System.assertEquals(snappy.theLine, result.Line__c);
         System.assertEquals('MAH BOI!', result.Message__c);
-        System.assert(result.Timestamp__c > timestamp && result.Timestamp__c < DateTime.now());
+        System.assert(result.Timestamp__c >= timestamp && result.Timestamp__c <= DateTime.now(), result.Timestamp__c);
         System.assertEquals('MuhRequest', result.Request__c);
         System.assertEquals('MuhQuiddity', result.Quiddity__c);
     }
