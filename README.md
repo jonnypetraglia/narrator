@@ -51,15 +51,17 @@ public class SimonSays extends Narrate {}
 You can also add custom functions that build on the basic `Narrate` functions, For example:
 
 ```apex
-// Add your own functions to use your own logging levels!
-public static void goat(Goat aGoat){
-  log('UserIsAGoat', aGoat.bahhh());
-}
+public class Log extends Narrate {
+  // Add your own functions to use your own logging levels!
+  public static void goat(Goat aGoat){
+    log('UserIsAGoat', aGoat.bahhh());
+  }
 
-// Create functions based on your Exception classes for your own formatting
-public static void except(MyCustomException ohno) {
-  String formattedExceptionString = ohno.formatMyOwnPrettyWay();
-  log(EXCEPT, formattedExceptionString);
+  // Create functions based on your Exception classes for your own formatting
+  public static void except(MyCustomException ohno) {
+    String formattedExceptionString = ohno.formatMyOwnPrettyWay();
+    log(EXCEPT, formattedExceptionString);
+  }
 }
 ```
 
@@ -70,21 +72,22 @@ Alternatively, both included Logger implementations (RecordLogger and EmailLogge
 
 ## Sample usage
 
+Below uses `Log` as an extension of `Narrate`:
+
 ```apex
-  Narrate.debug('How {0} is this?', 'amazing');
-  Narrate.debug('Just pass in {0} or {1} or {2} or {3} and it is all converted to a single string for you', new Object[] { 42, new Account(), new SomeCustomClass(), 'whatever you want'})
-  Narrate.info('Now I am info');
-  Narrate.fine('All the system levels are built right in!');
+  Log.debug('How {0} is this?', 'amazing');
+  Log.debug('Just pass in {0} or {1} or {2} or {3} and it is all converted to a single string for you', new Object[] { 42, new Account(), new SomeCustomClass(), 'whatever you want'})
+  Log.info('Now I am info');
+  Log.fine('All the system levels are built right in!');
   Log.wtf('And more!');
 
   try {
     Integer theAnswerToLifeTheUniverseAndEverything = 42 / 0;
   } catch(Exception error) {
-    Narrate.error('Woah, an exception! I have a method specifically for that to make it all pretty and such!');
-    Narrate.except(error);
+    Log.error('Woah, an exception! I have a method specifically for that to make it all pretty and such!');
+    Log.except(error);
   }
 ```
-
 
 ## Configuration
 
