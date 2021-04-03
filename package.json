@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "sfdx": "^1.4.2"
+  }
+}
