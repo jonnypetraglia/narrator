@@ -159,6 +159,16 @@ Examples:
   - `['Message__c", 'CONTAINS', 'Banana']`
   - `['User__c", '!=', '00530000003xqAb']`
 
+Here are all the operations supported for the various field types:
+
+  - Boolean: `=`, `!=`, `IS NULL`, `IS NOT NULL`
+  - Id: `=`, `!=`, `IS NULL`, `IS NOT NULL`
+  - Long/Integer/Currency/Percent/Double: `=`, `!=`, `IS NULL`, `IS NOT NULL`, `>`, `<`, `>=`, `<=`
+  - Date/DateTime: `=`, `!=`, `IS NULL`, `IS NOT NULL`, `IS TODAY`, `IS YESTERDAY`, `IS THIS MONTH`, `IS THIS YEAR`, `IS FUTURE`, `IS PAST`
+  - String/Email/MultiPicklist/Phone/TextArea/Url/etc: `=`, `!=`, `IS NULL`, `IS NOT NULL`, `MATCHES`, `DOES NOT MATCH`, `CONTAINS`, `DOES NOT CONTAIN`, `STARTS WITH`, `ENDS WITH`
+
+All operations require 1 parameter except those starting with 'IS' which require 0.
+
 
 #### ComplexFilterLogic
 
