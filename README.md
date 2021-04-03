@@ -1,6 +1,6 @@
 # Narrator
 
-The End-All-Be-All Logging framework to take care of all your logging needs.
+The End-All-Be-All Logging framework to take care of all your Salesforce logging needs.
 Use it as a great base that does all the boilerplate leaving you to focus on the important part.
 Or use the `Narrate` Apex class in half a second to start logging now.
 
@@ -62,6 +62,10 @@ public static void except(MyCustomException ohno) {
   log(EXCEPT, formattedExceptionString);
 }
 ```
+
+### Alternative setup: ProcessBuilder/Flow
+
+Alternatively, both included Logger implementations (RecordLogger and EmailLogger) implement @InvocableMethod, so you can make a ProcessBuilder or Flow and call it and boom, you're logging. Turn the Process or Flow on and off at your leisure.
 
 
 ## Sample usage
