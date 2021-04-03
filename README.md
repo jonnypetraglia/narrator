@@ -155,9 +155,9 @@ The field name to be evaluated must _exactly_ match what is on the SObject (for 
 
 Examples:
 
-`['Level__c", '=', 'INFO']`
-`['Message__c", 'CONTAINS', 'Banana']`
-`['User__c", '!=', '00530000003xqAb']`
+  - `['Level__c", '=', 'INFO']`
+  - `['Message__c", 'CONTAINS', 'Banana']`
+  - `['User__c", '!=', '00530000003xqAb']`
 
 
 #### ComplexFilterLogic
@@ -168,8 +168,8 @@ Note that `ComplexFilterLogic` is a superset of `SimpleFilterLogic`, meaning tha
 
 Example:
 
-`['Level__c", '=', 'INFO', 'AND', 'Message__c', 'CONTAINS', 'Banana']`
-`['(', 'Level__c', '=', 'WARNING', 'OR', 'Level', '=', 'ERROR', ')', 'AND', 'User__c', '!=', '00530000003xqAb']`
+  - `['Level__c", '=', 'INFO', 'AND', 'Message__c', 'CONTAINS', 'Banana']`
+  - `['(', 'Level__c', '=', 'WARNING', 'OR', 'Level', '=', 'ERROR', ')', 'AND', 'User__c', '!=', '00530000003xqAb']`
 
 
 ### Misc potentially useful info
@@ -178,7 +178,7 @@ How are you still reading this? Are you really that bored? Or do you just have a
 
 ### CodeLocationSnapshot
 
-Listen, I'm not gonna lie, I stole CodeLocationSnapshot almost verbatim from apex-unified-logging & jsut extracted it into its own class. It works by generating a stacktrace on the fly & then parsing it to determine where exactly in the code (Class, Method, Line) the wrapping function call was. That's all I'm gonna say about it.
+Listen, I'm not gonna lie, I stole CodeLocationSnapshot almost verbatim from apex-unified-logging & just extracted it into its own class. It works by generating a stacktrace on the fly & then parsing it to determine where exactly in the code (Class, Method, Line) the wrapping function call was. That's all I'm gonna say about it.
 
 
 
