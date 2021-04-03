@@ -64,12 +64,13 @@ public static void except(MyCustomException ohno) {
 
 This is all *in addition* to everything that's offered by [apex-unified-logging](https://github.com/rsoesemann/apex-unified-logging), which is what the project forked off of! *Major props for that lib!*
 
-  - You only have to write ONE function to create a Logger!
+  - You only have to write ONE function to create a custom Logger!
   - Ships with a 'Log Entry' SObject, ready to hooked up & connected for persistent logging!
   - Built in Loggers supplied:
     - **Record Logger**
     - **Email Logger**
   - Schedulable auto-truncator Apex class configurable via Custom Settings!
+  - Converted Aura components from apex-unified-logging to LWC!
   - A live Logging Monitor Lightning Web Component (and Flexipage!) that lets you see _all_ (or filtered) events _in real time_
   - Have fine-grained control what logs you want and what logger to use via **Custom Metadata** without ever having to change code. Add complex filters through a dead simple front-end interface. Turn them on, turn them off, make them expire. Be free.
   - @InvocableMethod!
@@ -171,3 +172,16 @@ How are you still reading this? Are you really that bored? Or do you just have a
 ### CodeLocationSnapshot
 
 Listen, I'm not gonna lie, I stole CodeLocationSnapshot almost verbatim from apex-unified-logging & jsut extracted it into its own class. It works by generating a stacktrace on the fly & then parsing it to determine where exactly in the code (Class, Method, Line) the wrapping function call was. That's all I'm gonna say about it.
+
+
+
+
+## TODO & Ideas & Brainstorming
+
+Obviously these need tickets eventually, but right now here's just where to dump accessible thoughts
+
+  - Add "Logger Param" to LoggingSettings__mdt
+    - Mostly for EmailLogger to specify recipients
+    - This would mean we could ditch the CustomLabel (yay)
+  - Desperately need Jest tests for LWC
+  - Update Draw.io diagram, though hopefully it will get simplified enough to not be needed.
