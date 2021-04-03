@@ -24,7 +24,6 @@
         (4) Auto-inserts Timestamp__c and User__c for narrate_LogEvent__e Platform Events
         (5) Auto-inserts Timestamp__c and User__c for narrate_LogEvent__e Platform Events
         (6) Auto-inserts Class__c, Method__c, and Line__c for narrate_LogEvent__e Platform Events behind the scenes (via CodeLocationSnapshot)
-        (7) Helpful protected methods for narrate_LogEvent__e Platform Events from various types of parameters
 */
 
 public virtual without sharing class Narrate {
@@ -81,11 +80,10 @@ public virtual without sharing class Narrate {
     public static void wtf(String message) {
         log(WTF, message, new List<Object>());
     }
-    public static void wtf(String message, List<Object> values) {
-        log(WTF, message, values);
-    }
     public static void wtf(String message, Object param) {
         log(WTF, message, asList(param));
+    }
+    public static void wtf(String message, List<Object> values) {
     }
     public static void fine(String message) {
         log(FINE, message, new List<Object>());
@@ -162,7 +160,7 @@ public virtual without sharing class Narrate {
     // PRIVATE
 
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = level,
@@ -176,7 +174,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.EXCEPT,
@@ -190,7 +188,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -204,7 +202,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -218,7 +216,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -232,7 +230,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
+    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -245,7 +243,7 @@ public virtual without sharing class Narrate {
             User__c = UserInfo.getUserId()
         );
     }
-    protected static List<String> castToStringList(List<Object> values) {
+    private static List<String> castToStringList(List<Object> values) {
         List<String> result = new List<String>();
         if(values!= null) {
             for(Object value : values)
@@ -254,34 +252,34 @@ public virtual without sharing class Narrate {
         return result;
     }
     @testVisible
-    protected static final String CURRENT_REQUEST_ID {get {
+    private static final String CURRENT_REQUEST_ID {get {
         if(CURRENT_REQUEST_ID==null){
             CURRENT_REQUEST_ID =  System.Request.getCurrent().getRequestId();
         }
         return CURRENT_REQUEST_ID;
     } private set;}
     @testVisible
-    protected static final String CURRENT_REQUEST_QUIDDITY {get {
+    private static final String CURRENT_REQUEST_QUIDDITY {get {
         if(CURRENT_REQUEST_QUIDDITY==null){
             CURRENT_REQUEST_QUIDDITY = String.valueOf( System.Request.getCurrent().getQuiddity());
         }
         return CURRENT_REQUEST_QUIDDITY;
     } private set;}
     @testVisible
-    protected static narrate_CodeLocationSnapshot snapshot {get {
+    private static narrate_CodeLocationSnapshot snapshot {get {
         if(snapshot==null){
             snapshot = narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
         }
         return snapshot;
     } set;}
-    protected static Boolean narratorIsEnabled() {
+    private static Boolean narratorIsEnabled() {
         return !Test.isRunningTest() && settings.Enabled__c;
     }
-    protected static Boolean narratorIsEnabledTesting() {
+    private static Boolean narratorIsEnabledTesting() {
         return Test.isRunningTest() && settings.EnabledTests__c;
     }
-    protected static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
-    protected static void systemDebugOutput(String level, String message) {
+    private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
+    private static void systemDebugOutput(String level, String message) {
         LoggingLevel logLevel = LoggingLevel.DEBUG; // DEBUG, WTF, REST, and anything else
         // Switch here gives us guaranteed O(1)
         switch on level.toUpperCase() {
@@ -307,7 +305,7 @@ public virtual without sharing class Narrate {
         System.debug(logLevel, message);
     }
     @testVisible
-    protected static narrate_NarratorConfig__c settings {get {
+    private static narrate_NarratorConfig__c settings {get {
         if(settings==null){
             settings = narrate_NarratorConfig__c.getInstance();
         }
