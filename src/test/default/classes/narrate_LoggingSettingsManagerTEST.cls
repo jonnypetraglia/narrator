@@ -50,6 +50,7 @@ public class narrate_LoggingSettingsManagerTEST {
         return new narrate_LoggingSetting__mdt(
             Id=generateTestId(),
             Active__c=true,
+            FilterLogic__c='narrate_SimpleFilterLogic',
             Loggers__c=logger,
             Logic__c=JSON.serialize(logic)
         );
