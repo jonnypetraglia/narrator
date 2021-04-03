@@ -1,3 +1,7 @@
+/*
+    This is a Schedulable class to automatically truncate/trim/delete/whathaveyou narrate_LogEntry__c SObject records.
+    The criteria on what to keep is defined in the NarratorConfig Custom Settings
+*/
 global with sharing class narrate_LogEntryTruncator implements Schedulable {
     global static final Integer DEFAULT_MAX = 10000;
     private static final Date ALL_DATES = Date.newInstance(1952, 3, 4);

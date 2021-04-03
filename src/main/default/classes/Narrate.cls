@@ -1,3 +1,32 @@
+/*
+    This is the heart of Narrator and what should be primarly used in external code.
+
+
+    A sane logging class designed to be extended (i.e. virtual) to be able to use a custom name for use throughout code.
+    The extended class can then make its own custom functions (e.g. error(String message, Exception error)) while also providing what is in this class as a base.
+
+
+    A full list of what it provides:
+        (1) Functions for the built in LoggingLevels and a few more that all take (a) a String, (b) a String and an object (formatted with String.format, so include '{0}' in your message), and a List of Strings (also formatted with String.format). Valid levels are:
+            - Debug
+            - Info
+            - Warn(ing)
+            - Error
+            - Fine
+            - Finer
+            - Finest
+            - WTF (What a Terrible Failure); treated as ERROR when output to System.debug
+            - Except; meant to parse Exceptions into a pretty readable format, treated as ERROR when output to System.debug
+            - HTTP; for HTTP requests and responses, treated as DEBUG when output to System.debug
+            - REST; for REST requests and resposes, treated as DEBUG when output to System.debug
+        (2) Ability to be enabled/disabled in production and tests via NarratorConfig Custom Settings. If disabled, only outputs to System.debug
+        (3) Access to Quiddity and RequestId
+        (4) Auto-inserts Timestamp__c and User__c for narrate_LogEvent__e Platform Events
+        (5) Auto-inserts Timestamp__c and User__c for narrate_LogEvent__e Platform Events
+        (6) Auto-inserts Class__c, Method__c, and Line__c for narrate_LogEvent__e Platform Events behind the scenes (via CodeLocationSnapshot)
+        (7) Helpful protected methods for narrate_LogEvent__e Platform Events from various types of parameters
+*/
+
 public virtual without sharing class Narrate {
 
     public static final String DEBUG = LoggingLevel.DEBUG.name().toLowerCase().capitalize(),
@@ -133,7 +162,7 @@ public virtual without sharing class Narrate {
     // PRIVATE
 
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, String level, String message) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = level,
@@ -147,7 +176,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, Exception error) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.EXCEPT,
@@ -161,7 +190,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestRequest request) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -175,7 +204,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, RestResponse response) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -189,7 +218,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpRequest request) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -203,7 +232,7 @@ public virtual without sharing class Narrate {
         );
     }
     @testVisible
-    private static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
+    protected static narrate_LogEvent__e constructLogEvent(narrate_CodeLocationSnapshot.Snapshot codeLocation, HttpResponse response) {
         return new narrate_LogEvent__e(
             Class__c = codeLocation.theClass,
             Level__c = Narrate.REST,
@@ -216,7 +245,7 @@ public virtual without sharing class Narrate {
             User__c = UserInfo.getUserId()
         );
     }
-    private static List<String> castToStringList(List<Object> values) {
+    protected static List<String> castToStringList(List<Object> values) {
         List<String> result = new List<String>();
         if(values!= null) {
             for(Object value : values)
@@ -225,34 +254,34 @@ public virtual without sharing class Narrate {
         return result;
     }
     @testVisible
-    private static final String CURRENT_REQUEST_ID {get {
+    protected static final String CURRENT_REQUEST_ID {get {
         if(CURRENT_REQUEST_ID==null){
             CURRENT_REQUEST_ID =  System.Request.getCurrent().getRequestId();
         }
         return CURRENT_REQUEST_ID;
     } private set;}
     @testVisible
-    private static final String CURRENT_REQUEST_QUIDDITY {get {
+    protected static final String CURRENT_REQUEST_QUIDDITY {get {
         if(CURRENT_REQUEST_QUIDDITY==null){
             CURRENT_REQUEST_QUIDDITY = String.valueOf( System.Request.getCurrent().getQuiddity());
         }
         return CURRENT_REQUEST_QUIDDITY;
     } private set;}
     @testVisible
-    private static narrate_CodeLocationSnapshot snapshot {get {
+    protected static narrate_CodeLocationSnapshot snapshot {get {
         if(snapshot==null){
             snapshot = narrate_CodeLocationSnapshot.newInstanceForClass(Narrate.class.getName());
         }
         return snapshot;
     } set;}
-    private static Boolean narratorIsEnabled() {
+    protected static Boolean narratorIsEnabled() {
         return !Test.isRunningTest() && settings.Enabled__c;
     }
-    private static Boolean narratorIsEnabledTesting() {
+    protected static Boolean narratorIsEnabledTesting() {
         return Test.isRunningTest() && settings.EnabledTests__c;
     }
-    private static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
-    private static void systemDebugOutput(String level, String message) {
+    protected static List<Object> asList(Object obj) {return obj instanceof List<Object> ? (List<Object>)obj : new List<Object>{obj};}
+    protected static void systemDebugOutput(String level, String message) {
         LoggingLevel logLevel = LoggingLevel.DEBUG; // DEBUG, WTF, REST, and anything else
         // Switch here gives us guaranteed O(1)
         switch on level.toUpperCase() {
@@ -278,7 +307,7 @@ public virtual without sharing class Narrate {
         System.debug(logLevel, message);
     }
     @testVisible
-    private static narrate_NarratorConfig__c settings {get {
+    protected static narrate_NarratorConfig__c settings {get {
         if(settings==null){
             settings = narrate_NarratorConfig__c.getInstance();
         }

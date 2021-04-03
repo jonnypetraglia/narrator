@@ -1,4 +1,8 @@
-// This class is almost a copy+paste from apex-unified-logging, which is awesome and great!
+/*
+    Listen, I'm not gonna lie, I stole CodeLocationSnapshot almost verbatim from apex-unified-logging & jsut extracted it into its own class.
+    It works by generating a stacktrace on the fly & then parsing it to determine where exactly in the code (Class, Method, Line) the wrapping function call was.
+    That's all I'm gonna say about it.
+*/
 
 public class narrate_CodeLocationSnapshot {
 

@@ -1,3 +1,9 @@
+/*
+    (1) Takes narrate_LogEvent__e Platform Events as input
+    (2) Calls narrate_LoggingSettingsManager to determine which ones ought to go to which Loggers
+    (3) Instantiates needed Loggers
+    (4) Passes said events to appropriate loggers for each event
+*/
 public with sharing class narrate_LogEventDelegator {
 
     public void receiveEvents(List<narrate_LogEvent__e> events) {

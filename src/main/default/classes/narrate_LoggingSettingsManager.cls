@@ -1,3 +1,8 @@
+/*
+    (1) Loads narrate_LoggingSetting__mdt records to use
+    (2) Instantiates the FilterLogics for each setting
+    (3) Takes narrate_LogEvent__e Platform Events as input & determines which events match which the logic of which settings
+*/
 public without sharing class narrate_LoggingSettingsManager {
     
     @testVisible
