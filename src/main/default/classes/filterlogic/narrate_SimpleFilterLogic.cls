@@ -1,3 +1,6 @@
+/*
+    Please see Readme for documentation; not going to keep it going in two places.
+*/
 public without sharing class narrate_SimpleFilterLogic implements narrate_IFilterLogic {
     @testVisible
     private String fieldName, logic, whatToCompareTo;

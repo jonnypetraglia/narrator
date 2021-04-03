@@ -1,3 +1,6 @@
+/*
+    Please see Readme for documentation; not going to keep it going in two places.
+*/
 public class narrate_ComplexFilterLogic implements narrate_IFilterLogic {
     @testVisible
     private enum Operator { OP_AND, OP_OR, OP_XOR }
